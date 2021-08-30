@@ -21,6 +21,9 @@ module.exports = {
       maxHeight: {
         logo: '115px',
       },
+      minHeight: {
+        60: '60px',
+      },
       width: {
         70: '70px',
       },
