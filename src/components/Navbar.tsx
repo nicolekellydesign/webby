@@ -14,7 +14,7 @@ interface NavbarToggleProps {
 
 const NavbarToggle = (props: NavbarToggleProps): JSX.Element => {
   const {isShowing, onClick} = props;
-  const classes = `md:hidden absolute cursor-pointer p-2 right-1 top-14`;
+  const classes = `md:hidden absolute p-2 right-1 top-14`;
 
   if (isShowing) {
     return (
@@ -57,15 +57,12 @@ const Navbar = (): JSX.Element => {
           </div>
 
           <nav className="float-right">
-            {/* <div className="block md:hidden absolute top-16 right-0 w-16 h-16">
-              <NavbarToggle isShowing={navOpen} onClick={toggleNavMenu} />
-            </div> */}
             <NavbarToggle isShowing={navOpen} onClick={toggleNavMenu} />
-            <ul id="nav-list" className="list-none hidden m-0 p-0 md:block md:pt-16" onClick={toggleNavMenu}>
+            <ul id="nav-list" className="hidden md:block md:pt-16" onClick={toggleNavMenu}>
               {NavbarData.map((item, index) => {
                 // Map each navbar item info to a link element
                 return (
-                  <li key={index} className={"float-none md:float-left font-lighter lowercase no-underline p-0 relative md:mx-5 md:my-8"}>
+                  <li key={index} className={"md:float-left font-lighter lowercase no-underline p-0 relative md:mx-5 md:my-8"}>
                     <Link to={item.path} className="navbar-link block md:pt-1.5">
                       {item.title}
                     </Link>
