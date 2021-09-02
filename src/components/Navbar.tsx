@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { NavbarData } from './navbarData';
 import { slideToggle } from './slider';
 import logo from '../logo_white.png';
@@ -33,6 +33,8 @@ const NavbarToggle = (props: NavbarToggleProps): JSX.Element => {
 
 const Navbar = (): JSX.Element => {
   const [navOpen, setNavOpen] = useState(false);
+  const history = useHistory();
+
   const toggleNavMenu = () => {
     const toggle = document.getElementById('navbar-toggle')
     if (!toggle) {
@@ -49,6 +51,19 @@ const Navbar = (): JSX.Element => {
     setNavOpen(!navOpen);
   };
 
+  // Use a history hook to toggle the nav menu closed on nav change
+  useEffect(() => {
+    const historyUnlisten = history.listen(() => {
+      if (navOpen) {
+        toggleNavMenu();
+      }
+    });
+
+    return () => {
+      historyUnlisten();
+    }
+  });
+
   return (
       <section className="h-nav">
         <div className="mx-auto my-0">
@@ -58,7 +73,7 @@ const Navbar = (): JSX.Element => {
 
           <nav className="float-right">
             <NavbarToggle isShowing={navOpen} onClick={toggleNavMenu} />
-            <ul id="nav-list" className="hidden md:block md:pt-16" onClick={toggleNavMenu}>
+            <ul id="nav-list" className="hidden md:block md:pt-16">
               {NavbarData.map((item, index) => {
                 // Map each navbar item info to a link element
                 return (
