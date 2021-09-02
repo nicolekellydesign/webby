@@ -6,11 +6,12 @@ import './Alert.css'
 interface AlertProps {
   type: string,
   message: string,
+  fade: boolean,
   onClose: () => void;
 }
 
 const Alert = (props: AlertProps) => {
-  const { type, message, onClose } = props;
+  const { type, message, fade, onClose } = props;
 
   const alertColor = {
     [AlertType.Error]: 'bg-red-200',
@@ -36,8 +37,10 @@ const Alert = (props: AlertProps) => {
     [AlertType.Success]: <AiOutlineCheckCircle className={iconClasses.join(' ')} />,
   }
 
+  const fadeClass = fade ? 'fade-out' : '';
+
   return (
-    <div className={`opacity-0 fade-in flex rounded px-4 py-2 m-2 text-center ${alertColor[type]}`}>
+    <div className={`fade-in flex rounded px-4 py-2 m-2 text-center ${alertColor[type]} ${fadeClass}`}>
       <div className={`${alertFg[type]} flex text-2xl opacity-90 py-2 mr-3`}>
         {alertIcon[type]}
       </div>

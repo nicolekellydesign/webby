@@ -22,7 +22,7 @@ const Contact = (): JSX.Element => {
     const elements = form.elements ;
 
     elements.submitButton.disabled = true;
-    alertService.info("Submitting form information...");
+    alertService.info('Submitting form information...', true);
 
     // TODO: Email stuffs
     window.setTimeout(() => {

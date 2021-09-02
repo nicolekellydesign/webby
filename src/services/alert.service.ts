@@ -27,6 +27,8 @@ export interface AlertProps {
   id: string | undefined,
   type: string,
   message: string,
+  autoclose: boolean,
+  fade: boolean,
 }
 
 const alertSubject = new Subject();
@@ -63,36 +65,40 @@ function onAlert(id: string = defaultId) {
  * Send an error alert.
  *
  * @param message The message to display.
+ * @param autoclose Whether or not the alert should close on it's own.
  */
-function error(message: string) {
-  alert({ id: defaultId, type: AlertType.Error, message });
+function error(message: string, autoclose: boolean) {
+  alert({ id: defaultId, type: AlertType.Error, message, autoclose, fade: false });
 }
 
 /**
  * Send an warning alert.
  *
  * @param message The message to display.
+ * @param autoclose Whether or not the alert should close on it's own.
  */
-function warn(message: string) {
-  alert({ id: defaultId, type: AlertType.Warn, message });
+function warn(message: string, autoclose: boolean) {
+  alert({ id: defaultId, type: AlertType.Warn, message, autoclose, fade: false });
 }
 
 /**
  * Send an informational alert.
  *
  * @param message The message to display.
+ * @param autoclose Whether or not the alert should close on it's own.
  */
-function info(message: string) {
-  alert({ id: defaultId, type: AlertType.Info, message });
+function info(message: string, autoclose: boolean) {
+  alert({ id: defaultId, type: AlertType.Info, message, autoclose, fade: false });
 }
 
 /**
  * Send a success alert.
  *
  * @param message The message to display.
+ * @param autoclose Whether or not the alert should close on it's own.
  */
-function success(message: string) {
-  alert({ id: defaultId, type: AlertType.Success, message });
+function success(message: string, autoclose: boolean) {
+  alert({ id: defaultId, type: AlertType.Success, message, autoclose, fade: false });
 }
 
 /**

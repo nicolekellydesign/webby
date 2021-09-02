@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { AlertProps, alertService } from '../services/alert.service';
 import Alert from './Alert';
@@ -24,6 +24,10 @@ const AlertContainer = (props: AlertContainerProps) => {
 
         // Add alert to array
         setAlerts(alerts => ([...alerts, alert]));
+
+        if (alert.autoclose) {
+          setTimeout(() => removeAlert(alert), 5000);
+        }
       }
     );
 
@@ -41,13 +45,18 @@ const AlertContainer = (props: AlertContainerProps) => {
   });
 
   function removeAlert(alert: AlertProps) {
-    setAlerts(alerts => alerts.filter(obj => obj !== alert));
+    const alertWithFade = { ...alert, fade: true };
+    setAlerts(alerts => alerts.map(obj => obj === alert ? alertWithFade : obj));
+
+    setTimeout(() => {
+      setAlerts(alerts => alerts.filter(obj => obj !== alertWithFade));
+    }, 500);
   }
 
   return (
     <div className="container lg:max-w-3xl mx-auto py-2">
       {alerts.map((alert: AlertProps, index: number) => {
-        return <Alert key={index} type={alert.type} message={alert.message} onClose={() => removeAlert(alert)} />
+        return <Alert key={index} type={alert.type} message={alert.message} fade={alert.fade} onClose={() => removeAlert(alert)} />
       })}
     </div>
   )
