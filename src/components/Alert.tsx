@@ -1,6 +1,7 @@
 import { AlertType } from '../services/alert.service';
 import { AiOutlineCheckCircle, AiOutlineCloseSquare, AiOutlineWarning } from 'react-icons/ai';
 import { MdErrorOutline, MdInfoOutline } from 'react-icons/md';
+import './Alert.css'
 
 interface AlertProps {
   type: string,
@@ -36,7 +37,7 @@ const Alert = (props: AlertProps) => {
   }
 
   return (
-    <div className={`flex rounded px-4 py-2 m-2 text-center ${alertColor[type]}`}>
+    <div className={`opacity-0 fade-in flex rounded px-4 py-2 m-2 text-center ${alertColor[type]}`}>
       <div className={`${alertFg[type]} flex text-2xl opacity-90 py-2 mr-3`}>
         {alertIcon[type]}
       </div>
