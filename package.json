@@ -1,5 +1,5 @@
 {
-  "name": "website_pwa",
+  "name": "webby",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -59,6 +59,7 @@
     "postcss": "^7",
     "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.1",
+    "rxjs": "^7.3.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   }
 }
