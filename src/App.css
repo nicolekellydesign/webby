@@ -1,3 +1,30 @@
+.btn {
+  cursor: pointer;
+  padding: 10px;
+  margin: 10px;
+  min-width: 110px;
+}
+
+.btn:disabled {
+  cursor: auto;
+}
+
+input,
+textarea {
+  border: 1px solid grey;
+  transition: all 0.2s;
+}
+
+input:hover:not(:disabled),
+textarea:hover:not(:disabled) {
+  background-color: #ccc;;
+}
+
+input:focus:not(:disabled),
+textarea:focus:not(:disabled) {
+  background-color: #ccc;;
+}
+
 .line {
   border: 1px inset white;
   margin: 8px 20px;

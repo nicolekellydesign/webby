@@ -21,16 +21,21 @@ module.exports = {
       maxHeight: {
         logo: '115px',
       },
+      minWidth: {
+        textLarge: '425px',
+      },
       minHeight: {
         60: '60px',
+        textLarge: '250px',
       },
       width: {
         70: '70px',
+        email: '425px',
       },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
