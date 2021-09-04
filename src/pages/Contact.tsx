@@ -18,17 +18,54 @@ const Contact = (): JSX.Element => {
   const onSubmit = (event: React.FormEvent<MessageFormElement>) => {
     event.preventDefault();
 
-    const form = event.currentTarget;
-    const elements = form.elements ;
+    // Make sure we have a token to use
+    const token = process.env.REACT_APP_EMAIL_TOKEN;
+    if (!token || token === '') {
+      alertService.error('No email token set! Please contact a website administrator.', false);
+      return;
+    }
 
-    elements.submitButton.disabled = true;
+    const form = event.currentTarget;
+    const { firstNameInput, lastNameInput, emailInput, messageInput, submitButton } = form.elements;
+
+    submitButton.disabled = true;
     alertService.info('Submitting form information...', true);
 
-    // TODO: Email stuffs
-    window.setTimeout(() => {
-      elements.submitButton.disabled = false;
-      form.reset();
-    }, 5000);
+    // Build the email parts
+    const name = `${firstNameInput.value} ${lastNameInput.value}`;
+    const subject = `${name} - Contact Form Submission`;
+    const body = `Sender: ${name};\nEmail Address: ${emailInput.value}\n\n${messageInput.value}`;
+
+    // Send to the email sender
+    const params = new URLSearchParams();
+    params.append('access_token', encodeURIComponent(token));
+    params.append('subject', encodeURIComponent(subject));
+    params.append('text', encodeURIComponent(body));
+
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params,
+    };
+
+    fetch('https://postmail.invotes.com/send', options)
+      .then(async (response: Response) => {
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const data = isJson && await response.json();
+
+        if (!response.ok) {
+          const error = (data && data.message) || response.status;
+          return Promise.reject(error);
+        }
+
+        alertService.success('Form submitted! Thank you for your message.', false);
+      }).catch(error => {
+        console.error(`error sending email message: ${error}`);
+        alertService.error(`Error processing contact form submission: ${error}`, false);
+      }).finally(() => {
+        submitButton.disabled = false;
+        form.reset();
+      });
   }
 
   return (
