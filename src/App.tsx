@@ -1,17 +1,18 @@
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 
-import { defaultId } from './services/alert.service';
+import { defaultId } from "./services/alert.service";
 
-import AlertContainer from './components/AlertContainer';
-import Footer from './components/Footer';
-import Navbar from './components/Navbar';
+import AlertContainer from "./components/AlertContainer";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Home from './pages/Home';
-import Photography from './pages/Photography';
+import About from "./pages/About";
+import Admin from "./pages/Admin";
+import Contact from "./pages/Contact";
+import Home from "./pages/Home";
+import Photography from "./pages/Photography";
 
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <AlertContainer id={defaultId} />
         <Switch>
           <Route path="/about" exact component={About} />
+          <Route path="/admin" component={Admin} />
           <Route path="/contact" exact component={Contact} />
           <Route path="/photography" exact component={Photography} />
           <Route path="/" exact component={Home} />
