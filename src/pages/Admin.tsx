@@ -17,7 +17,7 @@ const Admin: React.FC<RouterDetailProps> = (): JSX.Element => {
   return (
     <>
       <AdminSidebar />
-      <div>
+      <div className="mt-10 px-48">
         <Route exact path="/admin" component={AdminHome} />
 
         <PrivateRoute path="/admin/gallery">

@@ -1,6 +1,6 @@
 const AdminUsers = (): JSX.Element => {
   return (
-    <div className="px-48">
+    <div>
       <h1>Administrators</h1>
     </div>
   );

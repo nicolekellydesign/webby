@@ -1,6 +1,6 @@
 const AdminPhotos = (): JSX.Element => {
   return (
-    <div className="px-48">
+    <div>
       <h1>Photography Gallery Settings</h1>
     </div>
   );
