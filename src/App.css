@@ -14,11 +14,15 @@
 .btn {
   cursor: pointer;
   padding: 0.5rem 0.75rem;
-  min-width: 110px;
 }
 
 .btn:disabled {
   cursor: auto;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 input,
