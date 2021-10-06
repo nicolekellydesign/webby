@@ -1,9 +1,11 @@
 import { Route, RouteComponentProps, withRouter } from "react-router-dom";
 import AdminGallery from "../components/AdminGallery";
 import AdminHome from "../components/AdminHome";
+import AdminLogin from "../components/AdminLogin";
 import AdminPhotos from "../components/AdminPhotos";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminUsers from "../components/AdminUsers";
+import PrivateRoute from "../components/PrivateRoute";
 
 interface RouterProps {
   path: string;
@@ -11,15 +13,24 @@ interface RouterProps {
 
 interface RouterDetailProps extends RouteComponentProps<RouterProps> {}
 
-const Admin: React.FC<RouterDetailProps> = ({ match }): JSX.Element => {
+const Admin: React.FC<RouterDetailProps> = (): JSX.Element => {
   return (
     <>
       <AdminSidebar />
       <div>
         <Route exact path="/admin" component={AdminHome} />
-        <Route path="/admin/gallery" component={AdminGallery} />
-        <Route path="/admin/photos" component={AdminPhotos} />
-        <Route path="/admin/users" component={AdminUsers} />
+
+        <PrivateRoute path="/admin/gallery">
+          <AdminGallery />
+        </PrivateRoute>
+        <PrivateRoute path="/admin/photos">
+          <AdminPhotos />
+        </PrivateRoute>
+        <PrivateRoute path="/admin/users">
+          <AdminUsers />
+        </PrivateRoute>
+
+        <Route path="/admin/login" component={AdminLogin} />
       </div>
     </>
   );
