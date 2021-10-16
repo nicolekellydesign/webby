@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { User } from "../entities/User";
+import { addUser, deleteUser, getUsers, User } from "../entities/User";
 import { alertService } from "../services/alert.service";
 
 interface LoginElements extends HTMLFormControlsCollection {
@@ -17,83 +17,6 @@ const AdminUsers = (): JSX.Element => {
   const [users, setUsers] = useState<User[]>([]);
   const [usersLength, setUsersLength] = useState(0);
 
-  const addUser = (username: string, password: string) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/users`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
-        }
-
-        alertService.success("User added successfully!", false);
-
-        setUsersLength(usersLength + 1);
-      })
-      .catch((error) => {
-        console.error(`error sending addUser request: ${error}`);
-        alertService.error(`Error adding user: ${error}`, false);
-      });
-  };
-
-  const deleteUser = (id: number) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/users/${id}`, {
-      method: "DELETE",
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
-        }
-
-        alertService.success("User deleted successfully!", false);
-
-        setUsersLength(usersLength + 1);
-      })
-      .catch((error) => {
-        console.error(`error sending deleteUser request: ${error}`);
-        alertService.error(`Error removing user: ${error}`, false);
-      });
-  };
-
-  const getUsers = () => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/users`, {
-      method: "GET",
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
-        }
-
-        setUsers(body.users);
-      })
-      .catch((error) => {
-        console.error(`error getting user list: ${error}`);
-        alertService.error(`Error getting user list: ${error}`, false);
-      });
-  };
-
   const handleSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
 
@@ -102,14 +25,30 @@ const AdminUsers = (): JSX.Element => {
 
     submitButton.disabled = true;
 
-    addUser(usernameInput.value, passwordInput.value);
-
-    submitButton.disabled = false;
-    form.reset();
+    addUser(usernameInput.value, passwordInput.value)
+      .then(() => {
+        alertService.success("User added successfully!", false);
+        setUsersLength(usersLength + 1);
+      })
+      .catch((error) => {
+        console.error(`error sending addUser request: ${error}`);
+        alertService.error(`Error adding user: ${error}`, false);
+      })
+      .finally(() => {
+        submitButton.disabled = false;
+        form.reset();
+      });
   };
 
   useEffect(() => {
-    getUsers();
+    getUsers()
+      .then((users) => {
+        setUsers(users);
+      })
+      .catch((error) => {
+        console.error(`error getting user list: ${error}`);
+        alertService.error(`Error getting user list: ${error}`, false);
+      });
   }, [usersLength]);
 
   return (
@@ -134,7 +73,21 @@ const AdminUsers = (): JSX.Element => {
                 }
                 onClick={() => {
                   if (!user.protected) {
-                    deleteUser(user.id);
+                    deleteUser(user.id)
+                      .then(() => {
+                        alertService.success(
+                          "User deleted successfully!",
+                          false
+                        );
+                        setUsersLength(usersLength + 1);
+                      })
+                      .catch((error) => {
+                        console.error(`error deleting user: ${error}`);
+                        alertService.error(
+                          `Error removing user: ${error}`,
+                          false
+                        );
+                      });
                   }
                 }}
               >

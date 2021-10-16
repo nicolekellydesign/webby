@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { Photo } from "../entities/Photo";
+import { addPhoto, deletePhoto, getPhotos, Photo } from "../entities/Photo";
 import { alertService } from "../services/alert.service";
 import "./AdminPhotos.css";
 
@@ -27,91 +27,30 @@ const AdminPhotos = (): JSX.Element => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("image", selectedFile, selectedFile.name);
-
-    fetch(`https://${window.location.hostname}/api/v1/admin/photos`, {
-      method: "POST",
-      body: formData,
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
-        }
-
+    addPhoto(selectedFile, selectedFile.name)
+      .then(() => {
         alertService.success("Photo uploaded successfully!", false);
-
         setPhotosLength(photosLength + 1);
       })
-      .then(() => {
+      .catch((error) => {
+        console.error(`error adding photography gallery item: ${error}`);
+        alertService.error(`Error uploading photo: ${error}`, false);
+      })
+      .finally(() => {
         setIsFilePicked(false);
         setSelectedFile(undefined);
-      })
-      .catch((error) => {
-        console.error(`error sending addPhoto request: ${error}`);
-        alertService.error(`Error uploading photo: ${error}`, false);
-      });
-  };
-
-  const deletePhoto = (filename: string) => {
-    fetch(
-      `https://${window.location.hostname}/api/v1/admin/photos/${filename}`,
-      {
-        method: "DELETE",
-      }
-    )
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
-        }
-
-        alertService.success("Photo deleted successfully!", false);
-
-        setPhotosLength(photosLength + 1);
-      })
-      .catch((error) => {
-        console.error(`error sending deletePhoto request: ${error}`);
-        alertService.error(`Error removing photo: ${error}`, false);
-      });
-  };
-
-  const getPhotos = () => {
-    fetch(`https://${window.location.hostname}/api/v1/photos`, {
-      method: "GET",
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
-        }
-
-        setPhotos(body.photos);
-      })
-      .catch((error) => {
-        console.error(`error getting user list: ${error}`);
-        alertService.error(`Error getting photos: ${error}`, false);
       });
   };
 
   useEffect(() => {
-    getPhotos();
+    getPhotos()
+      .then((photos) => {
+        setPhotos(photos);
+      })
+      .catch((error) => {
+        console.error(`error getting photography images: ${error}`);
+        alertService.error(`Error getting photos: ${error}`, false);
+      });
   }, [photosLength]);
 
   return (
@@ -130,7 +69,23 @@ const AdminPhotos = (): JSX.Element => {
                 className="cursor-pointer absolute opacity-0 top-1/2 left-1/2 overlay transition w-full h-full"
                 title="Delete Image"
                 onClick={() => {
-                  deletePhoto(photo.filename);
+                  deletePhoto(photo.filename)
+                    .then(() => {
+                      alertService.success(
+                        "Photo deleted successfully!",
+                        false
+                      );
+                      setPhotosLength(photosLength + 1);
+                    })
+                    .catch((error) => {
+                      console.error(
+                        `error removing photography gallery item: ${error}`
+                      );
+                      alertService.error(
+                        `Error removing photo: ${error}`,
+                        false
+                      );
+                    });
                 }}
               >
                 <AiIcons.AiOutlineClose className="absolute icon w-10 h-10" />

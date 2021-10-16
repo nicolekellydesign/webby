@@ -1,36 +1,20 @@
 import { useEffect, useState } from "react";
-import { Photo } from "../entities/Photo";
+import { getPhotos, Photo } from "../entities/Photo";
 import { alertService } from "../services/alert.service";
 
 const Photography = (): JSX.Element => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [photosLength] = useState(0);
 
-  const getPhotos = () => {
-    fetch(`https://${window.location.hostname}/api/v1/photos`, {
-      method: "GET",
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
-        }
-
-        setPhotos(body.photos);
+  useEffect(() => {
+    getPhotos()
+      .then((photos) => {
+        setPhotos(photos);
       })
       .catch((error) => {
-        console.error(`error getting user list: ${error}`);
+        console.error(`error getting photography images: ${error}`);
         alertService.error(`Error getting photos: ${error}`, false);
       });
-  };
-
-  useEffect(() => {
-    getPhotos();
   }, [photosLength]);
 
   return (
