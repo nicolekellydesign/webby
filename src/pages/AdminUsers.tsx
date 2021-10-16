@@ -126,6 +126,7 @@ const AdminUsers = (): JSX.Element => {
               <div className="flex-none">{user.id}</div>
               <div className="flex-grow">{user.username}</div>
               <div
+                title={user.protected ? "User is protected" : "Delete user"}
                 className={
                   user.protected
                     ? "btn disabled flex-none rounded"

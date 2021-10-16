@@ -16,7 +16,7 @@ module.exports = {
       },
       maxWidth: {
         logo: "115px",
-        thumb: "128px",
+        thumb: "256px",
       },
       maxHeight: {
         logo: "115px",
