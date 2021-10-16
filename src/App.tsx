@@ -16,7 +16,7 @@ import "./App.css";
 
 function App() {
   return (
-    <>
+    <div className="relative min-h-full">
       <BrowserRouter>
         <Navbar />
         <hr className="line" />
@@ -28,9 +28,9 @@ function App() {
           <Route path="/photography" exact component={Photography} />
           <Route path="/" exact component={Home} />
         </Switch>
-        <Footer />
       </BrowserRouter>
-    </>
+      <Footer />
+    </div>
   );
 }
 
