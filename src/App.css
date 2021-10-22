@@ -41,6 +41,10 @@ textarea:focus:not(:disabled) {
   background-color: #ccc;
 }
 
+input[type="file"]:hover {
+  background-color: transparent;
+}
+
 .line {
   border: 1px inset white;
   margin: 8px 20px;
