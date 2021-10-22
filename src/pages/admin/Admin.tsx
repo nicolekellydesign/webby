@@ -1,12 +1,12 @@
 import { Route, RouteComponentProps, withRouter } from "react-router-dom";
-import AdminSidebar from "../components/AdminSidebar";
-import PrivateRoute from "../components/PrivateRoute";
-import AdminGallery from "./AdminGallery";
-import AdminHome from "./AdminHome";
-import AdminLogin from "./AdminLogin";
-import AdminPhotos from "./AdminPhotos";
-import ProjectSettings from "./AdminProjectSettings";
-import AdminUsers from "./AdminUsers";
+import AdminSidebar from "../../components/AdminSidebar";
+import PrivateRoute from "../../components/PrivateRoute";
+import AdminGallery from "./Gallery";
+import AdminHome from "./Home";
+import AdminLogin from "./Login";
+import AdminPhotos from "./Photos";
+import ProjectSettings from "./ProjectSettings";
+import AdminUsers from "./Users";
 
 interface RouterProps {
   path: string;

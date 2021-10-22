@@ -5,9 +5,9 @@ import {
   addGalleryItem,
   GalleryItem,
   getGalleryItems,
-} from "../entities/GalleryItem";
-import { alertService } from "../services/alert.service";
-import { slideToggle } from "../components/slider";
+} from "../../entities/GalleryItem";
+import { alertService } from "../../services/alert.service";
+import { slideToggle } from "../../components/slider";
 
 interface AddProjectToggleProps {
   isShowing: boolean;

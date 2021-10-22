@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import { GalleryItem } from "../entities/GalleryItem";
+import { GalleryItem } from "../../entities/GalleryItem";
 
 interface ParamTypes {
   name: string;

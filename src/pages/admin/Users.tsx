@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { addUser, deleteUser, getUsers, User } from "../entities/User";
-import { alertService } from "../services/alert.service";
+import { addUser, deleteUser, getUsers, User } from "../../entities/User";
+import { alertService } from "../../services/alert.service";
 
 interface LoginElements extends HTMLFormControlsCollection {
   usernameInput: HTMLInputElement;

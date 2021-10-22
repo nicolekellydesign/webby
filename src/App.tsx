@@ -3,11 +3,10 @@ import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { defaultId } from "./services/alert.service";
 
 import AlertContainer from "./components/AlertContainer";
-import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
 import About from "./pages/About";
-import Admin from "./pages/Admin";
+import Admin from "./pages/admin/Admin";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Photography from "./pages/Photography";

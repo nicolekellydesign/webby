@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { addPhoto, deletePhoto, getPhotos, Photo } from "../entities/Photo";
-import { alertService } from "../services/alert.service";
-import "./AdminPhotos.css";
+import { addPhoto, deletePhoto, getPhotos, Photo } from "../../entities/Photo";
+import { alertService } from "../../services/alert.service";
+import "./Photos.css";
 
 const AdminPhotos = (): JSX.Element => {
   const [photos, setPhotos] = useState<Photo[]>([]);
