@@ -66,8 +66,7 @@ const AdminPhotos = (): JSX.Element => {
                 className="opacity-100 block transition"
               />
               <div
-                className="cursor-pointer absolute opacity-0 top-1/2 left-1/2 overlay transition w-full h-full"
-                title="Delete Image"
+                className="cursor-pointer absolute flex items-center justify-center opacity-0 top-1/2 left-1/2 overlay transition w-full h-full"
                 onClick={() => {
                   deletePhoto(photo.filename)
                     .then(() => {
@@ -88,7 +87,10 @@ const AdminPhotos = (): JSX.Element => {
                     });
                 }}
               >
-                <AiIcons.AiOutlineClose className="absolute icon w-10 h-10" />
+                <div className="font-bold text-lg w-max">
+                  <AiIcons.AiOutlineClose className="mx-auto w-8 h-8" />
+                  Delete image
+                </div>
               </div>
             </li>
           ))}

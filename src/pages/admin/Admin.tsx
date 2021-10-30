@@ -15,37 +15,17 @@ interface RouterProps {
 interface RouterDetailProps extends RouteComponentProps<RouterProps> {}
 
 const Admin: React.FC<RouterDetailProps> = (): JSX.Element => {
-  // const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-
-  // useEffect(() => {
-  //   getGalleryItems()
-  //     .then((galleryItem) => {
-  //       setGalleryItems(galleryItem);
-  //     })
-  //     .catch((error) => {
-  //       console.error(`error getting gallery items: ${error}`);
-  //       alertService.error(`Error getting gallery items: ${error}`, false);
-  //     });
-  // }, []);
-
   return (
     <>
       <AdminSidebar />
       <div className="mt-10 px-48">
-        <Route exact path="/admin" component={AdminHome} />
-
         <PrivateRoute path="/admin/gallery/:name" component={ProjectSettings} />
-        <PrivateRoute path="/admin/gallery">
-          <AdminGallery />
-        </PrivateRoute>
-        <PrivateRoute path="/admin/photos">
-          <AdminPhotos />
-        </PrivateRoute>
-        <PrivateRoute path="/admin/users">
-          <AdminUsers />
-        </PrivateRoute>
+        <PrivateRoute exact path="/admin/gallery" component={AdminGallery} />
+        <PrivateRoute exact path="/admin/photos" component={AdminPhotos} />
+        <PrivateRoute exact path="/admin/users" component={AdminUsers} />
 
-        <Route path="/admin/login" component={AdminLogin} />
+        <Route exact path="/admin/login" component={AdminLogin} />
+        <Route exact path="/admin" component={AdminHome} />
       </div>
     </>
   );

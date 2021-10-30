@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Redirect } from "react-router";
 import * as AiIcons from "react-icons/ai";
 import {
   addGalleryItem,
@@ -8,6 +7,7 @@ import {
 } from "../../entities/GalleryItem";
 import { alertService } from "../../services/alert.service";
 import { slideToggle } from "../../components/slider";
+import { NavLink } from "react-router-dom";
 
 interface AddProjectToggleProps {
   isShowing: boolean;
@@ -41,6 +41,7 @@ interface AddProjectElements extends HTMLFormControlsCollection {
   title: HTMLInputElement;
   caption: HTMLInputElement;
   projectInfo: HTMLInputElement;
+  embedURL: HTMLInputElement;
   thumbnail: HTMLInputElement;
   submitButton: HTMLInputElement;
 }
@@ -77,7 +78,8 @@ const AdminGallery = (): JSX.Element => {
     }
 
     const form = event.currentTarget;
-    const { name, title, caption, projectInfo, submitButton } = form.elements;
+    const { name, title, caption, projectInfo, embedURL, submitButton } =
+      form.elements;
 
     submitButton.disabled = true;
     const item: GalleryItem = {
@@ -85,6 +87,7 @@ const AdminGallery = (): JSX.Element => {
       title: title.value,
       caption: caption.value,
       projectInfo: projectInfo.value,
+      embedURL: embedURL.value,
     };
 
     addGalleryItem(item, selectedFile, selectedFile.name)
@@ -142,18 +145,19 @@ const AdminGallery = (): JSX.Element => {
         <ul className="border border-solid border-white grid grid-cols-4 gap-4 p-4 rounded overflow-y-scroll max-h-screen">
           {galleryItems.map((galleryItem) => (
             <li className="thumb relative max-w-thumb">
-              <img
-                src={`https://${window.location.hostname}/images/${galleryItem.thumbnail}`}
-                alt={galleryItem.title}
-                className="opacity-100 block transition"
-              />
-              <div
-                className="cursor-pointer absolute opacity-0 top-1/2 left-1/2 overlay transition w-full h-full"
-                title="Project Settings"
-                onClick={() => {
-                  return <Redirect to={`/admin/gallery/${galleryItem.name}`} />;
-                }}
-              ></div>
+              <NavLink to={`/admin/gallery/${galleryItem.name}`}>
+                <img
+                  src={`https://${window.location.hostname}/images/${galleryItem.thumbnail}`}
+                  alt={galleryItem.title}
+                  className="opacity-100 block transition"
+                />
+                <div className="cursor-pointer absolute flex items-center justify-center opacity-0 top-1/2 left-1/2 overlay transition w-full h-full">
+                  <div className="font-bold text-lg w-max">
+                    <AiIcons.AiOutlineSetting className="mx-auto w-8 h-8" />
+                    Project Settings
+                  </div>
+                </div>
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -208,6 +212,17 @@ const AdminGallery = (): JSX.Element => {
                   name="projectInfo"
                   className="w-full text-black min-h-textLarge"
                   required
+                />
+              </div>
+              <div className="p-2">
+                <label htmlFor="embedURL">Embed URL (optional)</label>
+                <br />
+                <input
+                  id="embedURL"
+                  type="text"
+                  name="embedURL"
+                  placeholder="https://youtube.com/embed/video-key"
+                  className="w-full text-black"
                 />
               </div>
               <div className="p-2">
