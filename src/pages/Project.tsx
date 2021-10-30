@@ -51,9 +51,9 @@ const Project = (): JSX.Element => {
           onClick={toggleProjectInfo}
           text="Project Information"
         />
-        <div id="project-info" className="hidden text-xl">
+        <div id="project-info" className="hidden text-left text-2xl pt-8">
           <h1 className="font-bold text-5xl">{project.title}</h1>
-          <p className="pt-4 text-left">{project.projectInfo}</p>
+          <p className="pt-6">{project.projectInfo}</p>
         </div>
       </div>
       <article className="block mt-8">
