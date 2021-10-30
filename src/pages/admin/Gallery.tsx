@@ -8,33 +8,7 @@ import {
 import { alertService } from "../../services/alert.service";
 import { slideToggle } from "../../components/slider";
 import { NavLink } from "react-router-dom";
-
-interface AddProjectToggleProps {
-  isShowing: boolean;
-  onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
-}
-
-const AddProjectToggle = (props: AddProjectToggleProps): JSX.Element => {
-  const { isShowing, onClick } = props;
-  const classes = `w-8 h-8 relative inline mr-3`;
-
-  const icon = isShowing ? (
-    <AiIcons.AiOutlineMinus className={classes} />
-  ) : (
-    <AiIcons.AiOutlinePlus className={classes} />
-  );
-
-  return (
-    <div
-      id="add-project-toggle"
-      className="cursor-pointer m-4 max-w-max"
-      onClick={onClick}
-    >
-      {icon}
-      <span className="align-middle text-2xl">Add new project</span>
-    </div>
-  );
-};
+import SlideToggle from "../../components/SlideToggle";
 
 interface AddProjectElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
@@ -111,7 +85,7 @@ const AdminGallery = (): JSX.Element => {
   };
 
   const toggleAddProject = () => {
-    const toggle = document.getElementById("add-project-toggle");
+    const toggle = document.getElementById("slide-toggle");
     if (!toggle) {
       return;
     }
@@ -162,9 +136,10 @@ const AdminGallery = (): JSX.Element => {
           ))}
         </ul>
         <div className="min-w-textLarge">
-          <AddProjectToggle
+          <SlideToggle
             isShowing={addProjectVisible}
             onClick={toggleAddProject}
+            text="Add new project"
           />
           <div id="add-project-form" className="hidden">
             <form onSubmit={onSubmit} className="text-left">

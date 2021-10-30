@@ -29,6 +29,9 @@ module.exports = {
         60: "60px",
         textLarge: "250px",
       },
+      padding: {
+        "2/3": "66.67%",
+      },
       width: {
         70: "70px",
         email: "425px",

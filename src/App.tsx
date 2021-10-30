@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Photography from "./pages/Photography";
 
 import "./App.css";
+import Project from "./pages/Project";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/admin" component={Admin} />
           <Route path="/contact" exact component={Contact} />
           <Route path="/photography" exact component={Photography} />
+          <Route path="/project/:name" component={Project} />
           <Route path="/" exact component={Home} />
         </Switch>
       </BrowserRouter>

@@ -129,7 +129,7 @@ export function getProject(name: string): Promise<GalleryItem> {
         caption: body.caption,
         projectInfo: body.projectInfo,
         thumbnail: body.thumbnail,
-        embedURL: body.embedUrl,
+        embedURL: body.embedURL,
         images: body.images,
       };
 

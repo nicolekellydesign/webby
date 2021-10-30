@@ -180,7 +180,7 @@ const ProjectSettings = (): JSX.Element => {
         );
         alertService.error(`Error getting project info: ${error}`, false);
       });
-  }, [projectLength]);
+  }, [name, projectLength]);
 
   return project ? (
     <div className="container text-center mx-auto">
