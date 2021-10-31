@@ -4,6 +4,7 @@ import { slideToggle } from "../components/slider";
 import SlideToggle from "../components/SlideToggle";
 import { GalleryItem, getProject } from "../entities/GalleryItem";
 import { alertService } from "../services/alert.service";
+import NotFound from "./NotFound";
 
 interface ParamTypes {
   name: string;
@@ -84,8 +85,7 @@ const Project = (): JSX.Element => {
       </article>
     </div>
   ) : (
-    // TODO: Make a 404 page
-    <></>
+    <NotFound />
   );
 };
 

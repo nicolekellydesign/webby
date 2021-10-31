@@ -10,6 +10,7 @@ import {
   updateProject,
 } from "../../entities/GalleryItem";
 import { alertService } from "../../services/alert.service";
+import NotFound from "../NotFound";
 
 interface ParamTypes {
   name: string;
@@ -358,8 +359,7 @@ const ProjectSettings = (): JSX.Element => {
       </div>
     </div>
   ) : (
-    // TODO: Make a 404 page
-    <></>
+    <NotFound />
   );
 };
 

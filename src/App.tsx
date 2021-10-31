@@ -13,6 +13,7 @@ import Photography from "./pages/Photography";
 
 import "./App.css";
 import Project from "./pages/Project";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/photography" exact component={Photography} />
           <Route path="/project/:name" component={Project} />
           <Route path="/" exact component={Home} />
+          <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
     </div>
