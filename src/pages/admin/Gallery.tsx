@@ -151,6 +151,8 @@ const AdminGallery = (): JSX.Element => {
                   type="text"
                   name="name"
                   placeholder="project-name"
+                  pattern="[A-z\d\-_]+"
+                  title="Only use letters, numbers, - and _ characters."
                   className="w-full text-black"
                   required
                 />
@@ -205,7 +207,9 @@ const AdminGallery = (): JSX.Element => {
                 <br />
                 <input
                   type="file"
+                  accept="image/*"
                   name="thumbnail"
+                  title="Only images allowed."
                   onChange={changeHandler}
                   className="btn rounded text-center"
                   style={{ paddingLeft: 0 }}

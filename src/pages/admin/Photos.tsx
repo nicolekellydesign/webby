@@ -98,7 +98,9 @@ const AdminPhotos = (): JSX.Element => {
         <div className="mt-8 p-2">
           <input
             type="file"
+            accept="image/*"
             name="file"
+            title="Only images allowed."
             onChange={changeHandler}
             className="btn rounded text-center"
           />

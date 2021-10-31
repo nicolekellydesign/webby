@@ -56,6 +56,7 @@ const AdminLogin = (): JSX.Element => {
           type="text"
           name="username"
           placeholder="Username"
+          pattern="\w"
           required
           className="rounded text-black text-center mb-3 w-full"
         />

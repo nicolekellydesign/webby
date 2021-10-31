@@ -211,7 +211,9 @@ const ProjectSettings = (): JSX.Element => {
                 <br />
                 <input
                   type="file"
+                  accept="image/*"
                   name="image"
+                  title="Only images allowed."
                   onChange={thumbChangeHandler}
                   className="btn rounded text-center"
                   required
@@ -341,7 +343,9 @@ const ProjectSettings = (): JSX.Element => {
             <br />
             <input
               type="file"
+              accept="image/*"
               name="image"
+              title="Only images allowed."
               onChange={imageChangeHandler}
               className="btn rounded text-center"
             />
