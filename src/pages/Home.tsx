@@ -30,7 +30,7 @@ const Home = (): JSX.Element => {
 
         <div className="flex flex-wrap">
           {galleryItems.map((item) => (
-            <div className="w-full xl:w-1/2">
+            <div className="w-full xl:w-1/2 p-4">
               <div
                 className="bg-cover bg-center bg-no-repeat"
                 data-src={`/images/${item.thumbnail}`}
