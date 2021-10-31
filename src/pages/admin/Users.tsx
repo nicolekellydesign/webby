@@ -102,7 +102,7 @@ const AdminUsers = (): JSX.Element => {
             type="text"
             name="username"
             placeholder="Username"
-            pattern="\w"
+            pattern="^(\w+)$"
             title="Username cannot contain whitespace"
             required
             className="rounded text-black text-center"
