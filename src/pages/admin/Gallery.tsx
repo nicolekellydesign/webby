@@ -103,7 +103,6 @@ const AdminGallery = (): JSX.Element => {
   useEffect(() => {
     getGalleryItems()
       .then((items) => {
-        console.info({ items });
         setGalleryItems(items);
       })
       .catch((error) => {
