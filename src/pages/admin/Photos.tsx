@@ -130,7 +130,7 @@ const AdminPhotos = (): JSX.Element => {
               name="image"
               title="Only images allowed."
               onChange={imageChangeHandler}
-              className="btn rounded text-center"
+              className="btn"
             />
             <IconButton
               type="submit"

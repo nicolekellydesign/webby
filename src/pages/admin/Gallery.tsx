@@ -210,7 +210,7 @@ const AdminGallery = (): JSX.Element => {
                   name="thumbnail"
                   title="Only images allowed."
                   onChange={changeHandler}
-                  className="btn rounded text-center"
+                  className="btn"
                   style={{ paddingLeft: 0 }}
                   required
                 />
@@ -220,7 +220,7 @@ const AdminGallery = (): JSX.Element => {
                   id="submitButton"
                   type="submit"
                   value="Add project"
-                  className="btn text-black text-center"
+                  className="btn"
                 />
               </div>
             </form>

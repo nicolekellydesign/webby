@@ -12,8 +12,15 @@
 }
 
 .btn {
+  border-radius: 0.25rem;
+  color: black;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
+  text-align: center;
+}
+
+.btn.text-white {
+  color: white;
 }
 
 .btn:disabled {

@@ -259,16 +259,12 @@ const About = (): JSX.Element => {
                   name="image"
                   title="Only images allowed."
                   onChange={portraitChangeHandler}
-                  className="btn rounded text-center"
+                  className="btn"
                   required
                 />
                 <br />
                 <div className="pl-3">
-                  <button
-                    type="submit"
-                    name="submit"
-                    className="btn rounded text-black text-center"
-                  >
+                  <button type="submit" name="submit" className="btn">
                     <AiIcons.AiOutlineUpload />
                     <span>Upload Portrait</span>
                   </button>
@@ -298,7 +294,7 @@ const About = (): JSX.Element => {
                 id="submit"
                 type="submit"
                 value="Update statement"
-                className="btn text-black text-center"
+                className="btn"
               />
             </div>
           </form>
@@ -317,16 +313,12 @@ const About = (): JSX.Element => {
                 name="resume"
                 title="Only PDF files allowed."
                 onChange={resumeChangeHandler}
-                className="btn rounded text-center"
+                className="btn"
                 required
               />
               <br />
               <div className="pl-3">
-                <button
-                  type="submit"
-                  name="submit"
-                  className="btn rounded text-black text-center"
-                >
+                <button type="submit" name="submit" className="btn">
                   <AiIcons.AiOutlineUpload />
                   <span>Upload résumé</span>
                 </button>

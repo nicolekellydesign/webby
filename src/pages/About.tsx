@@ -58,7 +58,7 @@ const About = (): JSX.Element => {
           ))}
         <button
           type="button"
-          className="btn rounded text-black text-center"
+          className="btn"
           onClick={() => {
             window.open("resources/resume.pdf");
           }}

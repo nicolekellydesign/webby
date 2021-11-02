@@ -149,14 +149,14 @@ const Contact = (): JSX.Element => {
             </div>
             <div className="md:flex md:justify-center p-2">
               <div className="p-2">
-                <input type="reset" className="btn w-full text-black" />
+                <input type="reset" className="btn w-full" />
               </div>
               <div className="p-2">
                 <input
                   id="submitButton"
                   type="submit"
                   value="Send message"
-                  className="btn w-full text-black"
+                  className="btn w-full"
                 />
               </div>
             </div>

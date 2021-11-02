@@ -235,7 +235,7 @@ const ProjectSettings = (): JSX.Element => {
                   name="image"
                   title="Only images allowed."
                   onChange={thumbChangeHandler}
-                  className="btn rounded text-center"
+                  className="btn"
                   required
                 />
                 <br />
@@ -308,7 +308,7 @@ const ProjectSettings = (): JSX.Element => {
                 id="submit"
                 type="submit"
                 value="Update project"
-                className="btn text-black text-center"
+                className="btn"
               />
             </div>
           </form>
@@ -369,7 +369,7 @@ const ProjectSettings = (): JSX.Element => {
               name="image"
               title="Only images allowed."
               onChange={imageChangeHandler}
-              className="btn rounded text-center"
+              className="btn"
             />
             <IconButton
               type="submit"

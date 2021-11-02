@@ -68,8 +68,8 @@ const AdminUsers = (): JSX.Element => {
                 title={user.protected ? "User is protected" : "Delete user"}
                 className={
                   user.protected
-                    ? "btn disabled flex-none rounded"
-                    : "btn flex-none rounded"
+                    ? "btn disabled flex-none text-white"
+                    : "btn flex-none text-white"
                 }
                 onClick={() => {
                   if (!user.protected) {
@@ -119,7 +119,7 @@ const AdminUsers = (): JSX.Element => {
             id="submitButton"
             type="submit"
             value="Add user"
-            className="btn rounded text-black text-center"
+            className="btn"
           />
         </form>
       </div>
