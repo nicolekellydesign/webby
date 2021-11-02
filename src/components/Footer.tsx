@@ -5,7 +5,9 @@ const Footer = (): JSX.Element => {
       role="contentinfo"
     >
       <div className="text-center py-3">
-        <p>&copy; 2020-{new Date().getFullYear()} Nicole Kelly Design</p>
+        <p>
+          &copy; 2020 &ndash; {new Date().getFullYear()} Nicole Kelly Design
+        </p>
       </div>
     </footer>
   );
