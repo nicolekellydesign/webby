@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Redirect, useParams } from "react-router";
 import * as AiIcons from "react-icons/ai";
 import {
   addProjectImage,
   changeThumbnail,
+  deleteGalleryItem,
   deleteProjectImage,
   GalleryItem,
   getProject,
@@ -11,7 +12,7 @@ import {
 } from "../../entities/GalleryItem";
 import { alertService } from "../../services/alert.service";
 import NotFound from "../NotFound";
-import IconButton from "../../components/IconButton";
+import IconButton, { DestructiveButton } from "../../components/IconButton";
 
 interface ParamTypes {
   name: string;
@@ -58,6 +59,8 @@ const ProjectSettings = (): JSX.Element => {
 
   const [imageFile, setImageFile] = useState<File>();
   const [isImagePicked, setIsImagePicked] = useState(false);
+
+  const [redirectToReferrer, setRedirectToReferrer] = useState(false);
 
   const thumbChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -171,6 +174,21 @@ const ProjectSettings = (): JSX.Element => {
       });
   };
 
+  const deleteProject = () => {
+    const ok = window.confirm(
+      "Are you sure you want to delete this project?\nThis action cannot be reversed."
+    );
+
+    if (!ok) {
+      return;
+    }
+
+    deleteGalleryItem(name).then(() => {
+      setRedirectToReferrer(true);
+      alertService.success("Project deleted successfully!", true);
+    });
+  };
+
   useEffect(() => {
     getProject(name)
       .then((p) => {
@@ -183,6 +201,10 @@ const ProjectSettings = (): JSX.Element => {
         alertService.error(`Error getting project info: ${error}`, false);
       });
   }, [name, projectLength]);
+
+  if (redirectToReferrer) {
+    return <Redirect to="/admin/gallery" />;
+  }
 
   return project ? (
     <div className="container text-center mx-auto">
@@ -229,6 +251,7 @@ const ProjectSettings = (): JSX.Element => {
             </form>
           </div>
         </div>
+
         <div id="update-project-form" className="mt-4">
           <form onSubmit={onSubmit} className="text-left">
             <div className="p-2">
@@ -290,6 +313,7 @@ const ProjectSettings = (): JSX.Element => {
             </div>
           </form>
         </div>
+
         <div className="mt-8">
           <h2 className="font-semibold text-left text-xl">Project Images</h2>
           <ul className="border border-solid border-white grid grid-cols-4 gap-4 p-4 mt-4 rounded overflow-y-scroll max-h-screen">
@@ -357,6 +381,14 @@ const ProjectSettings = (): JSX.Element => {
           <div className="text-xs mb-6">
             <p>Max file size: 8 MB</p>
           </div>
+        </div>
+
+        <div className="mt-8">
+          <DestructiveButton
+            icon={AiIcons.AiOutlineDelete}
+            text="Delete project"
+            onClick={deleteProject}
+          />
         </div>
       </div>
     </div>
