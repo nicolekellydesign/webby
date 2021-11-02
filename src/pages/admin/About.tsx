@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { alertService } from "../../services/alert.service";
 import BlankAvatar from "../../blank-avatar.svg";
+import IconButton from "../../components/IconButton";
 
 interface PortraitElements extends HTMLFormControlsCollection {
   image: HTMLInputElement;
@@ -264,10 +265,12 @@ const About = (): JSX.Element => {
                 />
                 <br />
                 <div className="pl-3">
-                  <button type="submit" name="submit" className="btn">
-                    <AiIcons.AiOutlineUpload />
-                    <span>Upload Portrait</span>
-                  </button>
+                  <IconButton
+                    type="submit"
+                    name="submit"
+                    icon={<AiIcons.AiOutlineUpload />}
+                    text="Upload portrait"
+                  />
                 </div>
               </div>
             </form>
@@ -318,10 +321,12 @@ const About = (): JSX.Element => {
               />
               <br />
               <div className="pl-3">
-                <button type="submit" name="submit" className="btn">
-                  <AiIcons.AiOutlineUpload />
-                  <span>Upload résumé</span>
-                </button>
+                <IconButton
+                  type="submit"
+                  name="submit"
+                  icon={<AiIcons.AiOutlineUpload />}
+                  text="Upload résumé"
+                />
               </div>
             </div>
           </form>

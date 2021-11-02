@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { alertService } from "../services/alert.service";
 import BlankAvatar from "../blank-avatar.svg";
+import IconButton from "../components/IconButton";
 
 const About = (): JSX.Element => {
   const [statement, setStatement] = useState("");
@@ -56,16 +57,13 @@ const About = (): JSX.Element => {
               <br />
             </>
           ))}
-        <button
-          type="button"
-          className="btn"
+        <IconButton
+          icon={<AiIcons.AiOutlineDownload />}
+          text="Download résumé"
           onClick={() => {
             window.open("resources/resume.pdf");
           }}
-        >
-          <AiIcons.AiOutlineDownload />
-          <span>Download résumé</span>
-        </button>
+        />
       </div>
     </div>
   );
