@@ -25,17 +25,28 @@
   opacity: 0.5;
 }
 
+button,
 input,
 textarea {
+  background-color: #e6e6e6;
   border: 1px solid grey;
   transition: all 0.2s;
 }
 
+button > svg {
+  display: inline;
+  margin-right: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+button:hover:not(:disabled),
 input:hover:not(:disabled),
 textarea:hover:not(:disabled) {
   background-color: #ccc;
 }
 
+button:hover:not(:disabled),
 input:focus:not(:disabled),
 textarea:focus:not(:disabled) {
   background-color: #ccc;

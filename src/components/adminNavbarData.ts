@@ -15,6 +15,11 @@ export const adminNavbarData = [
     privileged: true,
   },
   {
+    title: "About",
+    path: "/admin/about",
+    privileged: true,
+  },
+  {
     title: "Users",
     path: "/admin/users",
     privileged: true,
