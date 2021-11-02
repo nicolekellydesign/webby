@@ -61,7 +61,7 @@ const AdminPhotos = (): JSX.Element => {
           {photos.map((photo: Photo) => (
             <li className="thumb relative max-w-thumb">
               <img
-                src={`https://${window.location.hostname}/images/${photo.filename}`}
+                src={`images/${photo.filename}`}
                 alt={photo.filename}
                 className="opacity-100 block transition"
               />

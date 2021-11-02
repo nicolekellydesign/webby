@@ -11,7 +11,7 @@ const authContext = React.createContext({});
 export function useAuth(): AuthProps {
   const [authed, setAuthed] = React.useState(false);
 
-  fetch(`https://${window.location.hostname}/api/v1/check`, {
+  fetch("/api/v1/check", {
     headers: { Method: "GET" },
   })
     .then(async (response) => {
@@ -42,10 +42,7 @@ export function useAuth(): AuthProps {
         body: JSON.stringify({ username, password, extended }),
       };
 
-      return await fetch(
-        `https://${window.location.hostname}/api/v1/login`,
-        options
-      ).then(async (response) => {
+      return await fetch("/api/v1/login", options).then(async (response) => {
         const isJson = response.headers
           .get("Content-Type")
           ?.includes("application/json");
@@ -61,7 +58,7 @@ export function useAuth(): AuthProps {
     },
 
     async logout() {
-      return await fetch(`https://${window.location.hostname}/api/v1/logout`, {
+      return await fetch("/api/v1/logout", {
         method: "POST",
       }).then(async (response) => {
         const isJson = response.headers

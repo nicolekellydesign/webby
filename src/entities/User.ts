@@ -16,7 +16,7 @@ export interface User {
  */
 export function addUser(username: string, password: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/users`, {
+    fetch("/api/v1/admin/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -44,7 +44,7 @@ export function addUser(username: string, password: string): Promise<void> {
  */
 export function deleteUser(id: number): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/users/${id}`, {
+    fetch(`/api/v1/admin/users/${id}`, {
       method: "DELETE",
     }).then(async (response) => {
       const isJson = response.headers
@@ -69,7 +69,7 @@ export function deleteUser(id: number): Promise<void> {
  */
 export function getUsers(): Promise<User[]> {
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/users`, {
+    fetch("/api/v1/admin/users", {
       method: "GET",
     }).then(async (response) => {
       const isJson = response.headers

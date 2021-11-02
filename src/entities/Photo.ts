@@ -17,7 +17,7 @@ export function addPhoto(file: File, filename: string): Promise<void> {
   formData.append("image", file, filename);
 
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/photos`, {
+    fetch("/api/v1/admin/photos", {
       method: "POST",
       body: formData,
     }).then(async (response) => {
@@ -44,12 +44,9 @@ export function addPhoto(file: File, filename: string): Promise<void> {
  */
 export function deletePhoto(filename: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(
-      `https://${window.location.hostname}/api/v1/admin/photos/${filename}`,
-      {
-        method: "DELETE",
-      }
-    ).then(async (response) => {
+    fetch(`/api/v1/admin/photos/${filename}`, {
+      method: "DELETE",
+    }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")
         ?.includes("application/json");
@@ -72,7 +69,7 @@ export function deletePhoto(filename: string): Promise<void> {
  */
 export function getPhotos(): Promise<Photo[]> {
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/photos`, {
+    fetch("/api/v1/photos", {
       method: "GET",
     }).then(async (response) => {
       const isJson = response.headers

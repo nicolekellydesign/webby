@@ -33,7 +33,7 @@ export function addGalleryItem(
   }
 
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/gallery`, {
+    fetch("/api/v1/admin/gallery", {
       method: "POST",
       body: formData,
     }).then(async (response) => {
@@ -59,7 +59,7 @@ export function addGalleryItem(
  */
 export function getGalleryItems(): Promise<GalleryItem[]> {
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/gallery`, {
+    fetch("/api/v1/gallery", {
       method: "GET",
     }).then(async (response) => {
       const isJson = response.headers
@@ -85,7 +85,7 @@ export function getGalleryItems(): Promise<GalleryItem[]> {
  */
 export function deleteGalleryItem(name: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/admin/gallery/${name}`, {
+    fetch(`/api/v1/admin/gallery/${name}`, {
       method: "DELETE",
     }).then(async (response) => {
       const isJson = response.headers
@@ -110,7 +110,7 @@ export function deleteGalleryItem(name: string): Promise<void> {
  */
 export function getProject(name: string): Promise<GalleryItem> {
   return new Promise((resolve, reject) => {
-    fetch(`https://${window.location.hostname}/api/v1/gallery/${name}`, {
+    fetch(`/api/v1/gallery/${name}`, {
       method: "GET",
     }).then(async (response) => {
       const isJson = response.headers
@@ -155,13 +155,10 @@ export function addProjectImage(
   formData.append("image", file, filename);
 
   return new Promise((resolve, reject) => {
-    fetch(
-      `https://${window.location.hostname}/api/v1/admin/gallery/${galleryID}/image`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    ).then(async (response) => {
+    fetch(`/api/v1/admin/gallery/${galleryID}/image`, {
+      method: "POST",
+      body: formData,
+    }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")
         ?.includes("application/json");
@@ -189,12 +186,9 @@ export function deleteProjectImage(
   filename: string
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(
-      `https://${window.location.hostname}/api/v1/admin/gallery/${galleryID}/image/${filename}`,
-      {
-        method: "DELETE",
-      }
-    ).then(async (response) => {
+    fetch(`/api/v1/admin/gallery/${galleryID}/image/${filename}`, {
+      method: "DELETE",
+    }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")
         ?.includes("application/json");
@@ -219,13 +213,10 @@ export function changeThumbnail(
   formData.append("thumbnail", file, filename);
 
   return new Promise((resolve, reject) => {
-    fetch(
-      `https://${window.location.hostname}/api/v1/admin/gallery/${galleryID}/thumbnail`,
-      {
-        method: "PATCH",
-        body: formData,
-      }
-    ).then(async (response) => {
+    fetch(`/api/v1/admin/gallery/${galleryID}/thumbnail`, {
+      method: "PATCH",
+      body: formData,
+    }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")
         ?.includes("application/json");
@@ -249,14 +240,11 @@ export function changeThumbnail(
  */
 export function updateProject(item: GalleryItem): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(
-      `https://${window.location.hostname}/api/v1/admin/gallery/${item.name}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
-      }
-    ).then(async (response) => {
+    fetch(`/api/v1/admin/gallery/${item.name}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(item),
+    }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")
         ?.includes("application/json");

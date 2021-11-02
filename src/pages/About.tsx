@@ -8,7 +8,7 @@ const About = (): JSX.Element => {
   const [statementLength] = useState(0);
 
   useEffect(() => {
-    fetch(`https://${window.location.hostname}/api/v1/about`, {
+    fetch("api/v1/about", {
       method: "GET",
     })
       .then(async (response) => {
@@ -34,7 +34,7 @@ const About = (): JSX.Element => {
     <div className="flex gap-16 ml-28">
       <div className="p-4 max-w-lg w-full">
         <img
-          src={`https://${window.location.hostname}/images/about-portrait.jpg`}
+          src={"images/about-portrait.jpg"}
           onError={(e) => {
             e.currentTarget.onerror = null;
             e.currentTarget.src = BlankAvatar;

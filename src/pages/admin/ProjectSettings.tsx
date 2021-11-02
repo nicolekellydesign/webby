@@ -189,10 +189,7 @@ const ProjectSettings = (): JSX.Element => {
       <div className="max-w-max mx-auto my-8">
         <div className="flex">
           <div className="relative max-w-thumb pl-2">
-            <img
-              src={`https://${window.location.hostname}/images/${project.thumbnail}`}
-              alt={project.title}
-            />
+            <img src={`images/${project.thumbnail}`} alt={project.title} />
           </div>
           <div className="flex flex-col items-start mt-4">
             <form
@@ -298,7 +295,7 @@ const ProjectSettings = (): JSX.Element => {
             {project.images?.map((image) => (
               <li className="thumb relative max-w-thumb">
                 <img
-                  src={`https://${window.location.hostname}/images/${image}`}
+                  src={`images/${image}`}
                   alt={image}
                   className="opacity-100 block transition"
                 />

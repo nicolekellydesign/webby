@@ -81,7 +81,7 @@ const About = (): JSX.Element => {
     window.scrollTo(0, 0);
     alertService.info("Uploading portrait image", true);
 
-    fetch(`https://${window.location.hostname}/api/v1/admin/about/portrait`, {
+    fetch("api/v1/admin/about/portrait", {
       method: "PATCH",
       body: formData,
     })
@@ -118,7 +118,7 @@ const About = (): JSX.Element => {
     const { statement, submit } = form.elements;
     submit.disabled = true;
 
-    fetch(`https://${window.location.hostname}/api/v1/admin/about`, {
+    fetch("api/v1/admin/about", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ statement: statement.value }),
@@ -167,7 +167,7 @@ const About = (): JSX.Element => {
     window.scrollTo(0, 0);
     alertService.info("Uploading résumé", true);
 
-    fetch(`https://${window.location.hostname}/api/v1/admin/about/resume`, {
+    fetch("api/v1/admin/about/resume", {
       method: "PATCH",
       body: formData,
     })
@@ -198,7 +198,7 @@ const About = (): JSX.Element => {
   };
 
   useEffect(() => {
-    fetch(`https://${window.location.hostname}/api/v1/about`, {
+    fetch("api/v1/about", {
       method: "GET",
     })
       .then(async (response) => {
@@ -227,7 +227,7 @@ const About = (): JSX.Element => {
         <div className="flex">
           <div className="relative max-w-thumb pl-2">
             <img
-              src={`https://${window.location.hostname}/images/about-portrait.jpg`}
+              src="images/about-portrait.jpg"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = BlankAvatar;
