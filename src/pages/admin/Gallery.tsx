@@ -120,7 +120,7 @@ const AdminGallery = (): JSX.Element => {
             <li className="thumb relative max-w-thumb">
               <NavLink to={`/admin/gallery/${galleryItem.name}`}>
                 <img
-                  src={`images/${galleryItem.thumbnail}`}
+                  src={`/images/${galleryItem.thumbnail}`}
                   alt={galleryItem.title}
                   className="opacity-100 block transition"
                 />

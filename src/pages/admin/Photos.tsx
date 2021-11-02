@@ -80,7 +80,7 @@ const AdminPhotos = (): JSX.Element => {
           {photos.map((photo: Photo) => (
             <li className="thumb relative max-w-thumb">
               <img
-                src={`images/${photo.filename}`}
+                src={`/images/${photo.filename}`}
                 alt={photo.filename}
                 className="opacity-100 block transition"
               />
