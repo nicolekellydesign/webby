@@ -219,7 +219,7 @@ const AdminGallery = (): JSX.Element => {
                 <input
                   id="submitButton"
                   type="submit"
-                  value="Submit"
+                  value="Add project"
                   className="btn text-black text-center"
                 />
               </div>

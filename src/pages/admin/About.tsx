@@ -297,7 +297,7 @@ const About = (): JSX.Element => {
               <input
                 id="submit"
                 type="submit"
-                value="Submit"
+                value="Update statement"
                 className="btn text-black text-center"
               />
             </div>
@@ -328,7 +328,7 @@ const About = (): JSX.Element => {
                   className="btn rounded text-black text-center"
                 >
                   <AiIcons.AiOutlineUpload />
-                  <span>Upload Résumé</span>
+                  <span>Upload résumé</span>
                 </button>
               </div>
             </div>

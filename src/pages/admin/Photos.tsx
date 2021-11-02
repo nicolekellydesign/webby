@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
+import IconButton from "../../components/IconButton";
 import { addPhoto, deletePhoto, getPhotos, Photo } from "../../entities/Photo";
 import { alertService } from "../../services/alert.service";
 import "./Photos.css";
+
+interface UploadImageElements extends HTMLFormControlsCollection {
+  image: HTMLInputElement;
+  submit: HTMLInputElement;
+}
+
+interface UploadImageFormElement extends HTMLFormElement {
+  readonly elements: UploadImageElements;
+}
 
 const AdminPhotos = (): JSX.Element => {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -11,7 +21,7 @@ const AdminPhotos = (): JSX.Element => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [isFilePicked, setIsFilePicked] = useState(false);
 
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const imageChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
 
     if (!files) {
@@ -22,10 +32,16 @@ const AdminPhotos = (): JSX.Element => {
     setIsFilePicked(true);
   };
 
-  const handleSubmission = () => {
+  const uploadImage = (event: React.FormEvent<UploadImageFormElement>) => {
+    event.preventDefault();
+
     if (!isFilePicked || !selectedFile) {
       return;
     }
+
+    const form = event.currentTarget;
+    const { submit } = form.elements;
+    submit.disabled = true;
 
     addPhoto(selectedFile, selectedFile.name)
       .then(() => {
@@ -39,6 +55,9 @@ const AdminPhotos = (): JSX.Element => {
       .finally(() => {
         setIsFilePicked(false);
         setSelectedFile(undefined);
+        form.reset();
+        submit.disabled = false;
+        window.scrollTo(0, 0);
       });
   };
 
@@ -96,21 +115,30 @@ const AdminPhotos = (): JSX.Element => {
           ))}
         </ul>
         <div className="mt-8 p-2">
-          <input
-            type="file"
-            accept="image/*"
-            name="file"
-            title="Only images allowed."
-            onChange={changeHandler}
-            className="btn rounded text-center"
-          />
-          <input
-            type="button"
-            name="submit"
-            value="Submit"
-            onClick={handleSubmission}
-            className="btn rounded text-black text-center"
-          />
+          <form
+            id="image-upload-form"
+            onSubmit={uploadImage}
+            className="mt-4 p-2"
+          >
+            <label htmlFor="image" className="pl-3 font-semibold">
+              Add project image
+            </label>
+            <br />
+            <input
+              type="file"
+              accept="image/*"
+              name="image"
+              title="Only images allowed."
+              onChange={imageChangeHandler}
+              className="btn rounded text-center"
+            />
+            <IconButton
+              type="submit"
+              name="submit"
+              icon={<AiIcons.AiOutlineUpload />}
+              text="Upload image"
+            />
+          </form>
         </div>
         <div className="text-xs mb-6">
           <p>Max file size: 8 MB</p>

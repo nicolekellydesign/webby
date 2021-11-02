@@ -118,7 +118,7 @@ const AdminUsers = (): JSX.Element => {
           <input
             id="submitButton"
             type="submit"
-            value="Add User"
+            value="Add user"
             className="btn rounded text-black text-center"
           />
         </form>

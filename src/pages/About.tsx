@@ -64,7 +64,7 @@ const About = (): JSX.Element => {
           }}
         >
           <AiIcons.AiOutlineDownload />
-          <span>Download Résumé</span>
+          <span>Download résumé</span>
         </button>
       </div>
     </div>

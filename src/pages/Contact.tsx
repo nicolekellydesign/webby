@@ -155,7 +155,7 @@ const Contact = (): JSX.Element => {
                 <input
                   id="submitButton"
                   type="submit"
-                  value="Submit"
+                  value="Send message"
                   className="btn w-full text-black"
                 />
               </div>

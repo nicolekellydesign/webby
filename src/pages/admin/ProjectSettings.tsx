@@ -11,6 +11,7 @@ import {
 } from "../../entities/GalleryItem";
 import { alertService } from "../../services/alert.service";
 import NotFound from "../NotFound";
+import IconButton from "../../components/IconButton";
 
 interface ParamTypes {
   name: string;
@@ -217,11 +218,11 @@ const ProjectSettings = (): JSX.Element => {
                 />
                 <br />
                 <div className="pl-3">
-                  <input
+                  <IconButton
                     type="submit"
                     name="submit"
-                    value="Upload"
-                    className="btn rounded text-black text-center"
+                    icon={<AiIcons.AiOutlineUpload />}
+                    text="Upload thumbnail"
                   />
                 </div>
               </div>
@@ -283,7 +284,7 @@ const ProjectSettings = (): JSX.Element => {
               <input
                 id="submit"
                 type="submit"
-                value="Submit"
+                value="Update project"
                 className="btn text-black text-center"
               />
             </div>
@@ -346,11 +347,11 @@ const ProjectSettings = (): JSX.Element => {
               onChange={imageChangeHandler}
               className="btn rounded text-center"
             />
-            <input
+            <IconButton
               type="submit"
               name="submit"
-              value="Upload"
-              className="btn rounded text-black text-center"
+              icon={<AiIcons.AiOutlineUpload />}
+              text="Upload image"
             />
           </form>
           <div className="text-xs mb-6">
