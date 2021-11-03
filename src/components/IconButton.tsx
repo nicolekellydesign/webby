@@ -1,6 +1,6 @@
 export const DestructiveButton = ({ icon, text, ...rest }: any) => {
   return (
-    <button {...rest} className="btn">
+    <button {...rest} className="btn destructive">
       {icon}
       <span>{text}</span>
     </button>
