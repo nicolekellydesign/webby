@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
+import DialogBox from "../../components/DialogBox";
 import { addUser, deleteUser, getUsers, User } from "../../entities/User";
 import { alertService } from "../../services/alert.service";
 
@@ -14,8 +15,14 @@ interface LoginFormElement extends HTMLFormElement {
 }
 
 const AdminUsers = (): JSX.Element => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const [users, setUsers] = useState<User[]>([]);
   const [usersLength, setUsersLength] = useState(0);
+
+  const toggleDialog = () => {
+    setDialogOpen(!dialogOpen);
+  };
 
   const handleSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
@@ -27,7 +34,7 @@ const AdminUsers = (): JSX.Element => {
 
     addUser(usernameInput.value, passwordInput.value)
       .then(() => {
-        alertService.success("User added successfully!", false);
+        alertService.success("User added successfully!", true);
         setUsersLength(usersLength + 1);
       })
       .catch((error) => {
@@ -38,6 +45,20 @@ const AdminUsers = (): JSX.Element => {
         submitButton.disabled = false;
         form.reset();
       });
+  };
+
+  const handleDelete = (user: User) => {
+    if (!user.protected) {
+      deleteUser(user.id)
+        .then(() => {
+          alertService.success("User deleted successfully!", true);
+          setUsersLength(usersLength + 1);
+        })
+        .catch((error) => {
+          console.error(`error deleting user: ${error}`);
+          alertService.error(`Error removing user: ${error}`, false);
+        });
+    }
   };
 
   useEffect(() => {
@@ -73,26 +94,32 @@ const AdminUsers = (): JSX.Element => {
                 }
                 onClick={() => {
                   if (!user.protected) {
-                    deleteUser(user.id)
-                      .then(() => {
-                        alertService.success(
-                          "User deleted successfully!",
-                          false
-                        );
-                        setUsersLength(usersLength + 1);
-                      })
-                      .catch((error) => {
-                        console.error(`error deleting user: ${error}`);
-                        alertService.error(
-                          `Error removing user: ${error}`,
-                          false
-                        );
-                      });
+                    toggleDialog();
                   }
                 }}
               >
                 <AiIcons.AiOutlineClose />
               </div>
+
+              {!user.protected && (
+                <DialogBox
+                  show={dialogOpen}
+                  type="warning"
+                  onClose={toggleDialog}
+                  onConfirm={() => {
+                    handleDelete(user);
+                    toggleDialog();
+                  }}
+                >
+                  <div className="flex-grow p-4">
+                    <h2 className="font-bold text-xl">
+                      Are you sure you want to delete user '{user.username}'?
+                    </h2>
+                    <br />
+                    <p className="text-lg">This action cannot be reversed.</p>
+                  </div>
+                </DialogBox>
+              )}
             </li>
           ))}
         </ul>
