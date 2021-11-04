@@ -13,6 +13,7 @@ import {
 import { alertService } from "../../services/alert.service";
 import NotFound from "../NotFound";
 import IconButton, { DestructiveButton } from "../../components/IconButton";
+import DialogBox from "../../components/DialogBox";
 
 interface ParamTypes {
   name: string;
@@ -51,6 +52,8 @@ interface UploadImageFormElement extends HTMLFormElement {
 const ProjectSettings = (): JSX.Element => {
   const { name } = useParams<ParamTypes>();
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const [project, setProject] = useState<GalleryItem>();
   const [projectLength, setProjectLength] = useState(0);
 
@@ -61,6 +64,10 @@ const ProjectSettings = (): JSX.Element => {
   const [isImagePicked, setIsImagePicked] = useState(false);
 
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+
+  const toggleDialog = () => {
+    setDialogOpen(!dialogOpen);
+  };
 
   const thumbChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -385,12 +392,27 @@ const ProjectSettings = (): JSX.Element => {
 
         <div className="mt-8">
           <DestructiveButton
-            icon={AiIcons.AiOutlineDelete}
+            icon={<AiIcons.AiOutlineDelete />}
             text="Delete project"
-            onClick={deleteProject}
+            onClick={toggleDialog}
           />
         </div>
       </div>
+
+      <DialogBox
+        show={dialogOpen}
+        type="warning"
+        onClose={toggleDialog}
+        onConfirm={deleteProject}
+      >
+        <div className="flex-grow p-4">
+          <h2 className="font-bold text-xl">
+            Are you sure you want to delete this project?
+          </h2>
+          <br />
+          <p className="text-lg">This action cannot be reversed.</p>
+        </div>
+      </DialogBox>
     </div>
   ) : (
     <NotFound />
