@@ -16,7 +16,7 @@ const DialogBox = ({
   type,
   children,
 }: DialogProps) => {
-  const iconClasses = "flex-1 flex-grow-0 mx-auto w-16";
+  const iconClasses = "flex-1 mx-auto w-16";
   const icon = {
     info: <AiOutlineInfo className={iconClasses} />,
     warning: <AiOutlineWarning className={iconClasses} />,
@@ -40,8 +40,8 @@ const DialogBox = ({
   };
 
   return show ? (
-    <div className="fixed bg-gray-700 bg-opacity-70 top-0 left-0 right-0 bottom-0 p-14">
-      <div className="bg-black border border-gray-500 flex flex-col rounded-lg p-4 mx-auto my-0 max-w-lg min-h-lg ">
+    <div className="fade-in fixed flex flex-col justify-center bg-gray-700 bg-opacity-70 top-0 left-0 right-0 bottom-0 p-14">
+      <div className="fade-in bg-black border border-gray-500 flex flex-col rounded-lg p-4 mx-auto my-0 max-w-lg min-h-lg ">
         {icon[type]}
         {children}
         <div className="flex-1 flex flex-grow-0 justify-between px-8">

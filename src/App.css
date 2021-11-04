@@ -70,6 +70,32 @@ input[type="file"]:hover {
   background-color: transparent;
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fade-in 150ms ease-in forwards;
+}
+
+.fade-out {
+  animation: fade-out 150ms ease-out backwards;
+}
+
 .line {
   border: 1px inset white;
   margin: 8px 20px;
