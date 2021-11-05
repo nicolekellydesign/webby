@@ -175,19 +175,21 @@ export function addProjectImage(
 }
 
 /**
- * Removes a portfolio project image from the server.
+ * Removes portfolio project images from the server.
  *
  * @param {string} galleryID The ID of the gallery item the image is a part of.
- * @param {string} filename The name of the file to remove.
+ * @param {string[]} files The names of the files to remove.
  * @returns {Promise} A promise with the result of the API request.
  */
-export function deleteProjectImage(
+export function deleteProjectImages(
   galleryID: string,
-  filename: string
+  files: string[]
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(`/api/v1/admin/gallery/${galleryID}/image/${filename}`, {
+    fetch(`/api/v1/admin/gallery/${galleryID}/images`, {
       method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(files),
     }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")

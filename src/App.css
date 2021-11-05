@@ -66,6 +66,10 @@ textarea:focus:not(:disabled) {
   background-color: #ccc;
 }
 
+input[type="file"] {
+  color: white;
+}
+
 input[type="file"]:hover {
   background-color: transparent;
 }

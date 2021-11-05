@@ -5,7 +5,7 @@ import {
   addProjectImage,
   changeThumbnail,
   deleteGalleryItem,
-  deleteProjectImage,
+  deleteProjectImages,
   GalleryItem,
   getProject,
   updateProject,
@@ -52,7 +52,9 @@ interface UploadImageFormElement extends HTMLFormElement {
 const ProjectSettings = (): JSX.Element => {
   const { name } = useParams<ParamTypes>();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [imagesDialogOpen, setImagesDialogOpen] = useState(false);
+  const [projectDialogOpen, setProjectDialogOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
   const [project, setProject] = useState<GalleryItem>();
   const [projectLength, setProjectLength] = useState(0);
@@ -64,10 +66,6 @@ const ProjectSettings = (): JSX.Element => {
   const [isImagePicked, setIsImagePicked] = useState(false);
 
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
-
-  const toggleDialog = () => {
-    setDialogOpen(!dialogOpen);
-  };
 
   const thumbChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -181,15 +179,23 @@ const ProjectSettings = (): JSX.Element => {
       });
   };
 
+  const deleteImages = () => {
+    deleteProjectImages(name, selectedImages)
+      .then(() => {
+        alertService.success("Image(s) deleted successfully!", true);
+        setProjectLength(projectLength + 1);
+      })
+      .catch((error) => {
+        console.error(`error removing images from project '${name}': ${error}`);
+        alertService.error(`Error removing images: ${error}`, false);
+      })
+      .finally(() => {
+        setSelectedImages([]);
+        window.scrollTo(0, 0);
+      });
+  };
+
   const deleteProject = () => {
-    const ok = window.confirm(
-      "Are you sure you want to delete this project?\nThis action cannot be reversed."
-    );
-
-    if (!ok) {
-      return;
-    }
-
     deleteGalleryItem(name).then(() => {
       setRedirectToReferrer(true);
       alertService.success("Project deleted successfully!", true);
@@ -305,7 +311,6 @@ const ProjectSettings = (): JSX.Element => {
                 id="embedURL"
                 type="text"
                 name="embedURL"
-                placeholder="https://youtube.com/embed/video-key"
                 defaultValue={project.embedURL}
                 className="w-full text-black"
               />
@@ -321,88 +326,140 @@ const ProjectSettings = (): JSX.Element => {
           </form>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 w-6xl">
           <h2 className="font-semibold text-left text-xl">Project Images</h2>
-          <ul className="border border-solid border-white grid grid-cols-4 gap-4 p-4 mt-4 rounded overflow-y-scroll max-h-screen">
+          <ul className="border border-solid border-white flex flex-wrap gap-4 justify-center py-8 mt-4 rounded overflow-y-scroll max-h-screen">
             {project.images?.map((image) => (
-              <li className="thumb relative max-w-thumb">
-                <img
-                  src={`/images/${image}`}
-                  alt={image}
-                  className="opacity-100 block transition"
-                />
-                <div
-                  className="cursor-pointer absolute flex items-center justify-center opacity-0 top-1/2 left-1/2 overlay transition w-full h-full"
-                  onClick={() => {
-                    deleteProjectImage(name, image)
-                      .then(() => {
-                        alertService.success(
-                          "Image deleted successfully!",
-                          false
-                        );
-                        setProjectLength(projectLength + 1);
-                      })
-                      .catch((error) => {
-                        console.error(
-                          `error removing image '${image}' from project '${name}': ${error}`
-                        );
-                        alertService.error(
-                          `Error removing image: ${error}`,
-                          false
-                        );
-                      });
-                  }}
-                >
-                  <div className="font-bold text-lg w-max">
-                    <AiIcons.AiOutlineClose className="mx-auto w-8 h-8" />
-                    Delete image
+              <li
+                className="bg-cover bg-center bg-no-repeat cursor-pointer flex flex-col justify-center w-64 h-64"
+                data-src={`/images/${image}`}
+                style={{
+                  backgroundImage: `url("/images/${image}")`,
+                }}
+              >
+                {selectedImages.some((name) => name === image) ? (
+                  <div
+                    className="opacity-70 bg-black hover:text-blue-400 relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
+                    onClick={() => {
+                      setSelectedImages((selectedImages) =>
+                        selectedImages.filter((name) => name !== image)
+                      );
+                    }}
+                    title="Unselect image"
+                  >
+                    <div className="box-border font-bold text-lg mx-auto w-max">
+                      <div className="w-max">
+                        <AiIcons.AiOutlineCheckCircle className="w-12 h-12" />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div
+                    className="opacity-0 hover:opacity-70 hover:bg-black relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
+                    onClick={() => {
+                      setSelectedImages((selectedImages) =>
+                        selectedImages.concat(image)
+                      );
+                    }}
+                    title="Select image"
+                  >
+                    <div className="box-border font-bold text-lg mx-auto w-max">
+                      <div className="w-max">
+                        <AiIcons.AiOutlineCheck className="mx-auto w-12 h-12" />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
-          <form
-            id="image-upload-form"
-            onSubmit={uploadImage}
-            className="mt-4 p-2"
-          >
-            <label htmlFor="image" className="pl-3 font-semibold">
-              Add project image
-            </label>
-            <br />
-            <input
-              type="file"
-              accept="image/*"
-              name="image"
-              title="Only images allowed."
-              onChange={imageChangeHandler}
-              className="btn"
-            />
-            <IconButton
-              type="submit"
-              name="submit"
-              icon={<AiIcons.AiOutlineUpload />}
-              text="Upload image"
-            />
-          </form>
-          <div className="text-xs mb-6">
-            <p>Max file size: 8 MB</p>
+
+          <div className="mt-4">
+            <form
+              id="image-upload-form"
+              onSubmit={uploadImage}
+              className="flex flex-col items-start p-2"
+            >
+              <div className="text-left">
+                <label htmlFor="image" className="pl-3 font-semibold">
+                  Manage project images
+                </label>
+                <br />
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="image"
+                  title="Only images allowed."
+                  onChange={imageChangeHandler}
+                  className="btn"
+                />
+
+                <div className="text-center text-xs pl-3 mb-6">
+                  <p>Max file size: 8 MB</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 pl-3">
+                <IconButton
+                  type="submit"
+                  name="submit"
+                  icon={<AiIcons.AiOutlineUpload />}
+                  text="Upload image"
+                />
+                {selectedImages.length > 0 && (
+                  <div className="fade-in">
+                    <DestructiveButton
+                      icon={<AiIcons.AiOutlineDelete />}
+                      text="Delete selected"
+                      onClick={() => {
+                        setImagesDialogOpen(true);
+                      }}
+                    ></DestructiveButton>
+                  </div>
+                )}
+              </div>
+            </form>
           </div>
+
+          <DialogBox
+            show={imagesDialogOpen}
+            type="warning"
+            onClose={() => {
+              setImagesDialogOpen(false);
+            }}
+            onConfirm={() => {
+              deleteImages();
+              setImagesDialogOpen(false);
+            }}
+          >
+            <div className="flex-grow p-4">
+              <h2 className="font-bold text-xl">
+                Are you sure you want to delete {selectedImages.length}{" "}
+                {selectedImages.length === 1 ? "image" : "images"}?
+              </h2>
+              <br />
+              <p className="text-lg">This action cannot be reversed.</p>
+            </div>
+          </DialogBox>
         </div>
 
         <div className="mt-8">
           <DestructiveButton
             icon={<AiIcons.AiOutlineDelete />}
             text="Delete project"
-            onClick={toggleDialog}
+            onClick={() => {
+              setProjectDialogOpen(true);
+            }}
           />
         </div>
       </div>
 
       <DialogBox
-        show={dialogOpen}
+        show={projectDialogOpen}
         type="warning"
-        onClose={toggleDialog}
+        onClose={() => {
+          setProjectDialogOpen(false);
+        }}
         onConfirm={deleteProject}
       >
         <div className="flex-grow p-4">
