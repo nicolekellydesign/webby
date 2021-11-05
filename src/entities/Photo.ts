@@ -39,13 +39,15 @@ export function addPhoto(file: File, filename: string): Promise<void> {
 /**
  * Removes a photography image from the server.
  *
- * @param {string} filename The name of the file to remove.
+ * @param {string[]} files The names of the files to remove.
  * @returns {Promise} A promise with the result of the API request.
  */
-export function deletePhoto(filename: string): Promise<void> {
+export function deletePhotos(files: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    fetch(`/api/v1/admin/photos/${filename}`, {
+    fetch("/api/v1/admin/photos", {
       method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(files),
     }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")
