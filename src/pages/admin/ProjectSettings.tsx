@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router";
 import * as AiIcons from "react-icons/ai";
 import {
-  addProjectImage,
+  addProjectImages,
   changeThumbnail,
   deleteGalleryItem,
   deleteProjectImages,
@@ -65,15 +65,15 @@ const ProjectSettings = (): JSX.Element => {
     setIsThumbPicked(true);
   };
 
-  const uploadImage = (image: File, imageName: string) => {
-    addProjectImage(name, image, imageName)
+  const insertImages = (images: string[]) => {
+    addProjectImages(name, images)
       .then(() => {
-        alertService.success("Image uploaded successfully!", true);
+        alertService.success("Images uploaded successfully!", true);
         setProjectLength(projectLength + 1);
       })
       .catch((error) => {
-        console.error(`error uploading project image: ${error}`);
-        alertService.error(`Error uploading image: ${error}`, false);
+        console.error(`error uploading project images: ${error}`);
+        alertService.error(`Error uploading images: ${error}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -292,7 +292,7 @@ const ProjectSettings = (): JSX.Element => {
           title="Project Images"
           label="Manage project images"
           deleteImages={deleteImages}
-          uploadFunc={uploadImage}
+          uploadFunc={insertImages}
         />
 
         <div className="mt-8">

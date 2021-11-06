@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import ImageManager from "../../components/ImageManager";
-import { addPhoto, deletePhotos, getPhotos, Photo } from "../../entities/Photo";
+import {
+  addPhotos,
+  deletePhotos,
+  getPhotos,
+  Photo,
+} from "../../entities/Photo";
 import { alertService } from "../../services/alert.service";
 import "./Photos.css";
 
@@ -26,15 +31,15 @@ const AdminPhotos = (): JSX.Element => {
       });
   };
 
-  const uploadImage = (image: File, imageName: string) => {
-    addPhoto(image, imageName)
+  const insertImages = (files: string[]) => {
+    addPhotos(files)
       .then(() => {
-        alertService.success("Photo uploaded successfully!", true);
+        alertService.success("Photos uploaded successfully!", true);
         setPhotosLength(photosLength + 1);
       })
       .catch((error) => {
-        console.error(`error adding photography gallery item: ${error}`);
-        alertService.error(`Error uploading photo: ${error}`, false);
+        console.error(`error adding photography gallery items: ${error}`);
+        alertService.error(`Error uploading photos: ${error}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -62,7 +67,7 @@ const AdminPhotos = (): JSX.Element => {
           title="Photography Images"
           label="Manage photography images"
           deleteImages={deleteImages}
-          uploadFunc={uploadImage}
+          uploadFunc={insertImages}
         />
       </div>
     </div>

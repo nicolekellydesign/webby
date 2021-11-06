@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   AiOutlineCheck,
   AiOutlineCheckCircle,
   AiOutlineDelete,
   AiOutlineUpload,
 } from "react-icons/ai";
+import { alertService } from "../services/alert.service";
+import UploadService from "../services/upload.service";
 import DialogBox from "./DialogBox";
 import IconButton, { DestructiveButton } from "./IconButton";
+
+interface ProgressInfo {
+  percentage: number;
+  fileName: string;
+}
 
 interface UploadImageElements extends HTMLFormControlsCollection {
   image: HTMLInputElement;
@@ -21,7 +28,7 @@ interface ImageManagerProps {
   images?: string[];
   label: string;
   title: string;
-  uploadFunc: (image: File, imageName: string) => void;
+  uploadFunc: (images: string[]) => void;
   deleteImages: (images: string[]) => void;
 }
 
@@ -36,24 +43,23 @@ const ImageManager = ({
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [imageFile, setImageFile] = useState<File>();
-  const [isImagePicked, setIsImagePicked] = useState(false);
+  const [imageFiles, setImageFiles] = useState<FileList | undefined>(undefined);
+
+  const [progressInfos, setProgressInfos] = useState<ProgressInfo[]>([]);
+
+  const progressInfosRef = useRef<any>(null);
 
   const imageChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
 
-    if (!files) {
-      return;
-    }
-
-    setImageFile(files[0]);
-    setIsImagePicked(true);
+    setImageFiles(files || undefined);
+    setProgressInfos([]);
   };
 
   const handleUpload = (event: React.FormEvent<UploadImageFormElement>) => {
     event.preventDefault();
 
-    if (!isImagePicked || !imageFile) {
+    if (!imageFiles || imageFiles.length === 0) {
       return;
     }
 
@@ -61,12 +67,55 @@ const ImageManager = ({
     const { submit } = form.elements;
     submit.disabled = true;
 
-    uploadFunc(imageFile, imageFile.name);
+    const files = Array.from(imageFiles);
 
-    setIsImagePicked(false);
-    setImageFile(undefined);
-    form.reset();
-    submit.disabled = false;
+    let _progressInfos = files.map((file) => ({
+      percentage: 0,
+      fileName: file.name,
+    }));
+
+    progressInfosRef.current = {
+      val: _progressInfos,
+    };
+
+    const uploadPromises = files.map((file, i) => upload(i, file));
+
+    Promise.all(uploadPromises)
+      .then((uploaded) => {
+        uploadFunc(uploaded);
+      })
+      .then(() => {
+        setImageFiles(undefined);
+        form.reset();
+        submit.disabled = false;
+      })
+      .catch((error) => {
+        console.error(`error uploading files: ${error}`);
+        alertService.error(`Error uploading files: ${error}`, false);
+      });
+  };
+
+  const upload = (i: number, file: File): Promise<string> => {
+    let _progressInfos = [...progressInfosRef.current.val];
+
+    return new Promise((resolve, reject) => {
+      UploadService.upload(
+        file,
+        (percentage) => {
+          _progressInfos[i].percentage = percentage;
+          setProgressInfos(_progressInfos);
+        },
+        (status, response) => {
+          if (status !== 200) {
+            _progressInfos[i].percentage = 0;
+            setProgressInfos(_progressInfos);
+            reject(response.statusText);
+          } else {
+            resolve(_progressInfos[i].fileName);
+          }
+        }
+      );
+    });
   };
 
   return (
@@ -131,10 +180,29 @@ const ImageManager = ({
               type="file"
               accept="image/*"
               name="image"
+              multiple
               title="Only images allowed."
               onChange={imageChangeHandler}
               className="btn"
             />
+
+            {progressInfos.map((info, idx) => (
+              <div className="mb-2" key={idx}>
+                <span>{info.fileName}</span>
+                <div>
+                  <div
+                    className=""
+                    role="progressbar"
+                    aria-valuenow={info.percentage}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    style={{ width: info.percentage + "%" }}
+                  >
+                    {info.percentage}%
+                  </div>
+                </div>
+              </div>
+            ))}
 
             <div className="text-center text-xs pl-3 mb-6">
               <p>Max file size: 8 MB</p>
@@ -146,7 +214,7 @@ const ImageManager = ({
               type="submit"
               name="submit"
               icon={<AiOutlineUpload />}
-              text="Upload image"
+              text="Upload images"
             />
             {selected.length > 0 && (
               <div className="fade-in">

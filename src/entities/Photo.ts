@@ -6,20 +6,16 @@ export interface Photo {
 }
 
 /**
- * Uploads a new photography gallery image to the server.
+ * Sends a list of image file names to add to the photography gallery.
  *
- * @param {File} file The file to upload to the server.
- * @param {string} filename The name of the file being uploaded.
- * @returns {Promise} A promise with the result of the API request.
+ * @param {string[]} files The file names to insert into the database.
  */
-export function addPhoto(file: File, filename: string): Promise<void> {
-  const formData = new FormData();
-  formData.append("image", file, filename);
-
+export function addPhotos(files: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     fetch("/api/v1/admin/photos", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(files),
     }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")

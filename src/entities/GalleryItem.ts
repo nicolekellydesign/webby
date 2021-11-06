@@ -139,25 +139,21 @@ export function getProject(name: string): Promise<GalleryItem> {
 }
 
 /**
- * Uploads a new project image to the server.
+ * Sends a list of image file names to attach to the project on the server.
  *
  * @param {string} galleryID The ID of the gallery item the image is a part of.
- * @param {File} file The file to upload to the server.
- * @param {string} filename The name of the file being uploaded.
+ * @param {string[]} files The file names to attach to the project.
  * @returns {Promise} A promise with the result of the API request.
  */
-export function addProjectImage(
+export function addProjectImages(
   galleryID: string,
-  file: File,
-  filename: string
+  files: string[]
 ): Promise<void> {
-  const formData = new FormData();
-  formData.append("image", file, filename);
-
   return new Promise((resolve, reject) => {
-    fetch(`/api/v1/admin/gallery/${galleryID}/image`, {
+    fetch(`/api/v1/admin/gallery/${galleryID}/images`, {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(files),
     }).then(async (response) => {
       const isJson = response.headers
         .get("Content-Type")
