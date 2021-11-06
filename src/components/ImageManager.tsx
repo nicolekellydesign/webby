@@ -183,22 +183,25 @@ const ImageManager = ({
               multiple
               title="Only images allowed."
               onChange={imageChangeHandler}
-              className="btn"
+              className="btn mb-4"
             />
 
             {progressInfos.map((info, idx) => (
               <div className="mb-2" key={idx}>
-                <span>{info.fileName}</span>
+                <span className="ml-2">{info.fileName}</span>
                 <div>
                   <div
-                    className=""
+                    className="bg-blue-700 rounded-lg"
                     role="progressbar"
                     aria-valuenow={info.percentage}
                     aria-valuemin={0}
                     aria-valuemax={100}
+                    title="Upload progress"
                     style={{ width: info.percentage + "%" }}
                   >
+                    <span className="ml-4 font-semibold">
                     {info.percentage}%
+                    </span>
                   </div>
                 </div>
               </div>
