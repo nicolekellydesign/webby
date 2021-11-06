@@ -6,14 +6,9 @@ import {
   AiOutlineUpload,
 } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
-import UploadService from "../services/upload.service";
+import UploadService, { ProgressInfo } from "../services/upload.service";
 import DialogBox from "./DialogBox";
 import IconButton, { DestructiveButton } from "./IconButton";
-
-interface ProgressInfo {
-  percentage: number;
-  fileName: string;
-}
 
 interface UploadImageElements extends HTMLFormControlsCollection {
   image: HTMLInputElement;
@@ -187,7 +182,7 @@ const ImageManager = ({
             />
 
             {progressInfos.map((info, idx) => (
-              <div className="mb-2" key={idx}>
+              <div className="mb-2 w-96" key={idx}>
                 <span className="ml-2">{info.fileName}</span>
                 <div>
                   <div
@@ -200,7 +195,7 @@ const ImageManager = ({
                     style={{ width: info.percentage + "%" }}
                   >
                     <span className="ml-4 font-semibold">
-                    {info.percentage}%
+                      {info.percentage}%
                     </span>
                   </div>
                 </div>

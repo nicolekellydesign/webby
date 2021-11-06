@@ -1,3 +1,8 @@
+export interface ProgressInfo {
+  percentage: number;
+  fileName: string;
+}
+
 class UploadService {
   upload(
     file: File,
@@ -5,7 +10,7 @@ class UploadService {
     onFinish: (status: number, response: Response) => void
   ) {
     const formData = new FormData();
-    formData.append("image", file, file.name);
+    formData.append("file", file, file.name);
 
     let request = new XMLHttpRequest();
     request.open("POST", "/api/v1/admin/upload");

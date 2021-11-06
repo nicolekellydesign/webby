@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { alertService } from "../../services/alert.service";
 import BlankAvatar from "../../blank-avatar.svg";
 import IconButton from "../../components/IconButton";
+import UploadService, { ProgressInfo } from "../../services/upload.service";
 
 interface PortraitElements extends HTMLFormControlsCollection {
   image: HTMLInputElement;
@@ -39,7 +40,8 @@ const About = (): JSX.Element => {
   const [isPortraitPicked, setIsPortraitPicked] = useState(false);
 
   const [resumeFile, setResumeFile] = useState<File>();
-  const [isResumePicked, setIsResumePicked] = useState(false);
+  const [resumeProgressInfo, setResumeProgressInfo] = useState<ProgressInfo>();
+  const resumeProgressInfoRef = useRef<any>(null);
 
   const portraitChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -62,7 +64,7 @@ const About = (): JSX.Element => {
     }
 
     setResumeFile(files[0]);
-    setIsResumePicked(true);
+    setResumeProgressInfo(undefined);
   };
 
   const uploadPortrait = (event: React.FormEvent<PortraitFormElement>) => {
@@ -151,10 +153,10 @@ const About = (): JSX.Element => {
       });
   };
 
-  const uploadResume = (event: React.FormEvent<ResumeFormElement>) => {
+  const handleUploadResume = (event: React.FormEvent<ResumeFormElement>) => {
     event.preventDefault();
 
-    if (!isResumePicked || !resumeFile) {
+    if (!resumeFile) {
       return;
     }
 
@@ -162,27 +164,13 @@ const About = (): JSX.Element => {
     const { submit } = form.elements;
     submit.disabled = true;
 
-    const formData = new FormData();
-    formData.append("resume", resumeFile);
+    let _progressInfo = { percentage: 0, fileName: resumeFile.name };
+    resumeProgressInfoRef.current = {
+      val: _progressInfo,
+    };
 
-    window.scrollTo(0, 0);
-    alertService.info("Uploading résumé", true);
-
-    fetch("api/v1/admin/about/resume", {
-      method: "PATCH",
-      body: formData,
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          Promise.reject(error);
-        }
-
+    upload(resumeFile)
+      .then(() => {
         alertService.success("Résumé uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
       })
@@ -191,11 +179,33 @@ const About = (): JSX.Element => {
         alertService.error(`Error uploading résumé: ${error}`, false);
       })
       .finally(() => {
-        setIsResumePicked(false);
         setResumeFile(undefined);
         form.reset();
         submit.disabled = false;
       });
+  };
+
+  const upload = (file: File): Promise<string> => {
+    let _progressInfo = resumeProgressInfoRef.current.val;
+
+    return new Promise((resolve, reject) => {
+      UploadService.upload(
+        file,
+        (percentage) => {
+          _progressInfo.percentage = percentage;
+          setResumeProgressInfo(_progressInfo);
+        },
+        (status, response) => {
+          if (status !== 200) {
+            _progressInfo.percentage = 0;
+            setResumeProgressInfo(_progressInfo);
+            reject(response.statusText);
+          } else {
+            resolve(_progressInfo.fileName);
+          }
+        }
+      );
+    });
   };
 
   useEffect(() => {
@@ -304,7 +314,7 @@ const About = (): JSX.Element => {
         </div>
 
         <div className="mt-4">
-          <form onSubmit={uploadResume} className="text-left">
+          <form onSubmit={handleUploadResume} className="text-left">
             <div className="p-2">
               <label htmlFor="resume" className="font-semibold">
                 Résumé
@@ -316,10 +326,32 @@ const About = (): JSX.Element => {
                 name="resume"
                 title="Only PDF files allowed."
                 onChange={resumeChangeHandler}
-                className="btn"
+                className="btn mb-4"
                 required
               />
               <br />
+
+              {resumeProgressInfo && (
+                <div className="mb-6 w-96">
+                  <span className="ml-2">{resumeProgressInfo.fileName}</span>
+                  <div>
+                    <div
+                      className="bg-blue-700 rounded-lg"
+                      role="progressbar"
+                      aria-valuenow={resumeProgressInfo.percentage}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      title="Upload progress"
+                      style={{ width: resumeProgressInfo.percentage + "%" }}
+                    >
+                      <span className="ml-4 font-semibold">
+                        {resumeProgressInfo.percentage}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="pl-3">
                 <IconButton
                   type="submit"
