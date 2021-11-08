@@ -85,7 +85,7 @@ const AdminLogin = (): JSX.Element => {
           id="submitButton"
           type="submit"
           value="Log In"
-          className="btn m-0 w-full"
+          className="btn btn-primary m-0 w-full"
         />
       </form>
     </div>

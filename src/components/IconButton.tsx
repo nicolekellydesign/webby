@@ -10,7 +10,7 @@ interface IconButtonProps {
 
 export const DestructiveButton = ({ icon, text, ...rest }: IconButtonProps) => {
   return (
-    <button {...rest} className="btn destructive">
+    <button {...rest} className="btn btn-outline">
       {icon}
       <span>{text}</span>
     </button>
