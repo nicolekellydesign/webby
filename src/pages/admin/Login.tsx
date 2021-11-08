@@ -46,48 +46,53 @@ const AdminLogin = (): JSX.Element => {
   }
 
   return (
-    <div className="container border border-solid border-white rounded-lg text-center mx-auto px-8 py-6 max-w-sm">
-      <div className="mb-5">
-        <h1 className="font-bold text-lg">Log In</h1>
-      </div>
-      <form id="login" onSubmit={onSubmit}>
-        <input
-          id="usernameInput"
-          type="text"
-          name="username"
-          placeholder="Username"
-          pattern="^(\w+)$"
-          required
-          className="rounded text-black text-center mb-3 w-full"
-        />
-        <input
-          id="passwordInput"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          className="rounded text-black text-center mb-3 w-full"
-        />
-        <div className="mb-3">
-          <div>
-            <label htmlFor="rememberToggle" className="checkbox text-left">
+    <div className="container mx-auto">
+      <div className="card lg:card-side bordered mx-auto max-w-sm">
+        <div className="card-body">
+          <h1 className="card-title text-center">Log In</h1>
+          <form id="login" onSubmit={onSubmit}>
+            <div className="form-control">
               <input
-                id="rememberToggle"
-                type="checkbox"
-                name="remember"
-                className="cursor-pointer rounded"
+                id="usernameInput"
+                type="text"
+                name="username"
+                placeholder="Username"
+                pattern="^(\w+)$"
+                required
+                className="input input-bordered mb-3 w-full"
               />
-              Remember me
-            </label>
-          </div>
+              <input
+                id="passwordInput"
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+                className="input input-bordered mb-3 w-full"
+              />
+              <div>
+                <label className="cursor-pointer label justify-start">
+                  <input
+                    id="rememberToggle"
+                    type="checkbox"
+                    name="remember"
+                    className="checkbox checkbox-primary"
+                  />
+                  <span className="label-text ml-4">Remember me</span>
+                </label>
+              </div>
+              <div className="card-actions">
+                <button
+                  id="submitButton"
+                  type="submit"
+                  className="btn btn-primary m-0 w-full"
+                >
+                  Log In
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-        <input
-          id="submitButton"
-          type="submit"
-          value="Log In"
-          className="btn btn-primary m-0 w-full"
-        />
-      </form>
+      </div>
     </div>
   );
 };
