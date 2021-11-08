@@ -37,6 +37,7 @@ module.exports = {
       width: {
         70: "70px",
         "6xl": "72rem",
+        "7xl": "80rem",
         email: "425px",
       },
     },

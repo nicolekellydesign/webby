@@ -118,7 +118,7 @@ const ImageManager = ({
     <div className="card lg:card-side bordered mt-8 w-7xl">
       <div className="card-body">
         <h2 className="card-title">{title}</h2>
-        <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center bg-neutral rounded-box p-4">
+        <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4">
           {images?.map((image) => (
             <li
               className="carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64"

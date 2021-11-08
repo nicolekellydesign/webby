@@ -9,7 +9,3 @@
   -ms-overflow-style: none;
   scrollbar-width: thin;
 }
-
-.image-scroller::-webkit-scrollbar {
-  display: none;
-}
