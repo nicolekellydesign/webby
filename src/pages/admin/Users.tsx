@@ -5,9 +5,9 @@ import { addUser, deleteUser, getUsers, User } from "../../entities/User";
 import { alertService } from "../../services/alert.service";
 
 interface LoginElements extends HTMLFormControlsCollection {
-  usernameInput: HTMLInputElement;
-  passwordInput: HTMLInputElement;
-  submitButton: HTMLInputElement;
+  username: HTMLInputElement;
+  password: HTMLInputElement;
+  submit: HTMLInputElement;
 }
 
 interface LoginFormElement extends HTMLFormElement {
@@ -28,11 +28,11 @@ const AdminUsers = (): JSX.Element => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const { usernameInput, passwordInput, submitButton } = form.elements;
+    const { username, password, submit } = form.elements;
 
-    submitButton.disabled = true;
+    submit.disabled = true;
 
-    addUser(usernameInput.value, passwordInput.value)
+    addUser(username.value, password.value)
       .then(() => {
         alertService.success("User added successfully!", true);
         setUsersLength(usersLength + 1);
@@ -42,7 +42,7 @@ const AdminUsers = (): JSX.Element => {
         alertService.error(`Error adding user: ${error}`, false);
       })
       .finally(() => {
-        submitButton.disabled = false;
+        submit.disabled = false;
         form.reset();
       });
   };
@@ -73,82 +73,104 @@ const AdminUsers = (): JSX.Element => {
   }, [usersLength]);
 
   return (
-    <div className="container text-center mx-auto">
-      <h1 className="font-bold text-5xl">Administrators</h1>
+    <div className="container mx-auto">
+      <h1 className="font-bold text-4xl text-center">Administrators</h1>
       <div className="max-w-xl mx-auto my-8">
-        <ul className="border border-solid border-white rounded">
-          <li className="flex border-b border-white p-4">
-            <div className="flex-none">ID</div>
-            <div className="flex-grow">Username</div>
-          </li>
-          {users.map((user: User) => (
-            <li className="flex p-4">
-              <div className="flex-none">{user.id}</div>
-              <div className="flex-grow">{user.username}</div>
-              <div
-                title={user.protected ? "User is protected" : "Delete user"}
-                className={
-                  user.protected
-                    ? "btn disabled flex-none text-white"
-                    : "btn flex-none text-white"
-                }
-                onClick={() => {
-                  if (!user.protected) {
-                    toggleDialog();
-                  }
-                }}
-              >
-                <AiIcons.AiOutlineClose />
-              </div>
+        <div className="overflow-x-auto">
+          <table className="table w-full">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user: User) => (
+                <tr>
+                  <th>{user.id}</th>
+                  <td>{user.username}</td>
+                  <td className="text-center">
+                    {user.protected ? (
+                      <div data-tip="User is protected" className="tooltip">
+                        <button
+                          className="btn btn-ghost btn-disabled btn-sm"
+                          disabled
+                        >
+                          <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div data-tip="Delete user" className="tooltip">
+                        <button
+                          className="btn btn-ghost btn-sm"
+                          onClick={() => {
+                            if (!user.protected) {
+                              toggleDialog();
+                            }
+                          }}
+                        >
+                          <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                        </button>
+                      </div>
+                    )}
+                  </td>
 
-              {!user.protected && (
-                <DialogBox
-                  show={dialogOpen}
-                  type="warning"
-                  onClose={toggleDialog}
-                  onConfirm={() => {
-                    handleDelete(user);
-                    toggleDialog();
-                  }}
-                >
-                  <div className="flex-grow p-4">
-                    <h2 className="font-bold text-xl">
-                      Are you sure you want to delete user '{user.username}'?
-                    </h2>
-                    <br />
-                    <p className="text-lg">This action cannot be reversed.</p>
-                  </div>
-                </DialogBox>
-              )}
-            </li>
-          ))}
-        </ul>
-        <form id="addUser" className="mt-8" onSubmit={handleSubmit}>
-          <input
-            id="usernameInput"
-            type="text"
-            name="username"
-            placeholder="Username"
-            pattern="^(\w+)$"
-            title="Username cannot contain whitespace"
-            required
-            className="rounded text-black text-center"
-          />
-          <input
-            id="passwordInput"
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            className="rounded text-black text-center m-2"
-          />
-          <input
-            id="submitButton"
-            type="submit"
-            value="Add user"
-            className="btn"
-          />
-        </form>
+                  {!user.protected && (
+                    <DialogBox
+                      show={dialogOpen}
+                      type="warning"
+                      onClose={toggleDialog}
+                      onConfirm={() => {
+                        handleDelete(user);
+                        toggleDialog();
+                      }}
+                    >
+                      <div className="flex-grow p-4">
+                        <h2 className="font-bold text-xl">
+                          Are you sure you want to delete user '{user.username}
+                          '?
+                        </h2>
+                        <br />
+                        <p className="text-lg">
+                          This action cannot be reversed.
+                        </p>
+                      </div>
+                    </DialogBox>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <form
+            id="addUser"
+            className="mt-8 input-group w-full"
+            onSubmit={handleSubmit}
+          >
+            <input
+              id="username"
+              type="text"
+              name="username"
+              placeholder="Username"
+              pattern="^(\w+)$"
+              title="Username cannot contain whitespace"
+              required
+              className="input input-bordered"
+            />
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+              className="input input-bordered"
+            />
+            <button id="submit" type="submit" className="btn btn-primary">
+              Add user
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
