@@ -63,13 +63,15 @@ const AdminPhotos = (): JSX.Element => {
       <h1 className="font-bold text-4xl text-center">
         Photography Gallery Settings
       </h1>
-      <ImageManager
-        images={images}
-        title="Photography Images"
-        label="Manage photography images"
-        deleteImages={deleteImages}
-        uploadFunc={insertImages}
-      />
+      <div className="max-w-max mx-auto my-8">
+        <ImageManager
+          images={images}
+          title="Photography Images"
+          label="Manage photography images"
+          deleteImages={deleteImages}
+          uploadFunc={insertImages}
+        />
+      </div>
     </div>
   );
 };
