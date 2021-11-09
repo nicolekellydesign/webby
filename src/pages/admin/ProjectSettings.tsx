@@ -312,7 +312,8 @@ const ProjectSettings = (): JSX.Element => {
             <h2 className="font-bold text-xl">
               Are you sure you want to delete this project?
             </h2>
-            <p className="text-lg">This action cannot be reversed.</p>
+            <br />
+            <p>This action cannot be reversed.</p>
 
             <div className="modal-action">
               <label

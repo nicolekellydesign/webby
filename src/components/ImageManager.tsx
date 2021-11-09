@@ -7,7 +7,6 @@ import {
 } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
 import UploadService, { ProgressInfo } from "../services/upload.service";
-import DialogBox from "./DialogBox";
 import ProgressInfoDisplay from "./ProgressInfo";
 import "./ImageManager.css";
 
@@ -36,8 +35,6 @@ const ImageManager = ({
   uploadFunc,
 }: ImageManagerProps) => {
   const [selected, setSelected] = useState<string[]>([]);
-
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const [imageFiles, setImageFiles] = useState<FileList | undefined>(undefined);
 
@@ -203,43 +200,50 @@ const ImageManager = ({
                 Upload images
               </button>
               {selected.length > 0 && (
-                <div className="fade-in">
-                  <button
-                    className="btn btn-secondary btn-outline"
-                    onClick={() => {
-                      setDialogOpen(true);
-                    }}
+                <>
+                  <label
+                    htmlFor="delete-images-modal"
+                    className="btn btn-secondary btn-outline modal-open"
                   >
                     <AiOutlineDelete className="inline-block w-6 h-6 mr-2 stroke-current" />
                     Delete selected
-                  </button>
-                </div>
+                  </label>
+                  <input
+                    type="checkbox"
+                    id="delete-images-modal"
+                    className="modal-toggle"
+                  />
+                  <div className="modal">
+                    <div className="modal-box">
+                      <h2 className="font-bold text-xl">
+                        Are you sure you want to delete these images?
+                      </h2>
+                      <br />
+                      <p>Images selected: {selected.length}</p>
+                      <p>This action cannot be reversed.</p>
+
+                      <div className="modal-action">
+                        <label
+                          htmlFor="delete-images-modal"
+                          className="btn btn-secondary"
+                          onClick={() => {
+                            deleteImages(selected);
+                            setSelected([]);
+                          }}
+                        >
+                          Delete
+                        </label>
+                        <label htmlFor="delete-images-modal" className="btn">
+                          Cancel
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </form>
         </div>
-
-        <DialogBox
-          show={dialogOpen}
-          type="warning"
-          onClose={() => {
-            setDialogOpen(false);
-          }}
-          onConfirm={() => {
-            deleteImages(selected);
-            setDialogOpen(false);
-            setSelected([]);
-          }}
-        >
-          <div className="flex-grow p-4">
-            <h2 className="font-bold text-xl">
-              Are you sure you want to delete {selected.length}{" "}
-              {selected.length === 1 ? "image" : "images"}?
-            </h2>
-            <br />
-            <p className="text-lg">This action cannot be reversed.</p>
-          </div>
-        </DialogBox>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import DialogBox from "../../components/DialogBox";
 import { addUser, deleteUser, getUsers, User } from "../../entities/User";
 import { alertService } from "../../services/alert.service";
 
@@ -15,14 +14,8 @@ interface LoginFormElement extends HTMLFormElement {
 }
 
 const AdminUsers = (): JSX.Element => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   const [users, setUsers] = useState<User[]>([]);
   const [usersLength, setUsersLength] = useState(0);
-
-  const toggleDialog = () => {
-    setDialogOpen(!dialogOpen);
-  };
 
   const handleSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
@@ -102,42 +95,48 @@ const AdminUsers = (): JSX.Element => {
                       </div>
                     ) : (
                       <div data-tip="Delete user" className="tooltip">
-                        <button
-                          className="btn btn-ghost btn-sm"
-                          onClick={() => {
-                            if (!user.protected) {
-                              toggleDialog();
-                            }
-                          }}
+                        <label
+                          htmlFor={`delete-${user.username}-modal`}
+                          className="btn btn-ghost btn-sm modal-open"
                         >
                           <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
-                        </button>
+                        </label>
+                        <input
+                          type="checkbox"
+                          id={`delete-${user.username}-modal`}
+                          className="modal-toggle"
+                        />
+                        <div className="modal">
+                          <div className="modal-box">
+                            <h2 className="font-bold text-xl">
+                              Are you sure you want to delete user '
+                              {user.username}'?
+                            </h2>
+                            <br />
+                            <p>This action cannot be reversed.</p>
+
+                            <div className="modal-action">
+                              <label
+                                htmlFor={`delete-${user.username}-modal`}
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                  handleDelete(user);
+                                }}
+                              >
+                                Delete
+                              </label>
+                              <label
+                                htmlFor={`delete-${user.username}-modal`}
+                                className="btn"
+                              >
+                                Cancel
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </td>
-
-                  {!user.protected && (
-                    <DialogBox
-                      show={dialogOpen}
-                      type="warning"
-                      onClose={toggleDialog}
-                      onConfirm={() => {
-                        handleDelete(user);
-                        toggleDialog();
-                      }}
-                    >
-                      <div className="flex-grow p-4">
-                        <h2 className="font-bold text-xl">
-                          Are you sure you want to delete user '{user.username}
-                          '?
-                        </h2>
-                        <br />
-                        <p className="text-lg">
-                          This action cannot be reversed.
-                        </p>
-                      </div>
-                    </DialogBox>
-                  )}
                 </tr>
               ))}
             </tbody>
