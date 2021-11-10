@@ -1,52 +1,21 @@
-import React, { useEffect, useState } from "react";
-import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
+import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { NavbarData } from "./navbarData";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { slideToggle } from "./slider";
+import { NavbarData } from "./navbarData";
 import logo from "../logo_white.png";
 import "./Navbar.css";
-
-interface NavbarToggleProps {
-  isShowing: boolean;
-  onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
-}
-
-const NavbarToggle = (props: NavbarToggleProps): JSX.Element => {
-  const { isShowing, onClick } = props;
-  const classes = `md:hidden absolute cursor-pointer p-2 right-1 top-14`;
-
-  if (isShowing) {
-    return (
-      <div id="navbar-toggle" className={classes} onClick={onClick}>
-        <AiIcons.AiOutlineClose className="w-10 h-10" />
-      </div>
-    );
-  } else {
-    return (
-      <div id="navbar-toggle" className={classes} onClick={onClick}>
-        <FaIcons.FaBars className="w-10 h-10" />
-      </div>
-    );
-  }
-};
 
 const Navbar = (): JSX.Element => {
   const [navOpen, setNavOpen] = useState(false);
   const history = useHistory();
 
   const toggleNavMenu = () => {
-    const toggle = document.getElementById("navbar-toggle");
-    if (!toggle) {
-      return;
-    }
-
     const menu = document.getElementById("nav-list");
     if (!menu) {
       return;
     }
 
-    toggle.classList.toggle("active");
     slideToggle(menu, navOpen, 300);
     setNavOpen(!navOpen);
   };
@@ -65,9 +34,9 @@ const Navbar = (): JSX.Element => {
   });
 
   return (
-    <section className="h-nav">
-      <div className="mx-auto my-0">
-        <div className="absolute float-left p-5">
+    <nav>
+      <div className="w-full h-nav navbar p-5">
+        <div className="flex-1">
           <img
             src={logo}
             alt="Nicole Kelly Design"
@@ -75,23 +44,48 @@ const Navbar = (): JSX.Element => {
           />
         </div>
 
-        <nav className="float-right">
-          <NavbarToggle isShowing={navOpen} onClick={toggleNavMenu} />
-          <ul id="nav-list" className="hidden md:block md:pt-16">
+        <div className="flex-none hidden lg:block self-end">
+          <ul className="menu horizontal">
             {NavbarData.map((item, index) => (
               <li
                 key={index}
-                className="md:float-left font-lighter lowercase no-underline p-0 relative md:mx-5 md:my-8"
+                className="font-lighter lowercase no-underline p-0 relative"
               >
-                <Link to={item.path} className="navbar-link block md:pt-1.5">
+                <Link to={item.path} className="navbar-link block">
                   {item.title}
                 </Link>
               </li>
             ))}
           </ul>
-        </nav>
+        </div>
+
+        <div className="flex-none lg:hidden">
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              className="btn btn-ghost rounded-btn"
+              onClick={toggleNavMenu}
+            >
+              {navOpen ? (
+                <AiOutlineClose className="inline-block w-10 h-10 stroke-current" />
+              ) : (
+                <AiOutlineMenu className="inline-block w-10 h-10 stroke-current" />
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+
+      <ul id="nav-list" tabIndex={0} className="p-4 menu hidden w-full">
+        {NavbarData.map((item, index) => (
+          <li key={index} className="font-lighter lowercase no-underline">
+            <Link to={item.path} className="navbar-link">
+              {item.title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 
