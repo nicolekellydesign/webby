@@ -20,7 +20,7 @@ function App() {
     <div className="relative min-h-full -mb-24 pb-24">
       <BrowserRouter>
         <Navbar />
-        <hr className="line" />
+        <hr className="mx-5" />
         <AlertContainer id={defaultId} />
         <Switch>
           <Route path="/about" exact component={About} />

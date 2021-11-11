@@ -23,8 +23,3 @@
 .fade-out {
   animation: fade-out 150ms ease-out backwards;
 }
-
-.line {
-  border: 1px inset white;
-  margin: 8px 20px;
-}
