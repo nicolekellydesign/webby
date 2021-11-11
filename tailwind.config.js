@@ -7,12 +7,9 @@ module.exports = {
         lighter: "lighter",
       },
       height: {
-        70: "70px",
         80: "80px",
+        192: "48rem",
         nav: "150px",
-      },
-      lineHeight: {
-        70: "70px",
       },
       maxWidth: {
         logo: "115px",
@@ -22,23 +19,16 @@ module.exports = {
         logo: "115px",
         thumb: "128px",
       },
-      minWidth: {
-        textLarge: "425px",
-      },
       minHeight: {
         60: "60px",
         64: "16rem",
-        lg: "300px",
-        textLarge: "250px",
       },
       padding: {
         "2/3": "66.67%",
       },
       width: {
-        70: "70px",
         "6xl": "72rem",
         "7xl": "80rem",
-        email: "425px",
       },
     },
   },
