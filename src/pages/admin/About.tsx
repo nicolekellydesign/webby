@@ -80,7 +80,11 @@ const About = (): JSX.Element => {
     const { submit } = form.elements;
     submit.disabled = true;
 
-    let _progressInfo = { percentage: 0, fileName: "about-portrait.jpg" };
+    let _progressInfo = {
+      percentage: 0,
+      fileName: "about-portrait.jpg",
+      errored: false,
+    };
     portraitProgressInfoRef.current = {
       val: _progressInfo,
     };
@@ -150,7 +154,11 @@ const About = (): JSX.Element => {
     const { submit } = form.elements;
     submit.disabled = true;
 
-    let _progressInfo = { percentage: 0, fileName: resumeFile.name };
+    let _progressInfo = {
+      percentage: 0,
+      fileName: resumeFile.name,
+      errored: false,
+    };
     resumeProgressInfoRef.current = {
       val: _progressInfo,
     };
@@ -196,7 +204,7 @@ const About = (): JSX.Element => {
         },
         (status, response) => {
           if (status !== 200) {
-            _progressInfo.percentage = 0;
+            _progressInfo.errored = true;
             switch (type) {
               case "portrait":
                 setPortraitProgressInfo(_progressInfo);
@@ -289,6 +297,7 @@ const About = (): JSX.Element => {
             {portraitProgressInfo && (
               <ProgressInfoDisplay
                 percentage={portraitProgressInfo.percentage}
+                errored={portraitProgressInfo.errored}
               />
             )}
           </form>
@@ -340,7 +349,10 @@ const About = (): JSX.Element => {
             </div>
 
             {resumeProgressInfo && (
-              <ProgressInfoDisplay percentage={resumeProgressInfo.percentage} />
+              <ProgressInfoDisplay
+                percentage={resumeProgressInfo.percentage}
+                errored={resumeProgressInfo.errored}
+              />
             )}
           </form>
         </div>

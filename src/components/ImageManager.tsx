@@ -65,6 +65,7 @@ const ImageManager = ({
     let _progressInfos = files.map((file) => ({
       percentage: 0,
       fileName: file.name,
+      errored: false,
     }));
 
     progressInfosRef.current = {
@@ -100,7 +101,7 @@ const ImageManager = ({
         },
         (status, response) => {
           if (status !== 200) {
-            _progressInfos[i].percentage = 0;
+            _progressInfos[i].errored = true;
             setProgressInfos(_progressInfos);
             reject(response.statusText);
           } else {
@@ -190,6 +191,7 @@ const ImageManager = ({
                   key={idx}
                   fileName={info.fileName}
                   percentage={info.percentage}
+                  errored={info.errored}
                 />
               ))}
             </div>
