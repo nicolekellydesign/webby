@@ -68,108 +68,114 @@ const AdminUsers = (): JSX.Element => {
   return (
     <div className="container mx-auto">
       <h1 className="font-bold text-4xl text-center">Administrators</h1>
-      <div className="max-w-xl mx-auto my-8">
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user: User) => (
-                <tr>
-                  <th>{user.id}</th>
-                  <td>{user.username}</td>
-                  <td className="text-center">
-                    {user.protected ? (
-                      <div data-tip="User is protected" className="tooltip">
-                        <button
-                          className="btn btn-ghost btn-disabled btn-sm"
-                          disabled
-                        >
-                          <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
-                        </button>
-                      </div>
-                    ) : (
-                      <div data-tip="Delete user" className="tooltip">
-                        <label
-                          htmlFor={`delete-${user.username}-modal`}
-                          className="btn btn-ghost btn-sm modal-open"
-                        >
-                          <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
-                        </label>
-                        <input
-                          type="checkbox"
-                          id={`delete-${user.username}-modal`}
-                          className="modal-toggle"
-                        />
-                        <div className="modal">
-                          <div className="modal-box">
-                            <h2 className="font-bold text-xl">
-                              Are you sure you want to delete user '
-                              {user.username}'?
-                            </h2>
-                            <br />
-                            <p>This action cannot be reversed.</p>
 
-                            <div className="modal-action">
-                              <label
-                                htmlFor={`delete-${user.username}-modal`}
-                                className="btn btn-secondary"
-                                onClick={() => {
-                                  handleDelete(user);
-                                }}
-                              >
-                                Delete
-                              </label>
-                              <label
-                                htmlFor={`delete-${user.username}-modal`}
-                                className="btn"
-                              >
-                                Cancel
-                              </label>
-                            </div>
+      <div className="mx-auto my-8 w-1/2">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Created At</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user: User) => (
+              <tr key={user.id}>
+                <th>{user.id}</th>
+                <td>{user.username}</td>
+                <td>
+                  {new Date(user.createdAt).toLocaleString(undefined, {
+                    dateStyle: "medium",
+                    timeStyle: "medium",
+                  })}
+                </td>
+                <td className="text-center">
+                  {user.protected ? (
+                    <div data-tip="User is protected" className="tooltip">
+                      <button
+                        className="btn btn-ghost btn-disabled btn-sm"
+                        disabled
+                      >
+                        <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div data-tip="Delete user" className="tooltip">
+                      <label
+                        htmlFor={`delete-${user.username}-modal`}
+                        className="btn btn-ghost btn-sm modal-open"
+                      >
+                        <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                      </label>
+                      <input
+                        type="checkbox"
+                        id={`delete-${user.username}-modal`}
+                        className="modal-toggle"
+                      />
+                      <div className="modal">
+                        <div className="modal-box">
+                          <h2 className="font-bold text-xl">
+                            Are you sure you want to delete user '
+                            {user.username}'?
+                          </h2>
+                          <br />
+                          <p>This action cannot be reversed.</p>
+
+                          <div className="modal-action">
+                            <label
+                              htmlFor={`delete-${user.username}-modal`}
+                              className="btn btn-secondary"
+                              onClick={() => {
+                                handleDelete(user);
+                              }}
+                            >
+                              Delete
+                            </label>
+                            <label
+                              htmlFor={`delete-${user.username}-modal`}
+                              className="btn"
+                            >
+                              Cancel
+                            </label>
                           </div>
                         </div>
                       </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-          <form
-            id="addUser"
-            className="mt-8 input-group w-full"
-            onSubmit={handleSubmit}
-          >
-            <input
-              id="username"
-              type="text"
-              name="username"
-              placeholder="Username"
-              pattern="^(\w+)$"
-              title="Username cannot contain whitespace"
-              required
-              className="input input-bordered"
-            />
-            <input
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-              className="input input-bordered"
-            />
-            <button id="submit" type="submit" className="btn btn-primary">
-              Add user
-            </button>
-          </form>
-        </div>
+        <form
+          id="addUser"
+          className="mt-8 input-group w-full"
+          onSubmit={handleSubmit}
+        >
+          <input
+            id="username"
+            type="text"
+            name="username"
+            placeholder="Username"
+            pattern="^(\w+)$"
+            title="Username cannot contain whitespace"
+            required
+            className="input input-bordered"
+          />
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            className="input input-bordered"
+          />
+          <button id="submit" type="submit" className="btn btn-primary">
+            Add user
+          </button>
+        </form>
       </div>
     </div>
   );

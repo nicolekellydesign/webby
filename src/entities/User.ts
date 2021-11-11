@@ -5,6 +5,7 @@ export interface User {
   id: number;
   username: string;
   protected: boolean;
+  createdAt: Date;
 }
 
 /**
@@ -81,6 +82,8 @@ export function getUsers(): Promise<User[]> {
         const error = (body && body.message) || response.status;
         reject(error);
       }
+
+      console.info({ body });
 
       resolve(body.users);
     });
