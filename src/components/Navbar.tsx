@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { slideToggle } from "./slider";
 import { NavbarData } from "./navbarData";
-import logo from "../logo_white.png";
+import logo from "../icons/logo_white.png";
 import "./Navbar.css";
 
 const Navbar = (): JSX.Element => {

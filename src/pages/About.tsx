@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiOutlineDownload } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
-import BlankAvatar from "../blank-avatar.svg";
+import BlankAvatar from "../icons/blank-avatar.svg";
 
 const About = (): JSX.Element => {
   const [statement, setStatement] = useState("");

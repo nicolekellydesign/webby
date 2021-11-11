@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { alertService } from "../../services/alert.service";
-import BlankAvatar from "../../blank-avatar.svg";
+import BlankAvatar from "../../icons/blank-avatar.svg";
 import UploadService, { ProgressInfo } from "../../services/upload.service";
 import ProgressInfoDisplay from "../../components/ProgressInfo";
 
