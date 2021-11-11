@@ -81,11 +81,11 @@ const About = (): JSX.Element => {
     submit.disabled = true;
 
     let _progressInfo = { percentage: 0, fileName: "about-portrait.jpg" };
-    resumeProgressInfoRef.current = {
+    portraitProgressInfoRef.current = {
       val: _progressInfo,
     };
 
-    upload(portraitFile, portraitProgressInfoRef)
+    upload(portraitFile, portraitProgressInfoRef, "portrait")
       .then(() => {
         alertService.success("Portrait uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
@@ -95,7 +95,6 @@ const About = (): JSX.Element => {
         alertService.error(`Error uploading portrait: ${error}`, false);
       })
       .finally(() => {
-        setResumeFile(undefined);
         form.reset();
         submit.disabled = false;
       });
@@ -156,7 +155,7 @@ const About = (): JSX.Element => {
       val: _progressInfo,
     };
 
-    upload(resumeFile, resumeProgressInfoRef)
+    upload(resumeFile, resumeProgressInfoRef, "resume")
       .then(() => {
         alertService.success("Résumé uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
@@ -172,7 +171,11 @@ const About = (): JSX.Element => {
       });
   };
 
-  const upload = (file: File, ref: MutableRefObject<any>): Promise<string> => {
+  const upload = (
+    file: File,
+    ref: MutableRefObject<any>,
+    type: "portrait" | "resume"
+  ): Promise<string> => {
     let _progressInfo = ref.current.val;
 
     return new Promise((resolve, reject) => {
@@ -180,12 +183,30 @@ const About = (): JSX.Element => {
         file,
         (percentage) => {
           _progressInfo.percentage = percentage;
-          setResumeProgressInfo(_progressInfo);
+          switch (type) {
+            case "portrait":
+              setPortraitProgressInfo(_progressInfo);
+              break;
+            case "resume":
+              setResumeProgressInfo(_progressInfo);
+              break;
+            default:
+              break;
+          }
         },
         (status, response) => {
           if (status !== 200) {
             _progressInfo.percentage = 0;
-            setResumeProgressInfo(_progressInfo);
+            switch (type) {
+              case "portrait":
+                setPortraitProgressInfo(_progressInfo);
+                break;
+              case "resume":
+                setResumeProgressInfo(_progressInfo);
+                break;
+              default:
+                break;
+            }
             reject(response.statusText);
           } else {
             resolve(_progressInfo.fileName);
