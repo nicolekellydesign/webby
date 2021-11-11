@@ -35,7 +35,7 @@ const About = (): JSX.Element => {
       <div className="card lg:card-side">
         <figure>
           <img
-            src={"images/about-portrait.jpg"}
+            src={"/images/about-portrait.jpg"}
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = BlankAvatar;
