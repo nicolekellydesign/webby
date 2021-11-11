@@ -75,6 +75,10 @@ module.exports = {
           success: "#009485" /* Success */,
           warning: "#ff9900" /* Warning */,
           error: "#ff5724" /* Error */,
+
+          ".btn": {
+            "text-transform": "none",
+          },
         },
       },
     ],
