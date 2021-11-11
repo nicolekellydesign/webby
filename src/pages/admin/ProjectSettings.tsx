@@ -182,11 +182,11 @@ const ProjectSettings = (): JSX.Element => {
 
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered">
-          <figure className="relative max-w-thumb pl-2">
+          <figure className="relative">
             <img
               src={`/images/${project.thumbnail}`}
               alt={project.title}
-              className="rounded-xl w-52 h-52"
+              className="rounded-xl h-52"
             />
           </figure>
           <form
