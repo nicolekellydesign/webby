@@ -5,8 +5,8 @@ export default function ProgressInfoDisplay({
   fileName,
 }: ProgressInfo) {
   return (
-    <div className="mb-6 w-96">
-      <span className="ml-2">{fileName}</span>
+    <div className="my-4 w-96">
+      {fileName && <span className="ml-2">{fileName}</span>}
       <progress
         className="progress progress-info"
         value={percentage}

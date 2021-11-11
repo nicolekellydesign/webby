@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { alertService } from "../../services/alert.service";
 import BlankAvatar from "../../icons/blank-avatar.svg";
@@ -37,7 +37,9 @@ const About = (): JSX.Element => {
   const [statement, setStatement] = useState("");
 
   const [portraitFile, setPortraitFile] = useState<File>();
-  const [isPortraitPicked, setIsPortraitPicked] = useState(false);
+  const [portraitProgressInfo, setPortraitProgressInfo] =
+    useState<ProgressInfo>();
+  const portraitProgressInfoRef = useRef<any>(null);
 
   const [resumeFile, setResumeFile] = useState<File>();
   const [resumeProgressInfo, setResumeProgressInfo] = useState<ProgressInfo>();
@@ -53,7 +55,7 @@ const About = (): JSX.Element => {
     }
 
     setPortraitFile(files[0]);
-    setIsPortraitPicked(true);
+    setPortraitProgressInfo(undefined);
   };
 
   const resumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +72,7 @@ const About = (): JSX.Element => {
   const uploadPortrait = (event: React.FormEvent<PortraitFormElement>) => {
     event.preventDefault();
 
-    if (!isPortraitPicked || !portraitFile) {
+    if (!portraitFile) {
       return;
     }
 
@@ -78,37 +80,22 @@ const About = (): JSX.Element => {
     const { submit } = form.elements;
     submit.disabled = true;
 
-    const formData = new FormData();
-    formData.append("image", portraitFile);
+    let _progressInfo = { percentage: 0, fileName: "about-portrait.jpg" };
+    resumeProgressInfoRef.current = {
+      val: _progressInfo,
+    };
 
-    window.scrollTo(0, 0);
-    alertService.info("Uploading portrait image", true);
-
-    fetch("api/v1/admin/about/portrait", {
-      method: "PATCH",
-      body: formData,
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          Promise.reject(error);
-        }
-
-        alertService.success("Portrait image updated successfully!", true);
+    upload(portraitFile, portraitProgressInfoRef)
+      .then(() => {
+        alertService.success("Portrait uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
       })
       .catch((error) => {
-        console.error(`error uploading portrait image: ${error}`);
+        console.error(`error uploading portrait: ${error}`);
         alertService.error(`Error uploading portrait: ${error}`, false);
       })
       .finally(() => {
-        setIsPortraitPicked(false);
-        setPortraitFile(undefined);
+        setResumeFile(undefined);
         form.reset();
         submit.disabled = false;
       });
@@ -169,7 +156,7 @@ const About = (): JSX.Element => {
       val: _progressInfo,
     };
 
-    upload(resumeFile)
+    upload(resumeFile, resumeProgressInfoRef)
       .then(() => {
         alertService.success("Résumé uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
@@ -185,8 +172,8 @@ const About = (): JSX.Element => {
       });
   };
 
-  const upload = (file: File): Promise<string> => {
-    let _progressInfo = resumeProgressInfoRef.current.val;
+  const upload = (file: File, ref: MutableRefObject<any>): Promise<string> => {
+    let _progressInfo = ref.current.val;
 
     return new Promise((resolve, reject) => {
       UploadService.upload(
@@ -236,7 +223,7 @@ const About = (): JSX.Element => {
       <h1 className="font-bold text-4xl text-center">About Page Settings</h1>
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered">
-          <figure className="relative max-w-thumb pl-2">
+          <figure className="relative">
             <img
               src="/images/about-portrait.jpg"
               onError={(e) => {
@@ -246,7 +233,7 @@ const About = (): JSX.Element => {
                 e.currentTarget.classList.add("p-4");
               }}
               alt="portrait"
-              className="rounded-xl w-52 h-52"
+              className="rounded-xl h-72"
             />
           </figure>
           <form
@@ -277,6 +264,12 @@ const About = (): JSX.Element => {
                 </button>
               </div>
             </div>
+
+            {portraitProgressInfo && (
+              <ProgressInfoDisplay
+                percentage={portraitProgressInfo.percentage}
+              />
+            )}
           </form>
         </div>
 
@@ -326,10 +319,7 @@ const About = (): JSX.Element => {
             </div>
 
             {resumeProgressInfo && (
-              <ProgressInfoDisplay
-                fileName={resumeProgressInfo.fileName}
-                percentage={resumeProgressInfo.percentage}
-              />
+              <ProgressInfoDisplay percentage={resumeProgressInfo.percentage} />
             )}
           </form>
         </div>
