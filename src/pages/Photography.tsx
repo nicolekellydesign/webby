@@ -23,7 +23,7 @@ const Photography = (): JSX.Element => {
         return (
           <div>
             <img
-              src={`images/${photo.filename}`}
+              src={`/images/${photo.filename}`}
               alt={photo.filename}
               className="w-full h-auto"
             />
