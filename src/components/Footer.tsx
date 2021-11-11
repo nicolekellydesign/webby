@@ -1,10 +1,10 @@
 const Footer = (): JSX.Element => {
   return (
     <footer
-      className="relative justify-center text-xs bottom-0 w-full h-12 mt-8"
+      className="p-4 footer text-base-content footer-center mt-8"
       role="contentinfo"
     >
-      <div className="text-center py-3">
+      <div>
         <p>
           &copy; 2020 &ndash; {new Date().getFullYear()} Nicole Kelly Design
         </p>
