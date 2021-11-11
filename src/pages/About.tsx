@@ -58,7 +58,7 @@ const About = (): JSX.Element => {
             <button
               className="btn btn-primary"
               onClick={() => {
-                window.open("resources/resume.pdf");
+                window.open("/resources/resume.pdf");
               }}
             >
               <AiOutlineDownload className="inline-block w-6 h-6 mr-2 stroke-current" />
