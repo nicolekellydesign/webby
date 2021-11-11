@@ -47,12 +47,10 @@ const About = (): JSX.Element => {
           />
         </figure>
 
-        <div className="card-body pl-16">
+        <article className="card-body prose pl-24 max-w-4xl">
           <h2 className="card-title">Designer Statement</h2>
           {statement &&
-            statement
-              .split("\n\n")
-              .map((paragraph) => <p className="pt-6">{paragraph}</p>)}
+            statement.split("\n\n").map((paragraph) => <p>{paragraph}</p>)}
 
           <div className="card-actions">
             <button
@@ -65,7 +63,7 @@ const About = (): JSX.Element => {
               Download résumé
             </button>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   );
