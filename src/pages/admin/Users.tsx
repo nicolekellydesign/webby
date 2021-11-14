@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import DialogBox from "../../components/DialogBox";
 import { addUser, deleteUser, getUsers, User } from "../../entities/User";
 import { alertService } from "../../services/alert.service";
 
 interface LoginElements extends HTMLFormControlsCollection {
-  usernameInput: HTMLInputElement;
-  passwordInput: HTMLInputElement;
-  submitButton: HTMLInputElement;
+  username: HTMLInputElement;
+  password: HTMLInputElement;
+  submit: HTMLInputElement;
 }
 
 interface LoginFormElement extends HTMLFormElement {
@@ -15,24 +14,18 @@ interface LoginFormElement extends HTMLFormElement {
 }
 
 const AdminUsers = (): JSX.Element => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   const [users, setUsers] = useState<User[]>([]);
   const [usersLength, setUsersLength] = useState(0);
-
-  const toggleDialog = () => {
-    setDialogOpen(!dialogOpen);
-  };
 
   const handleSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const { usernameInput, passwordInput, submitButton } = form.elements;
+    const { username, password, submit } = form.elements;
 
-    submitButton.disabled = true;
+    submit.disabled = true;
 
-    addUser(usernameInput.value, passwordInput.value)
+    addUser(username.value, password.value)
       .then(() => {
         alertService.success("User added successfully!", true);
         setUsersLength(usersLength + 1);
@@ -42,7 +35,7 @@ const AdminUsers = (): JSX.Element => {
         alertService.error(`Error adding user: ${error}`, false);
       })
       .finally(() => {
-        submitButton.disabled = false;
+        submit.disabled = false;
         form.reset();
       });
   };
@@ -73,81 +66,115 @@ const AdminUsers = (): JSX.Element => {
   }, [usersLength]);
 
   return (
-    <div className="container text-center mx-auto">
-      <h1 className="font-bold text-5xl">Administrators</h1>
-      <div className="max-w-xl mx-auto my-8">
-        <ul className="border border-solid border-white rounded">
-          <li className="flex border-b border-white p-4">
-            <div className="flex-none">ID</div>
-            <div className="flex-grow">Username</div>
-          </li>
-          {users.map((user: User) => (
-            <li className="flex p-4">
-              <div className="flex-none">{user.id}</div>
-              <div className="flex-grow">{user.username}</div>
-              <div
-                title={user.protected ? "User is protected" : "Delete user"}
-                className={
-                  user.protected
-                    ? "btn disabled flex-none text-white"
-                    : "btn flex-none text-white"
-                }
-                onClick={() => {
-                  if (!user.protected) {
-                    toggleDialog();
-                  }
-                }}
-              >
-                <AiIcons.AiOutlineClose />
-              </div>
+    <div className="container mx-auto">
+      <h1 className="font-bold text-4xl text-center">Administrators</h1>
 
-              {!user.protected && (
-                <DialogBox
-                  show={dialogOpen}
-                  type="warning"
-                  onClose={toggleDialog}
-                  onConfirm={() => {
-                    handleDelete(user);
-                    toggleDialog();
-                  }}
-                >
-                  <div className="flex-grow p-4">
-                    <h2 className="font-bold text-xl">
-                      Are you sure you want to delete user '{user.username}'?
-                    </h2>
-                    <br />
-                    <p className="text-lg">This action cannot be reversed.</p>
-                  </div>
-                </DialogBox>
-              )}
-            </li>
-          ))}
-        </ul>
-        <form id="addUser" className="mt-8" onSubmit={handleSubmit}>
+      <div className="mx-auto my-8 w-1/2">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Created At</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user: User) => (
+              <tr key={user.id}>
+                <th>{user.id}</th>
+                <td>{user.username}</td>
+                <td>
+                  {new Date(user.createdAt).toLocaleString(undefined, {
+                    dateStyle: "medium",
+                    timeStyle: "medium",
+                  })}
+                </td>
+                <td className="text-center">
+                  {user.protected ? (
+                    <div data-tip="User is protected" className="tooltip">
+                      <button
+                        className="btn btn-ghost btn-disabled btn-sm"
+                        disabled
+                      >
+                        <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div data-tip="Delete user" className="tooltip">
+                      <label
+                        htmlFor={`delete-${user.username}-modal`}
+                        className="btn btn-ghost btn-sm modal-open"
+                      >
+                        <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                      </label>
+                      <input
+                        type="checkbox"
+                        id={`delete-${user.username}-modal`}
+                        className="modal-toggle"
+                      />
+                      <div className="modal">
+                        <div className="modal-box">
+                          <h2 className="font-bold text-xl">
+                            Are you sure you want to delete user '
+                            {user.username}'?
+                          </h2>
+                          <br />
+                          <p>This action cannot be reversed.</p>
+
+                          <div className="modal-action">
+                            <label
+                              htmlFor={`delete-${user.username}-modal`}
+                              className="btn btn-secondary"
+                              onClick={() => {
+                                handleDelete(user);
+                              }}
+                            >
+                              Delete
+                            </label>
+                            <label
+                              htmlFor={`delete-${user.username}-modal`}
+                              className="btn"
+                            >
+                              Cancel
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <form
+          id="addUser"
+          className="mt-8 input-group w-full"
+          onSubmit={handleSubmit}
+        >
           <input
-            id="usernameInput"
+            id="username"
             type="text"
             name="username"
             placeholder="Username"
             pattern="^(\w+)$"
             title="Username cannot contain whitespace"
             required
-            className="rounded text-black text-center"
+            className="input input-bordered"
           />
           <input
-            id="passwordInput"
+            id="password"
             type="password"
             name="password"
             placeholder="Password"
             required
-            className="rounded text-black text-center m-2"
+            className="input input-bordered"
           />
-          <input
-            id="submitButton"
-            type="submit"
-            value="Add user"
-            className="btn"
-          />
+          <button id="submit" type="submit" className="btn btn-primary">
+            Add user
+          </button>
         </form>
       </div>
     </div>

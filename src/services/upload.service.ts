@@ -1,6 +1,7 @@
 export interface ProgressInfo {
   percentage: number;
-  fileName: string;
+  fileName?: string;
+  errored: boolean;
 }
 
 class UploadService {

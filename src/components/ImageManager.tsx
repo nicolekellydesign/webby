@@ -7,8 +7,8 @@ import {
 } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
 import UploadService, { ProgressInfo } from "../services/upload.service";
-import DialogBox from "./DialogBox";
-import IconButton, { DestructiveButton } from "./IconButton";
+import ProgressInfoDisplay from "./ProgressInfo";
+import "./ImageManager.css";
 
 interface UploadImageElements extends HTMLFormControlsCollection {
   image: HTMLInputElement;
@@ -35,8 +35,6 @@ const ImageManager = ({
   uploadFunc,
 }: ImageManagerProps) => {
   const [selected, setSelected] = useState<string[]>([]);
-
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const [imageFiles, setImageFiles] = useState<FileList | undefined>(undefined);
 
@@ -67,6 +65,7 @@ const ImageManager = ({
     let _progressInfos = files.map((file) => ({
       percentage: 0,
       fileName: file.name,
+      errored: false,
     }));
 
     progressInfosRef.current = {
@@ -102,7 +101,7 @@ const ImageManager = ({
         },
         (status, response) => {
           if (status !== 200) {
-            _progressInfos[i].percentage = 0;
+            _progressInfos[i].errored = true;
             setProgressInfos(_progressInfos);
             reject(response.statusText);
           } else {
@@ -114,142 +113,140 @@ const ImageManager = ({
   };
 
   return (
-    <div className="mt-8 w-6xl">
-      <h2 className="font-semibold text-left text-xl">{title}</h2>
-      <ul className="border border-solid border-white flex flex-wrap gap-4 justify-start p-4 mt-4 rounded overflow-y-scroll min-h-64 max-h-screen ">
-        {images?.map((image) => (
-          <li
-            className="bg-cover bg-center bg-no-repeat cursor-pointer flex flex-col justify-center w-64 h-64"
-            data-src={`/images/${image}`}
-            style={{
-              backgroundImage: `url("/images/${image}")`,
-            }}
-          >
-            {selected.some((name) => name === image) ? (
-              <div
-                className="opacity-70 bg-black hover:text-blue-400 relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
-                onClick={() => {
-                  setSelected((selected) =>
-                    selected.filter((name) => name !== image)
-                  );
-                }}
-                title="Unselect image"
-              >
-                <div className="box-border font-bold text-lg mx-auto w-max">
-                  <div className="w-max">
-                    <AiOutlineCheckCircle className="w-12 h-12" />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div
-                className="opacity-0 hover:opacity-70 hover:bg-black relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
-                onClick={() => {
-                  setSelected((selected) => selected.concat(image));
-                }}
-                title="Select image"
-              >
-                <div className="box-border font-bold text-lg mx-auto w-max">
-                  <div className="w-max">
-                    <AiOutlineCheck className="mx-auto w-12 h-12" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-4">
-        <form
-          id="image-upload-form"
-          onSubmit={handleUpload}
-          className="flex flex-col items-start p-2"
-        >
-          <div className="text-left">
-            <label htmlFor="image" className="pl-3 font-semibold">
-              {label}
-            </label>
-            <br />
-            <input
-              type="file"
-              accept="image/*"
-              name="image"
-              multiple
-              title="Only images allowed."
-              onChange={imageChangeHandler}
-              className="btn mb-4"
-            />
-
-            {progressInfos.map((info, idx) => (
-              <div className="mb-2 w-96" key={idx}>
-                <span className="ml-2">{info.fileName}</span>
-                <div>
-                  <div
-                    className="bg-blue-700 rounded-lg"
-                    role="progressbar"
-                    aria-valuenow={info.percentage}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    title="Upload progress"
-                    style={{ width: info.percentage + "%" }}
-                  >
-                    <span className="ml-4 font-semibold">
-                      {info.percentage}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            <div className="text-center text-xs pl-3 mb-6">
-              <p>Max file size: 8 MB</p>
-            </div>
-          </div>
-
-          <div className="flex gap-4 pl-3">
-            <IconButton
-              type="submit"
-              name="submit"
-              icon={<AiOutlineUpload />}
-              text="Upload images"
-            />
-            {selected.length > 0 && (
-              <div className="fade-in">
-                <DestructiveButton
-                  icon={<AiOutlineDelete />}
-                  text="Delete selected"
+    <div className="card lg:card-side bordered mt-8 w-7xl">
+      <div className="card-body">
+        <h2 className="card-title">{title}</h2>
+        <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4">
+          {images?.map((image) => (
+            <li
+              className="carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64"
+              data-src={`/images/${image}`}
+              style={{
+                backgroundImage: `url("/images/${image}")`,
+              }}
+            >
+              {selected.some((name) => name === image) ? (
+                <div
+                  className="opacity-70 bg-black hover:text-blue-400 rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
                   onClick={() => {
-                    setDialogOpen(true);
+                    setSelected((selected) =>
+                      selected.filter((name) => name !== image)
+                    );
                   }}
-                ></DestructiveButton>
-              </div>
-            )}
-          </div>
-        </form>
-      </div>
+                >
+                  <div data-tip="Unselect image" className="tooltip">
+                    <div className="box-border font-bold text-lg mx-auto w-max">
+                      <div className="w-max">
+                        <AiOutlineCheckCircle className="w-12 h-12" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="opacity-0 hover:opacity-70 hover:bg-black rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
+                  onClick={() => {
+                    setSelected((selected) => selected.concat(image));
+                  }}
+                >
+                  <div data-tip="Select image" className="tooltip">
+                    <div className="box-border font-bold text-lg mx-auto w-max">
+                      <div className="w-max">
+                        <AiOutlineCheck className="mx-auto w-12 h-12" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
 
-      <DialogBox
-        show={dialogOpen}
-        type="warning"
-        onClose={() => {
-          setDialogOpen(false);
-        }}
-        onConfirm={() => {
-          deleteImages(selected);
-          setDialogOpen(false);
-          setSelected([]);
-        }}
-      >
-        <div className="flex-grow p-4">
-          <h2 className="font-bold text-xl">
-            Are you sure you want to delete {selected.length}{" "}
-            {selected.length === 1 ? "image" : "images"}?
-          </h2>
-          <br />
-          <p className="text-lg">This action cannot be reversed.</p>
+        <div className="mt-4">
+          <form
+            id="image-upload-form"
+            onSubmit={handleUpload}
+            className="card-body"
+          >
+            <div className="form-control">
+              <label htmlFor="image" className="card-title">
+                {label}
+              </label>
+              <div className="text-xs">
+                <p>Max file size: 8 MB</p>
+              </div>
+
+              <input
+                type="file"
+                accept="image/*"
+                name="image"
+                multiple
+                title="Only images allowed."
+                onChange={imageChangeHandler}
+                className="btn btn-ghost mt-4"
+              />
+
+              {progressInfos.map((info, idx) => (
+                <ProgressInfoDisplay
+                  key={idx}
+                  fileName={info.fileName}
+                  percentage={info.percentage}
+                  errored={info.errored}
+                />
+              ))}
+            </div>
+
+            <div className="card-actions">
+              <button type="submit" name="submit" className="btn btn-primary">
+                <AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                Upload images
+              </button>
+              {selected.length > 0 && (
+                <>
+                  <label
+                    htmlFor="delete-images-modal"
+                    className="btn btn-secondary btn-outline modal-open"
+                  >
+                    <AiOutlineDelete className="inline-block w-6 h-6 mr-2 stroke-current" />
+                    Delete selected
+                  </label>
+                  <input
+                    type="checkbox"
+                    id="delete-images-modal"
+                    className="modal-toggle"
+                  />
+                  <div className="modal">
+                    <div className="modal-box">
+                      <h2 className="font-bold text-xl">
+                        Are you sure you want to delete these images?
+                      </h2>
+                      <br />
+                      <p>Images selected: {selected.length}</p>
+                      <p>This action cannot be reversed.</p>
+
+                      <div className="modal-action">
+                        <label
+                          htmlFor="delete-images-modal"
+                          className="btn btn-secondary"
+                          onClick={() => {
+                            deleteImages(selected);
+                            setSelected([]);
+                          }}
+                        >
+                          Delete
+                        </label>
+                        <label htmlFor="delete-images-modal" className="btn">
+                          Cancel
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </form>
         </div>
-      </DialogBox>
+      </div>
     </div>
   );
 };

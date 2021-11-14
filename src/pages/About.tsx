@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import * as AiIcons from "react-icons/ai";
+import { AiOutlineDownload } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
-import BlankAvatar from "../blank-avatar.svg";
-import IconButton from "../components/IconButton";
+import BlankAvatar from "../icons/blank-avatar.svg";
 
 const About = (): JSX.Element => {
   const [statement, setStatement] = useState("");
@@ -32,38 +31,39 @@ const About = (): JSX.Element => {
   }, [statementLength]);
 
   return (
-    <div className="flex gap-16 ml-28">
-      <div className="p-4 max-w-lg w-full">
-        <img
-          src={"images/about-portrait.jpg"}
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = BlankAvatar;
-            e.currentTarget.classList.add("bg-white");
-            e.currentTarget.classList.add("p-4");
-            // e.currentTarget.classList.add("w-52");
-            // e.currentTarget.classList.add("h-52");
-          }}
-          alt="portrait"
-          className="rounded-xl w-full"
-        />
-      </div>
-      <div className="p-4">
-        <h2 className="font-bold text-lg">Designer Statement</h2>
-        {statement &&
-          statement.split("\n\n").map((paragraph) => (
-            <>
-              <p className="pt-6">{paragraph}</p>
-              <br />
-            </>
-          ))}
-        <IconButton
-          icon={<AiIcons.AiOutlineDownload />}
-          text="Download résumé"
-          onClick={() => {
-            window.open("resources/resume.pdf");
-          }}
-        />
+    <div className="container mx-auto mt-8">
+      <div className="card lg:card-side">
+        <figure>
+          <img
+            src={"/images/about-portrait.jpg"}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = BlankAvatar;
+              e.currentTarget.classList.add("bg-white");
+              e.currentTarget.classList.add("p-4");
+            }}
+            alt="portrait"
+            className="rounded-xl h-192"
+          />
+        </figure>
+
+        <article className="card-body prose pl-24 max-w-4xl">
+          <h2 className="card-title">Designer Statement</h2>
+          {statement &&
+            statement.split("\n\n").map((paragraph) => <p>{paragraph}</p>)}
+
+          <div className="card-actions">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                window.open("/resources/resume.pdf");
+              }}
+            >
+              <AiOutlineDownload className="inline-block w-6 h-6 mr-2 stroke-current" />
+              Download résumé
+            </button>
+          </div>
+        </article>
       </div>
     </div>
   );

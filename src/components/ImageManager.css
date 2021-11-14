@@ -1,0 +1,11 @@
+.image-scroller {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  justify-content: flex-start;
+  -ms-scroll-snap-type: y mandatory;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: thin;
+}

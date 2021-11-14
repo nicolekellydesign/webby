@@ -59,8 +59,10 @@ const AdminPhotos = (): JSX.Element => {
   }, [photosLength]);
 
   return (
-    <div className="container text-center mx-auto">
-      <h1 className="font-bold text-5xl">Photography Gallery Settings</h1>
+    <div className="container mx-auto">
+      <h1 className="font-bold text-4xl text-center">
+        Photography Gallery Settings
+      </h1>
       <div className="max-w-max mx-auto my-8">
         <ImageManager
           images={images}

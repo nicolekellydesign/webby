@@ -8,7 +8,6 @@ import {
 import { alertService } from "../../services/alert.service";
 import { slideToggle } from "../../components/slider";
 import { NavLink } from "react-router-dom";
-import SlideToggle from "../../components/SlideToggle";
 
 interface AddProjectElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
@@ -112,39 +111,53 @@ const AdminGallery = (): JSX.Element => {
   }, [galleryItemsLength]);
 
   return (
-    <div className="container text-center mx-auto">
-      <h1 className="font-bold text-5xl">Portfolio Gallery Settings</h1>
+    <div className="container mx-auto">
+      <h1 className="font-bold text-4xl text-center">
+        Portfolio Gallery Settings
+      </h1>
+
       <div className="max-w-max mx-auto my-8">
-        <ul className="border border-solid border-white grid grid-cols-4 gap-4 p-4 rounded overflow-y-scroll max-h-screen">
-          {galleryItems.map((galleryItem) => (
-            <li className="thumb relative max-w-thumb">
-              <NavLink to={`/admin/gallery/${galleryItem.name}`}>
-                <img
-                  src={`/images/${galleryItem.thumbnail}`}
-                  alt={galleryItem.title}
-                  className="opacity-100 block transition"
-                />
-                <div className="cursor-pointer absolute flex items-center justify-center opacity-0 top-1/2 left-1/2 overlay transition w-full h-full">
-                  <div className="font-bold text-lg w-max">
-                    <AiIcons.AiOutlineSetting className="mx-auto w-8 h-8" />
-                    Project Settings
-                  </div>
-                </div>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-        <div className="min-w-textLarge">
-          <SlideToggle
-            isShowing={addProjectVisible}
-            onClick={toggleAddProject}
-            text="Add new project"
-          />
-          <div id="add-project-form" className="hidden">
+        <div className="card lg:card-side bordered w-7xl">
+          <div className="card-body">
+            <h2 className="card-title">Gallery Projects</h2>
+
+            <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4">
+              {galleryItems.map((galleryItem) => (
+                <li
+                  data-src={`/images/${galleryItem.thumbnail}`}
+                  className="carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64"
+                  style={{
+                    backgroundImage: `url("/images/${galleryItem.thumbnail}")`,
+                  }}
+                >
+                  <NavLink
+                    to={`/admin/gallery/${galleryItem.name}`}
+                    className="opacity-0 hover:opacity-70 hover:bg-black rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
+                  >
+                    <div className="box-border font-bold text-lg mx-auto w-max">
+                      <div className="font-bold text-lg w-max">
+                        <AiIcons.AiOutlineSetting className="mx-auto w-8 h-8" />
+                        Project Settings
+                      </div>
+                    </div>
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="collapse w-96 border rounded-box border-base-300 collapse-plus mt-8">
+          <input type="checkbox" />
+          <div className="collapse-title text-xl font-medium">
+            Add new project
+          </div>
+          <div className="collapse-content">
             <form onSubmit={onSubmit} className="text-left">
-              <div className="p-2">
-                <label htmlFor="name">Project name</label>
-                <br />
+              <div className="form-control">
+                <label htmlFor="name" className="label">
+                  <span className="label-text">Project name</span>
+                </label>
                 <input
                   id="name"
                   type="text"
@@ -152,76 +165,81 @@ const AdminGallery = (): JSX.Element => {
                   placeholder="project-name"
                   pattern="[A-z\d\-_]+"
                   title="Only use letters, numbers, - and _ characters."
-                  className="w-full text-black"
+                  className="input input-bordered w-full"
                   required
                 />
               </div>
-              <div className="p-2">
-                <label htmlFor="title">Title</label>
-                <br />
+              <div className="form-control">
+                <label htmlFor="title" className="label">
+                  <span className="label-text">Title</span>
+                </label>
                 <input
                   id="title"
                   type="text"
                   name="title"
                   placeholder="Project Title"
-                  className="w-full text-black"
+                  className="input input-bordered w-full"
                   required
                 />
               </div>
-              <div className="p-2">
-                <label htmlFor="caption">Caption</label>
-                <br />
+              <div className="form-control">
+                <label htmlFor="caption" className="label">
+                  <span className="label-text">Caption</span>
+                </label>
                 <input
                   id="caption"
                   type="text"
                   name="caption"
                   placeholder="Short thumbnail caption"
-                  className="w-full text-black"
+                  className="input input-bordered w-full"
                   required
                 />
               </div>
-              <div className="p-2">
-                <label htmlFor="projectInfo">Project info</label>
-                <br />
+              <div className="form-control">
+                <label htmlFor="projectInfo" className="label">
+                  <span className="label-text">Project info</span>
+                </label>
                 <textarea
                   id="projectInfo"
                   name="projectInfo"
-                  className="w-full text-black min-h-textLarge"
+                  className="textarea textarea-bordered w-full h-64"
                   required
                 />
               </div>
-              <div className="p-2">
-                <label htmlFor="embedURL">Embed URL (optional)</label>
-                <br />
+              <div className="form-control">
+                <label htmlFor="embedURL" className="label">
+                  <span className="label-text">Embed URL (optional)</span>
+                </label>
                 <input
                   id="embedURL"
                   type="text"
                   name="embedURL"
                   placeholder="https://youtube.com/embed/video-key"
-                  className="w-full text-black"
+                  className="input input-bordered w-full"
                 />
               </div>
-              <div className="p-2">
-                <label htmlFor="thumbnail">Project thumbnail</label>
-                <br />
+              <div className="form-control">
+                <label htmlFor="thumbnail" className="label">
+                  <span className="label-text">Project thumbnail</span>
+                </label>
                 <input
                   type="file"
                   accept="image/*"
                   name="thumbnail"
                   title="Only images allowed."
                   onChange={changeHandler}
-                  className="btn"
-                  style={{ paddingLeft: 0 }}
+                  className="btn btn-ghost"
                   required
                 />
               </div>
-              <div className="p-2">
-                <input
+              <div className="form-control mt-4">
+                <button
                   id="submitButton"
                   type="submit"
-                  value="Add project"
-                  className="btn"
-                />
+                  className="btn btn-primary"
+                >
+                  Add project
+                </button>
               </div>
             </form>
           </div>

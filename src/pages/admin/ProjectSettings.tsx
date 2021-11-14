@@ -12,8 +12,6 @@ import {
 } from "../../entities/GalleryItem";
 import { alertService } from "../../services/alert.service";
 import NotFound from "../NotFound";
-import IconButton, { DestructiveButton } from "../../components/IconButton";
-import DialogBox from "../../components/DialogBox";
 import ImageManager from "../../components/ImageManager";
 
 interface ParamTypes {
@@ -43,8 +41,6 @@ interface UpdateProjectFormElement extends HTMLFormElement {
 
 const ProjectSettings = (): JSX.Element => {
   const { name } = useParams<ParamTypes>();
-
-  const [projectDialogOpen, setProjectDialogOpen] = useState(false);
 
   const [project, setProject] = useState<GalleryItem>();
   const [projectLength, setProjectLength] = useState(0);
@@ -181,108 +177,112 @@ const ProjectSettings = (): JSX.Element => {
   }
 
   return project ? (
-    <div className="container text-center mx-auto">
-      <h1 className="font-bold text-5xl">Project Settings</h1>
+    <div className="container mx-auto">
+      <h1 className="font-bold text-4xl text-center">Project Settings</h1>
+
       <div className="max-w-max mx-auto my-8">
-        <div className="flex">
-          <div className="relative max-w-thumb pl-2">
-            <img src={`/images/${project.thumbnail}`} alt={project.title} />
-          </div>
-          <div className="flex flex-col items-start mt-4">
-            <form
-              id="thumbnail-upload-form"
-              onSubmit={uploadThumbnail}
-              className="mt-8 p-2"
-            >
-              <div className="text-left">
-                <label htmlFor="image" className="pl-3 font-semibold">
-                  Change thumbnail image
-                </label>
-                <br />
-                <div className="pl-3 text-xs">
-                  <p>Max file size: 8 MB</p>
-                </div>
-                <br />
+        <div className="card lg:card-side bordered">
+          <figure className="relative">
+            <img
+              src={`/images/${project.thumbnail}`}
+              alt={project.title}
+              className="rounded-xl h-52"
+            />
+          </figure>
+          <form
+            id="thumbnail-upload-form"
+            onSubmit={uploadThumbnail}
+            className="card-body"
+          >
+            <div className="form-control">
+              <label htmlFor="image" className="card-title">
+                Change thumbnail image
+              </label>
+              <div className="text-xs">
+                <p>Max file size: 8 MB</p>
+              </div>
+              <div className="card-actions">
                 <input
                   type="file"
                   accept="image/*"
                   name="image"
                   title="Only images allowed."
                   onChange={thumbChangeHandler}
-                  className="btn"
+                  className="btn btn-ghost"
                   required
                 />
-                <br />
-                <div className="pl-3">
-                  <IconButton
-                    type="submit"
-                    name="submit"
-                    icon={<AiIcons.AiOutlineUpload />}
-                    text="Upload thumbnail"
-                  />
-                </div>
+                <button type="submit" name="submit" className="btn btn-primary">
+                  <AiIcons.AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                  Upload thumbnail
+                </button>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
 
-        <div id="update-project-form" className="mt-4">
-          <form onSubmit={onSubmit} className="text-left">
-            <div className="p-2">
-              <label htmlFor="title">Title</label>
-              <br />
+        <div
+          id="update-project-form"
+          className="card lg:card-side bordered mt-8"
+        >
+          <form onSubmit={onSubmit} className="card-body">
+            <h2 className="card-title">Project Details</h2>
+
+            <div className="form-control">
+              <label htmlFor="title" className="label">
+                <span className="label-text">Title</span>
+              </label>
               <input
                 id="title"
                 type="text"
                 name="title"
                 placeholder="Project Title"
                 defaultValue={project.title}
-                className="w-full text-black"
+                className="input input-bordered"
                 required
               />
             </div>
-            <div className="p-2">
-              <label htmlFor="caption">Caption</label>
-              <br />
+            <div className="form-control">
+              <label htmlFor="caption" className="label">
+                <span className="label-text">Caption</span>
+              </label>
               <input
                 id="caption"
                 type="text"
                 name="caption"
                 placeholder="Short thumbnail caption"
                 defaultValue={project.caption}
-                className="w-full text-black"
+                className="input input-bordered"
                 required
               />
             </div>
-            <div className="p-2">
-              <label htmlFor="projectInfo">Project info</label>
-              <br />
+            <div className="form-control">
+              <label htmlFor="projectInfo" className="label">
+                <span className="label-text">Project info</span>
+              </label>
               <textarea
                 id="projectInfo"
                 name="projectInfo"
                 defaultValue={project.projectInfo}
-                className="w-full text-black min-h-textLarge"
+                className="textarea textarea-bordered h-96"
                 required
               />
             </div>
-            <div className="p-2">
-              <label htmlFor="embedURL">Embed URL (optional)</label>
-              <br />
+            <div className="form-control">
+              <label htmlFor="embedURL" className="label">
+                <span className="label-text">Embed URL (optional)</span>
+              </label>
               <input
                 id="embedURL"
                 type="text"
                 name="embedURL"
                 defaultValue={project.embedURL}
-                className="w-full text-black"
+                className="input input-bordered"
               />
             </div>
-            <div className="p-2">
-              <input
-                id="submit"
-                type="submit"
-                value="Update project"
-                className="btn"
-              />
+            <div className="card-actions">
+              <button id="submit" type="submit" className="btn btn-primary">
+                Update project
+              </button>
             </div>
           </form>
         </div>
@@ -295,33 +295,41 @@ const ProjectSettings = (): JSX.Element => {
           uploadFunc={insertImages}
         />
 
-        <div className="mt-8">
-          <DestructiveButton
-            icon={<AiIcons.AiOutlineDelete />}
-            text="Delete project"
-            onClick={() => {
-              setProjectDialogOpen(true);
-            }}
-          />
+        <label
+          htmlFor="delete-project-modal"
+          className="btn btn-secondary btn-outline modal-open mt-8"
+        >
+          <AiIcons.AiOutlineDelete className="inline-block w-6 h-6 mr-2 stroke-current" />
+          Delete project
+        </label>
+        <input
+          type="checkbox"
+          id="delete-project-modal"
+          className="modal-toggle"
+        />
+        <div className="modal">
+          <div className="modal-box">
+            <h2 className="font-bold text-xl">
+              Are you sure you want to delete this project?
+            </h2>
+            <br />
+            <p>This action cannot be reversed.</p>
+
+            <div className="modal-action">
+              <label
+                htmlFor="delete-project-modal"
+                className="btn btn-secondary"
+                onClick={deleteProject}
+              >
+                Delete
+              </label>
+              <label htmlFor="delete-project-modal" className="btn">
+                Cancel
+              </label>
+            </div>
+          </div>
         </div>
       </div>
-
-      <DialogBox
-        show={projectDialogOpen}
-        type="warning"
-        onClose={() => {
-          setProjectDialogOpen(false);
-        }}
-        onConfirm={deleteProject}
-      >
-        <div className="flex-grow p-4">
-          <h2 className="font-bold text-xl">
-            Are you sure you want to delete this project?
-          </h2>
-          <br />
-          <p className="text-lg">This action cannot be reversed.</p>
-        </div>
-      </DialogBox>
     </div>
   ) : (
     <NotFound />

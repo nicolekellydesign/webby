@@ -1,11 +1,11 @@
 import { alertService } from "../services/alert.service";
 
 interface FormElements extends HTMLFormControlsCollection {
-  firstNameInput: HTMLInputElement;
-  lastNameInput: HTMLInputElement;
-  emailInput: HTMLInputElement;
-  messageInput: HTMLTextAreaElement;
-  submitButton: HTMLInputElement;
+  firstname: HTMLInputElement;
+  lastname: HTMLInputElement;
+  email: HTMLInputElement;
+  message: HTMLTextAreaElement;
+  submit: HTMLInputElement;
 }
 
 interface MessageFormElement extends HTMLFormElement {
@@ -29,21 +29,15 @@ const Contact = (): JSX.Element => {
     }
 
     const form = event.currentTarget;
-    const {
-      firstNameInput,
-      lastNameInput,
-      emailInput,
-      messageInput,
-      submitButton,
-    } = form.elements;
+    const { firstname, lastname, email, message, submit } = form.elements;
 
-    submitButton.disabled = true;
+    submit.disabled = true;
     alertService.info("Submitting form information...", true);
 
     // Build the email parts
-    const name = `${firstNameInput.value} ${lastNameInput.value}`;
+    const name = `${firstname.value} ${lastname.value}`;
     const subject = `${name} - Contact Form Submission`;
-    const body = `Sender: ${name};\nEmail Address: ${emailInput.value}\n\n${messageInput.value}`;
+    const body = `Sender: ${name};\nEmail Address: ${email.value}\n\n${message.value}`;
 
     // Send to the email sender
     const params = new URLSearchParams();
@@ -82,88 +76,92 @@ const Contact = (): JSX.Element => {
         );
       })
       .finally(() => {
-        submitButton.disabled = false;
+        submit.disabled = false;
         form.reset();
       });
   };
 
   return (
-    <>
-      <div className="container mx-auto">
-        <h1 className="text-lg text-center">Use this form to contact me</h1>
-        <div className="container mx-auto pt-4">
-          <form id="form" onSubmit={onSubmit}>
-            <div className="md:flex md:justify-center p-2">
-              <div className="p-2">
-                <label htmlFor="firstname">First Name</label>
-                <br />
+    <div className="container mx-auto">
+      <div className="max-w-max mx-auto my-8">
+        <div className="card lg:card-side bordered">
+          <form id="form" onSubmit={onSubmit} className="card-body">
+            <h2 className="card-title">Contact Form</h2>
+
+            <div className="form-control lg:flex-row">
+              <div className="form-control">
+                <label htmlFor="firstname" className="label">
+                  <span className="label-text">First Name</span>
+                </label>
                 <input
-                  id="firstNameInput"
+                  id="firstname"
                   type="text"
                   name="firstname"
                   placeholder="John"
                   required
-                  className="w-full text-black"
+                  className="input input-bordered"
                 />
               </div>
-
-              <div className="p-2">
-                <label htmlFor="lastname">Last Name</label>
-                <br />
+              <div className="form-control">
+                <label htmlFor="lastname" className="label">
+                  <span className="label-text">Last Name</span>
+                </label>
                 <input
-                  id="lastNameInput"
+                  id="lastname"
                   type="text"
                   name="lastname"
                   placeholder="Doe"
                   required
-                  className="w-full text-black"
+                  className="input input-bordered"
                 />
               </div>
             </div>
-            <div className="md:flex md:justify-center p-2">
-              <div className="p-2">
-                <label htmlFor="email">Email Address</label>
-                <br />
-                <input
-                  id="emailInput"
-                  type="email"
-                  name="email"
-                  placeholder="you@example.com"
-                  required
-                  className="w-full md:w-email text-black"
-                />
-              </div>
+
+            <div className="form-control">
+              <label htmlFor="email" className="label">
+                <span className="label-text">Email Address</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                required
+                className="input input-bordered"
+              />
             </div>
-            <div className="md:flex md:justify-center p-2">
-              <div className="p-2">
-                <label htmlFor="message">Message</label>
-                <br />
-                <textarea
-                  id="messageInput"
-                  name="message"
-                  placeholder="Write your message for me here"
-                  required
-                  className="w-full md:min-w-textLarge min-h-textLarge text-black"
-                />
-              </div>
+
+            <div className="form-control">
+              <label htmlFor="message" className="label">
+                <span className="label-text">Message</span>
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Write your message for me here"
+                required
+                className="textarea textarea-bordered h-64"
+              />
             </div>
-            <div className="md:flex md:justify-center p-2">
-              <div className="p-2">
-                <input type="reset" className="btn w-full" />
-              </div>
-              <div className="p-2">
-                <input
-                  id="submitButton"
+
+            <div className="card-actions">
+              <div className="input-group">
+                <button type="reset" className="btn btn-outline">
+                  Clear form
+                </button>
+                <button
+                  id="submit"
                   type="submit"
-                  value="Send message"
-                  className="btn w-full"
-                />
+                  className="btn btn-outline btn-primary"
+                >
+                  Send message
+                </button>
               </div>
             </div>
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

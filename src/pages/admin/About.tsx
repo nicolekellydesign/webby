@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { alertService } from "../../services/alert.service";
-import BlankAvatar from "../../blank-avatar.svg";
-import IconButton from "../../components/IconButton";
+import BlankAvatar from "../../icons/blank-avatar.svg";
 import UploadService, { ProgressInfo } from "../../services/upload.service";
+import ProgressInfoDisplay from "../../components/ProgressInfo";
 
 interface PortraitElements extends HTMLFormControlsCollection {
   image: HTMLInputElement;
@@ -37,7 +37,9 @@ const About = (): JSX.Element => {
   const [statement, setStatement] = useState("");
 
   const [portraitFile, setPortraitFile] = useState<File>();
-  const [isPortraitPicked, setIsPortraitPicked] = useState(false);
+  const [portraitProgressInfo, setPortraitProgressInfo] =
+    useState<ProgressInfo>();
+  const portraitProgressInfoRef = useRef<any>(null);
 
   const [resumeFile, setResumeFile] = useState<File>();
   const [resumeProgressInfo, setResumeProgressInfo] = useState<ProgressInfo>();
@@ -53,7 +55,7 @@ const About = (): JSX.Element => {
     }
 
     setPortraitFile(files[0]);
-    setIsPortraitPicked(true);
+    setPortraitProgressInfo(undefined);
   };
 
   const resumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +72,7 @@ const About = (): JSX.Element => {
   const uploadPortrait = (event: React.FormEvent<PortraitFormElement>) => {
     event.preventDefault();
 
-    if (!isPortraitPicked || !portraitFile) {
+    if (!portraitFile) {
       return;
     }
 
@@ -78,37 +80,25 @@ const About = (): JSX.Element => {
     const { submit } = form.elements;
     submit.disabled = true;
 
-    const formData = new FormData();
-    formData.append("image", portraitFile);
+    let _progressInfo = {
+      percentage: 0,
+      fileName: "about-portrait.jpg",
+      errored: false,
+    };
+    portraitProgressInfoRef.current = {
+      val: _progressInfo,
+    };
 
-    window.scrollTo(0, 0);
-    alertService.info("Uploading portrait image", true);
-
-    fetch("api/v1/admin/about/portrait", {
-      method: "PATCH",
-      body: formData,
-    })
-      .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
-        const body = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          Promise.reject(error);
-        }
-
-        alertService.success("Portrait image updated successfully!", true);
+    upload(portraitFile, portraitProgressInfoRef, "portrait")
+      .then(() => {
+        alertService.success("Portrait uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
       })
       .catch((error) => {
-        console.error(`error uploading portrait image: ${error}`);
+        console.error(`error uploading portrait: ${error}`);
         alertService.error(`Error uploading portrait: ${error}`, false);
       })
       .finally(() => {
-        setIsPortraitPicked(false);
-        setPortraitFile(undefined);
         form.reset();
         submit.disabled = false;
       });
@@ -164,12 +154,16 @@ const About = (): JSX.Element => {
     const { submit } = form.elements;
     submit.disabled = true;
 
-    let _progressInfo = { percentage: 0, fileName: resumeFile.name };
+    let _progressInfo = {
+      percentage: 0,
+      fileName: resumeFile.name,
+      errored: false,
+    };
     resumeProgressInfoRef.current = {
       val: _progressInfo,
     };
 
-    upload(resumeFile)
+    upload(resumeFile, resumeProgressInfoRef, "resume")
       .then(() => {
         alertService.success("Résumé uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
@@ -185,20 +179,42 @@ const About = (): JSX.Element => {
       });
   };
 
-  const upload = (file: File): Promise<string> => {
-    let _progressInfo = resumeProgressInfoRef.current.val;
+  const upload = (
+    file: File,
+    ref: MutableRefObject<any>,
+    type: "portrait" | "resume"
+  ): Promise<string> => {
+    let _progressInfo = ref.current.val;
 
     return new Promise((resolve, reject) => {
       UploadService.upload(
         file,
         (percentage) => {
           _progressInfo.percentage = percentage;
-          setResumeProgressInfo(_progressInfo);
+          switch (type) {
+            case "portrait":
+              setPortraitProgressInfo(_progressInfo);
+              break;
+            case "resume":
+              setResumeProgressInfo(_progressInfo);
+              break;
+            default:
+              break;
+          }
         },
         (status, response) => {
           if (status !== 200) {
-            _progressInfo.percentage = 0;
-            setResumeProgressInfo(_progressInfo);
+            _progressInfo.errored = true;
+            switch (type) {
+              case "portrait":
+                setPortraitProgressInfo(_progressInfo);
+                break;
+              case "resume":
+                setResumeProgressInfo(_progressInfo);
+                break;
+              default:
+                break;
+            }
             reject(response.statusText);
           } else {
             resolve(_progressInfo.fileName);
@@ -232,13 +248,13 @@ const About = (): JSX.Element => {
   }, [aboutLength]);
 
   return (
-    <div className="container text-center mx-auto">
-      <h1 className="font-bold text-5xl">About Page Settings</h1>
+    <div className="container mx-auto">
+      <h1 className="font-bold text-4xl text-center">About Page Settings</h1>
       <div className="max-w-max mx-auto my-8">
-        <div className="flex">
-          <div className="relative max-w-thumb pl-2">
+        <div className="card lg:card-side bordered">
+          <figure className="relative">
             <img
-              src="images/about-portrait.jpg"
+              src="/images/about-portrait.jpg"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = BlankAvatar;
@@ -246,121 +262,98 @@ const About = (): JSX.Element => {
                 e.currentTarget.classList.add("p-4");
               }}
               alt="portrait"
-              className="rounded-xl w-52 h-52"
+              className="rounded-xl h-72"
             />
-          </div>
-          <div className="flex flex-col items-start mt-4">
-            <form
-              id="thumbnail-upload-form"
-              onSubmit={uploadPortrait}
-              className="mt-8 p-2"
-            >
-              <div className="text-left">
-                <label htmlFor="image" className="pl-3 font-semibold">
-                  Change portrait
-                </label>
-                <br />
-                <div className="pl-3 text-xs">
-                  <p>Max file size: 8 MB</p>
-                </div>
-                <br />
+          </figure>
+          <form
+            id="thumbnail-upload-form"
+            onSubmit={uploadPortrait}
+            className="card-body"
+          >
+            <div className="form-control">
+              <label htmlFor="image" className="card-title">
+                Change portrait
+              </label>
+              <div className="text-xs">
+                <p>Max file size: 8 MB</p>
+              </div>
+              <div className="card-actions">
                 <input
                   type="file"
                   accept="image/jpeg"
                   name="image"
                   title="Only images allowed."
                   onChange={portraitChangeHandler}
-                  className="btn"
+                  className="btn btn-ghost"
                   required
                 />
-                <br />
-                <div className="pl-3">
-                  <IconButton
-                    type="submit"
-                    name="submit"
-                    icon={<AiIcons.AiOutlineUpload />}
-                    text="Upload portrait"
-                  />
-                </div>
+                <button type="submit" name="submit" className="btn btn-primary">
+                  <AiIcons.AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                  Upload portrait
+                </button>
               </div>
-            </form>
-          </div>
+            </div>
+
+            {portraitProgressInfo && (
+              <ProgressInfoDisplay
+                percentage={portraitProgressInfo.percentage}
+                errored={portraitProgressInfo.errored}
+              />
+            )}
+          </form>
         </div>
 
-        <div id="update-about-form" className="mt-4">
-          <form onSubmit={onSubmit} className="text-left">
-            <div className="p-2">
-              <label htmlFor="title" className="font-semibold">
+        <div id="update-about-form" className="card lg:card-side bordered mt-4">
+          <form onSubmit={onSubmit} className="card-body">
+            <div className="form-control">
+              <label htmlFor="title" className="card-title">
                 Designer Statement
               </label>
-              <br />
               <textarea
                 id="statement"
                 name="statement"
                 defaultValue={statement}
-                className="w-full text-black min-h-textLarge"
+                className="textarea textarea-bordered h-96"
                 required
               />
             </div>
-            <div className="p-2">
-              <input
-                id="submit"
-                type="submit"
-                value="Update statement"
-                className="btn"
-              />
+            <div className="card-actions">
+              <button id="submit" type="submit" className="btn btn-primary">
+                Update statement
+              </button>
             </div>
           </form>
         </div>
 
-        <div className="mt-4">
-          <form onSubmit={handleUploadResume} className="text-left">
-            <div className="p-2">
-              <label htmlFor="resume" className="font-semibold">
-                Résumé
+        <div className="card lg:card-side bordered mt-4">
+          <form onSubmit={handleUploadResume} className="card-body">
+            <div className="form-control">
+              <label htmlFor="resume" className="card-title">
+                Upload résumé
               </label>
-              <br />
-              <input
-                type="file"
-                accept="application/pdf"
-                name="resume"
-                title="Only PDF files allowed."
-                onChange={resumeChangeHandler}
-                className="btn mb-4"
-                required
-              />
-              <br />
-
-              {resumeProgressInfo && (
-                <div className="mb-6 w-96">
-                  <span className="ml-2">{resumeProgressInfo.fileName}</span>
-                  <div>
-                    <div
-                      className="bg-blue-700 rounded-lg"
-                      role="progressbar"
-                      aria-valuenow={resumeProgressInfo.percentage}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      title="Upload progress"
-                      style={{ width: resumeProgressInfo.percentage + "%" }}
-                    >
-                      <span className="ml-4 font-semibold">
-                        {resumeProgressInfo.percentage}%
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="pl-3">
-                <IconButton
-                  type="submit"
-                  name="submit"
-                  icon={<AiIcons.AiOutlineUpload />}
-                  text="Upload résumé"
+              <div className="card-actions">
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  name="resume"
+                  title="Only PDF files allowed."
+                  onChange={resumeChangeHandler}
+                  className="btn btn-ghost"
+                  required
                 />
+                <button type="submit" name="submit" className="btn btn-primary">
+                  <AiIcons.AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                  Upload résumé
+                </button>
               </div>
             </div>
+
+            {resumeProgressInfo && (
+              <ProgressInfoDisplay
+                percentage={resumeProgressInfo.percentage}
+                errored={resumeProgressInfo.errored}
+              />
+            )}
           </form>
         </div>
       </div>
