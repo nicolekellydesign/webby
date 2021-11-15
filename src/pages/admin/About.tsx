@@ -37,9 +37,6 @@ export function About() {
   const [statement, setStatement] = useState("");
 
   const [portraitFile, setPortraitFile] = useState<File>();
-  const [portraitProgressInfo, setPortraitProgressInfo] =
-    useState<ProgressInfo>();
-  const portraitProgressInfoRef = useRef<any>(null);
 
   const [resumeFile, setResumeFile] = useState<File>();
   const [resumeProgressInfo, setResumeProgressInfo] = useState<ProgressInfo>();
@@ -55,7 +52,6 @@ export function About() {
     }
 
     setPortraitFile(files[0]);
-    setPortraitProgressInfo(undefined);
   };
 
   const resumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,17 +76,24 @@ export function About() {
     const { submit } = form.elements;
     submit.disabled = true;
 
-    let _progressInfo = {
-      percentage: 0,
-      fileName: "about-portrait.jpg",
-      errored: false,
-    };
-    portraitProgressInfoRef.current = {
-      val: _progressInfo,
-    };
+    const formData = new FormData();
+    formData.append("file", portraitFile, portraitFile.name);
 
-    upload(portraitFile, portraitProgressInfoRef, "portrait")
-      .then(() => {
+    fetch("/api/v1/admin/about/portrait", {
+      method: "PATCH",
+      body: formData,
+    })
+      .then(async (response) => {
+        const isJson = response.headers
+          .get("Content-Type")
+          ?.includes("application/json");
+        const body = isJson && (await response.json());
+
+        if (!response.ok) {
+          const error = (body && body.message) || response.status;
+          Promise.reject(error);
+        }
+
         alertService.success("Portrait uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
       })
@@ -163,7 +166,7 @@ export function About() {
       val: _progressInfo,
     };
 
-    upload(resumeFile, resumeProgressInfoRef, "resume")
+    upload(resumeFile, resumeProgressInfoRef)
       .then(() => {
         alertService.success("Résumé uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
@@ -179,11 +182,7 @@ export function About() {
       });
   };
 
-  const upload = (
-    file: File,
-    ref: MutableRefObject<any>,
-    type: "portrait" | "resume"
-  ): Promise<string> => {
+  const upload = (file: File, ref: MutableRefObject<any>): Promise<string> => {
     let _progressInfo = ref.current.val;
 
     return new Promise((resolve, reject) => {
@@ -191,30 +190,12 @@ export function About() {
         file,
         (percentage) => {
           _progressInfo.percentage = percentage;
-          switch (type) {
-            case "portrait":
-              setPortraitProgressInfo(_progressInfo);
-              break;
-            case "resume":
-              setResumeProgressInfo(_progressInfo);
-              break;
-            default:
-              break;
-          }
+          setResumeProgressInfo(_progressInfo);
         },
         (status, response) => {
           if (status !== 200) {
             _progressInfo.errored = true;
-            switch (type) {
-              case "portrait":
-                setPortraitProgressInfo(_progressInfo);
-                break;
-              case "resume":
-                setResumeProgressInfo(_progressInfo);
-                break;
-              default:
-                break;
-            }
+            setResumeProgressInfo(_progressInfo);
             reject(response.statusText);
           } else {
             resolve(_progressInfo.fileName);
@@ -293,13 +274,6 @@ export function About() {
                 </button>
               </div>
             </div>
-
-            {portraitProgressInfo && (
-              <ProgressInfoDisplay
-                percentage={portraitProgressInfo.percentage}
-                errored={portraitProgressInfo.errored}
-              />
-            )}
           </form>
         </div>
 
