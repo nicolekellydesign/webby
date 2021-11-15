@@ -2,20 +2,20 @@ import { Switch, Route, BrowserRouter } from "react-router-dom";
 
 import { defaultId } from "./services/alert.service";
 
-import AlertContainer from "./components/AlertContainer";
-import Navbar from "./components/Navbar";
+import { AlertContainer } from "./components/AlertContainer";
+import { Navbar } from "./components/Navbar";
 
-import About from "./pages/About";
+import { About } from "./pages/About";
 import Admin from "./pages/admin/Admin";
-import Contact from "./pages/Contact";
-import Home from "./pages/Home";
-import Photography from "./pages/Photography";
+import { Contact } from "./pages/Contact";
+import { Home } from "./pages/Home";
+import { Photography } from "./pages/Photography";
 
 import "./App.css";
-import Project from "./pages/Project";
-import NotFound from "./pages/NotFound";
+import { Project } from "./pages/Project";
+import { NotFound } from "./pages/NotFound";
 
-function App() {
+export function App() {
   return (
     <div className="relative min-h-full -mb-24 pb-24">
       <BrowserRouter>
@@ -35,5 +35,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

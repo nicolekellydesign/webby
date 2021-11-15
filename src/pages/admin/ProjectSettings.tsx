@@ -11,8 +11,8 @@ import {
   updateProject,
 } from "../../entities/GalleryItem";
 import { alertService } from "../../services/alert.service";
-import NotFound from "../NotFound";
-import ImageManager from "../../components/ImageManager";
+import { NotFound } from "../NotFound";
+import { ImageManager } from "../../components/ImageManager";
 
 interface ParamTypes {
   name: string;
@@ -39,7 +39,7 @@ interface UpdateProjectFormElement extends HTMLFormElement {
   readonly elements: UpdateProjectElements;
 }
 
-const ProjectSettings = (): JSX.Element => {
+export function ProjectSettings() {
   const { name } = useParams<ParamTypes>();
 
   const [project, setProject] = useState<GalleryItem>();
@@ -334,6 +334,4 @@ const ProjectSettings = (): JSX.Element => {
   ) : (
     <NotFound />
   );
-};
-
-export default ProjectSettings;
+}

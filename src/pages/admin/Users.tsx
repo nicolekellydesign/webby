@@ -13,7 +13,7 @@ interface LoginFormElement extends HTMLFormElement {
   readonly elements: LoginElements;
 }
 
-const AdminUsers = (): JSX.Element => {
+export function AdminUsers() {
   const [users, setUsers] = useState<User[]>([]);
   const [usersLength, setUsersLength] = useState(0);
 
@@ -179,6 +179,4 @@ const AdminUsers = (): JSX.Element => {
       </div>
     </div>
   );
-};
-
-export default AdminUsers;
+}

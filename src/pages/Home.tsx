@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { GalleryItem, getGalleryItems } from "../entities/GalleryItem";
 import { alertService } from "../services/alert.service";
 
-const Home = (): JSX.Element => {
+export function Home() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [galleryLength] = useState(0);
 
@@ -56,6 +56,4 @@ const Home = (): JSX.Element => {
       </div>
     </>
   );
-};
-
-export default Home;
+}

@@ -1,4 +1,4 @@
-const AdminHome = (): JSX.Element => {
+export function AdminHome() {
   return (
     <div className="container text-center mx-auto">
       <h1 className="font-bold text-5xl">Welcome!</h1>
@@ -10,6 +10,4 @@ const AdminHome = (): JSX.Element => {
       </p>
     </div>
   );
-};
-
-export default AdminHome;
+}

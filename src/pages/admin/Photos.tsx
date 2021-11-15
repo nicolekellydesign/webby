@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ImageManager from "../../components/ImageManager";
+import { ImageManager } from "../../components/ImageManager";
 import {
   addPhotos,
   deletePhotos,
@@ -9,7 +9,7 @@ import {
 import { alertService } from "../../services/alert.service";
 import "./Photos.css";
 
-const AdminPhotos = (): JSX.Element => {
+export function AdminPhotos() {
   // eslint-disable-next-line
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [photosLength, setPhotosLength] = useState(0);
@@ -74,6 +74,4 @@ const AdminPhotos = (): JSX.Element => {
       </div>
     </div>
   );
-};
-
-export default AdminPhotos;
+}

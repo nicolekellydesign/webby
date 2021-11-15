@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { slideToggle } from "../components/slider";
-import SlideToggle from "../components/SlideToggle";
+import { SlideToggle } from "../components/SlideToggle";
 import { GalleryItem, getProject } from "../entities/GalleryItem";
 import { alertService } from "../services/alert.service";
-import NotFound from "./NotFound";
+import { NotFound } from "./NotFound";
 
 interface ParamTypes {
   name: string;
 }
 
-const Project = (): JSX.Element => {
+export function Project() {
   const { name } = useParams<ParamTypes>();
   const [project, setProject] = useState<GalleryItem>();
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
@@ -87,6 +87,4 @@ const Project = (): JSX.Element => {
   ) : (
     <NotFound />
   );
-};
-
-export default Project;
+}

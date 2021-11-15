@@ -14,7 +14,7 @@ interface LoginFormElement extends HTMLFormElement {
   readonly elements: LoginElements;
 }
 
-const AdminLogin = (): JSX.Element => {
+export function AdminLogin() {
   const { login } = useAuth();
   const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
 
@@ -95,6 +95,6 @@ const AdminLogin = (): JSX.Element => {
       </div>
     </div>
   );
-};
+}
 
 export default withRouter(AdminLogin);

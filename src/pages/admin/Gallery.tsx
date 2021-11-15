@@ -23,7 +23,7 @@ interface AddProjectFormElement extends HTMLFormElement {
   readonly elements: AddProjectElements;
 }
 
-const AdminGallery = (): JSX.Element => {
+export function AdminGallery() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [galleryItemsLength, setGalleryItemsLength] = useState(0);
 
@@ -247,6 +247,4 @@ const AdminGallery = (): JSX.Element => {
       </div>
     </div>
   );
-};
-
-export default AdminGallery;
+}

@@ -6,7 +6,7 @@ import { NavbarData } from "./navbarData";
 import logo from "../icons/logo_white.png";
 import "./Navbar.css";
 
-const Navbar = (): JSX.Element => {
+export function Navbar() {
   const [navOpen, setNavOpen] = useState(false);
   const history = useHistory();
 
@@ -87,6 +87,4 @@ const Navbar = (): JSX.Element => {
       </ul>
     </nav>
   );
-};
-
-export default Navbar;
+}

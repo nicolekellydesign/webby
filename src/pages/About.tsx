@@ -3,7 +3,7 @@ import { AiOutlineDownload } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
 import BlankAvatar from "../icons/blank-avatar.svg";
 
-const About = (): JSX.Element => {
+export function About() {
   const [statement, setStatement] = useState("");
   const [statementLength] = useState(0);
 
@@ -67,6 +67,4 @@ const About = (): JSX.Element => {
       </div>
     </div>
   );
-};
-
-export default About;
+}

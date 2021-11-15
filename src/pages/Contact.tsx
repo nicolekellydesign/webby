@@ -14,7 +14,7 @@ interface MessageFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-const Contact = (): JSX.Element => {
+export function Contact() {
   const onSubmit = (event: React.FormEvent<MessageFormElement>) => {
     event.preventDefault();
 
@@ -163,6 +163,4 @@ const Contact = (): JSX.Element => {
       </div>
     </div>
   );
-};
-
-export default Contact;
+}

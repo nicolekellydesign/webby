@@ -1,13 +1,12 @@
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
-interface SlideToggleProps {
+interface Props {
   isShowing: boolean;
   text: string;
   onClick: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 
-const SlideToggle = (props: SlideToggleProps): JSX.Element => {
-  const { isShowing, onClick, text } = props;
+export function SlideToggle({ isShowing, onClick, text }: Props) {
   const classes = `w-8 h-8 relative inline mr-3`;
 
   const icon = isShowing ? (
@@ -26,6 +25,4 @@ const SlideToggle = (props: SlideToggleProps): JSX.Element => {
       <span className="align-middle text-2xl">{text}</span>
     </div>
   );
-};
-
-export default SlideToggle;
+}

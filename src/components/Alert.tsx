@@ -6,16 +6,14 @@ import {
 } from "react-icons/ai";
 import { MdErrorOutline, MdInfoOutline } from "react-icons/md";
 
-interface AlertProps {
+interface Props {
   type: string;
   message: string;
   fade: boolean;
   onClose: () => void;
 }
 
-const Alert = (props: AlertProps) => {
-  const { type, message, fade, onClose } = props;
-
+export function Alert({ type, message, fade, onClose }: Props) {
   const alertClass = {
     [AlertType.Error]: "alert-error",
     [AlertType.Warn]: "alert-warning",
@@ -48,6 +46,4 @@ const Alert = (props: AlertProps) => {
       </div>
     </div>
   );
-};
-
-export default Alert;
+}

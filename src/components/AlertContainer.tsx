@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { AlertProps, alertService } from "../services/alert.service";
-import Alert from "./Alert";
+import { Alert } from "./Alert";
 
-interface AlertContainerProps {
+interface Props {
   id: string;
 }
 
-const AlertContainer = (props: AlertContainerProps) => {
-  const { id } = props;
+export function AlertContainer({ id }: Props) {
   const [alerts, setAlerts] = useState<Array<AlertProps>>([]);
   const history = useHistory();
 
@@ -68,6 +67,4 @@ const AlertContainer = (props: AlertContainerProps) => {
       })}
     </div>
   );
-};
-
-export default AlertContainer;
+}

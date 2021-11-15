@@ -19,7 +19,7 @@ export interface UploadImageFormElement extends HTMLFormElement {
   readonly elements: UploadImageElements;
 }
 
-interface ImageManagerProps {
+interface Props {
   images?: string[];
   label: string;
   title: string;
@@ -27,13 +27,13 @@ interface ImageManagerProps {
   deleteImages: (images: string[]) => void;
 }
 
-const ImageManager = ({
+export function ImageManager({
   deleteImages,
   images,
   label,
   title,
   uploadFunc,
-}: ImageManagerProps) => {
+}: Props) {
   const [selected, setSelected] = useState<string[]>([]);
 
   const [imageFiles, setImageFiles] = useState<FileList | undefined>(undefined);
@@ -249,6 +249,4 @@ const ImageManager = ({
       </div>
     </div>
   );
-};
-
-export default ImageManager;
+}

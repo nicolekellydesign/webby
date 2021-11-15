@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getPhotos, Photo } from "../entities/Photo";
 import { alertService } from "../services/alert.service";
 
-const Photography = (): JSX.Element => {
+export function Photography() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [photosLength] = useState(0);
 
@@ -32,6 +32,4 @@ const Photography = (): JSX.Element => {
       })}
     </div>
   );
-};
-
-export default Photography;
+}

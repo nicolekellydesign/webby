@@ -32,7 +32,7 @@ interface ResumeFormElement extends HTMLFormElement {
   readonly elements: ResumeElements;
 }
 
-const About = (): JSX.Element => {
+export function About() {
   const [aboutLength, setAboutLength] = useState(0);
   const [statement, setStatement] = useState("");
 
@@ -359,6 +359,4 @@ const About = (): JSX.Element => {
       </div>
     </div>
   );
-};
-
-export default About;
+}

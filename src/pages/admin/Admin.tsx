@@ -6,16 +6,16 @@ import {
   withRouter,
 } from "react-router-dom";
 import { adminNavbarData } from "../../components/adminNavbarData";
-import PrivateRoute from "../../components/PrivateRoute";
+import { PrivateRoute } from "../../components/PrivateRoute";
 import { alertService } from "../../services/alert.service";
 import { useAuth } from "../../services/auth.service";
-import About from "./About";
-import AdminGallery from "./Gallery";
-import AdminHome from "./Home";
-import AdminLogin from "./Login";
-import AdminPhotos from "./Photos";
-import ProjectSettings from "./ProjectSettings";
-import AdminUsers from "./Users";
+import { About } from "./About";
+import { AdminGallery } from "./Gallery";
+import { AdminHome } from "./Home";
+import { AdminLogin } from "./Login";
+import { AdminPhotos } from "./Photos";
+import { ProjectSettings } from "./ProjectSettings";
+import { AdminUsers } from "./Users";
 
 interface RouterProps {
   path: string;
@@ -23,7 +23,7 @@ interface RouterProps {
 
 interface RouterDetailProps extends RouteComponentProps<RouterProps> {}
 
-const Admin: React.FC<RouterDetailProps> = (): JSX.Element => {
+const Admin: React.FC<RouterDetailProps> = () => {
   const { authed, logout } = useAuth();
   const history = useHistory();
 
