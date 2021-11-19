@@ -7,7 +7,6 @@ import {
   Photo,
 } from "../../entities/Photo";
 import { alertService } from "../../services/alert.service";
-import "./Photos.css";
 
 export function AdminPhotos() {
   // eslint-disable-next-line

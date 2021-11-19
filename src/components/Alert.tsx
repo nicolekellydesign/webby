@@ -21,7 +21,7 @@ export function Alert({ type, message, fade, onClose }: Props) {
     [AlertType.Success]: "alert-success",
   };
 
-  const iconClasses = "w-6 h-6 mx-2 stroke-current";
+  const iconClasses = "icon-sm mx-2";
 
   const alertIcon = {
     [AlertType.Error]: <MdErrorOutline className={iconClasses} />,
@@ -41,7 +41,7 @@ export function Alert({ type, message, fade, onClose }: Props) {
 
       <div className="flex-none">
         <button className="btn btn-ghost btn-sm" onClick={onClose}>
-          <AiOutlineCloseSquare className="inline-block w-6 h-6 stroke-current" />
+          <AiOutlineCloseSquare className="icon-sm" />
         </button>
       </div>
     </div>

@@ -269,7 +269,7 @@ export function About() {
                   required
                 />
                 <button type="submit" name="submit" className="btn btn-primary">
-                  <AiIcons.AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                  <AiIcons.AiOutlineUpload className="btn-icon" />
                   Upload portrait
                 </button>
               </div>
@@ -316,7 +316,7 @@ export function About() {
                   required
                 />
                 <button type="submit" name="submit" className="btn btn-primary">
-                  <AiIcons.AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                  <AiIcons.AiOutlineUpload className="btn-icon" />
                   Upload résumé
                 </button>
               </div>

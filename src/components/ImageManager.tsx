@@ -116,10 +116,10 @@ export function ImageManager({
     <div className="card lg:card-side bordered mt-8 w-7xl">
       <div className="card-body">
         <h2 className="card-title">{title}</h2>
-        <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4">
+        <ul className="webby-carousel">
           {images?.map((image) => (
             <li
-              className="carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64"
+              className="webby-carousel-item"
               data-src={`/images/${image}`}
               style={{
                 backgroundImage: `url("/images/${image}")`,
@@ -127,7 +127,7 @@ export function ImageManager({
             >
               {selected.some((name) => name === image) ? (
                 <div
-                  className="opacity-70 bg-black hover:text-blue-400 rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
+                  className="selected"
                   onClick={() => {
                     setSelected((selected) =>
                       selected.filter((name) => name !== image)
@@ -144,7 +144,7 @@ export function ImageManager({
                 </div>
               ) : (
                 <div
-                  className="opacity-0 hover:opacity-70 hover:bg-black rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
+                  className="unselected"
                   onClick={() => {
                     setSelected((selected) => selected.concat(image));
                   }}
@@ -198,7 +198,7 @@ export function ImageManager({
 
             <div className="card-actions">
               <button type="submit" name="submit" className="btn btn-primary">
-                <AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                <AiOutlineUpload className="btn-icon" />
                 Upload images
               </button>
               {selected.length > 0 && (
@@ -207,7 +207,7 @@ export function ImageManager({
                     htmlFor="delete-images-modal"
                     className="btn btn-secondary btn-outline modal-open"
                   >
-                    <AiOutlineDelete className="inline-block w-6 h-6 mr-2 stroke-current" />
+                    <AiOutlineDelete className="btn-icon" />
                     Delete selected
                   </label>
                   <input

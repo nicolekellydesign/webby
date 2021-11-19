@@ -212,7 +212,7 @@ export function ProjectSettings() {
                   required
                 />
                 <button type="submit" name="submit" className="btn btn-primary">
-                  <AiIcons.AiOutlineUpload className="inline-block w-6 h-6 mr-2 stroke-current" />
+                  <AiIcons.AiOutlineUpload className="btn-icon" />
                   Upload thumbnail
                 </button>
               </div>
@@ -299,7 +299,7 @@ export function ProjectSettings() {
           htmlFor="delete-project-modal"
           className="btn btn-secondary btn-outline modal-open mt-8"
         >
-          <AiIcons.AiOutlineDelete className="inline-block w-6 h-6 mr-2 stroke-current" />
+          <AiIcons.AiOutlineDelete className="btn-icon" />
           Delete project
         </label>
         <input

@@ -67,9 +67,9 @@ export function Navbar() {
               onClick={toggleNavMenu}
             >
               {navOpen ? (
-                <AiOutlineClose className="inline-block w-10 h-10 stroke-current" />
+                <AiOutlineClose className="icon-md inline-block" />
               ) : (
-                <AiOutlineMenu className="inline-block w-10 h-10 stroke-current" />
+                <AiOutlineMenu className="icon-md inline-block" />
               )}
             </div>
           </div>
