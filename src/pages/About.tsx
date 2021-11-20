@@ -45,7 +45,7 @@ export function About() {
               e.currentTarget.classList.add("p-4");
             }}
             alt="portrait"
-            className="rounded-xl h-192"
+            className="rounded-xl lg:h-192"
           />
         </figure>
 
