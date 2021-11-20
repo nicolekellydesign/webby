@@ -13,6 +13,7 @@ import {
 import { alertService } from "../../services/alert.service";
 import { NotFound } from "../NotFound";
 import { ImageManager } from "../../components/ImageManager";
+import MarkdownInput from "../../components/MarkdownInput";
 
 interface ParamTypes {
   name: string;
@@ -255,18 +256,12 @@ export function ProjectSettings() {
                 required
               />
             </div>
-            <div className="form-control">
-              <label htmlFor="projectInfo" className="label">
-                <span className="label-text">Project info</span>
-              </label>
-              <textarea
-                id="projectInfo"
-                name="projectInfo"
-                defaultValue={project.projectInfo}
-                className="textarea textarea-bordered h-96"
-                required
-              />
-            </div>
+            <MarkdownInput
+              inputId="projectInfo"
+              inputName="projectInfo"
+              label="Project info"
+              startingText={project.projectInfo}
+            />
             <div className="form-control">
               <label htmlFor="embedURL" className="label">
                 <span className="label-text">Embed URL (optional)</span>

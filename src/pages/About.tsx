@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AiOutlineDownload } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
 import BlankAvatar from "../icons/blank-avatar.svg";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export function About() {
   const [statement, setStatement] = useState("");
@@ -49,8 +51,11 @@ export function About() {
 
         <article className="card-body prose pl-24 max-w-4xl">
           <h2 className="card-title">Designer Statement</h2>
-          {statement &&
-            statement.split("\n\n").map((paragraph) => <p>{paragraph}</p>)}
+          {statement && (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {statement}
+            </ReactMarkdown>
+          )}
 
           <div className="card-actions">
             <button
@@ -59,7 +64,7 @@ export function About() {
                 window.open("/resources/resume.pdf");
               }}
             >
-              <AiOutlineDownload />
+              <AiOutlineDownload className="btn-icon" />
               Download résumé
             </button>
           </div>

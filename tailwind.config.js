@@ -12,6 +12,7 @@ module.exports = {
         nav: "150px",
       },
       maxWidth: {
+        fit: "fit-content",
         logo: "115px",
         thumb: "256px",
       },

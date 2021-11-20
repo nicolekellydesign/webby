@@ -4,6 +4,7 @@ import { alertService } from "../../services/alert.service";
 import BlankAvatar from "../../icons/blank-avatar.svg";
 import UploadService, { ProgressInfo } from "../../services/upload.service";
 import ProgressInfoDisplay from "../../components/ProgressInfo";
+import MarkdownInput from "../../components/MarkdownInput";
 
 interface PortraitElements extends HTMLFormControlsCollection {
   image: HTMLInputElement;
@@ -114,7 +115,7 @@ export function About() {
     const { statement, submit } = form.elements;
     submit.disabled = true;
 
-    fetch("api/v1/admin/about", {
+    fetch("/api/v1/admin/about", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ statement: statement.value }),
@@ -206,7 +207,7 @@ export function About() {
   };
 
   useEffect(() => {
-    fetch("api/v1/about", {
+    fetch("/api/v1/about", {
       method: "GET",
     })
       .then(async (response) => {
@@ -279,18 +280,12 @@ export function About() {
 
         <div id="update-about-form" className="card lg:card-side bordered mt-4">
           <form onSubmit={onSubmit} className="card-body">
-            <div className="form-control">
-              <label htmlFor="title" className="card-title">
-                Designer Statement
-              </label>
-              <textarea
-                id="statement"
-                name="statement"
-                defaultValue={statement}
-                className="textarea textarea-bordered h-96"
-                required
-              />
-            </div>
+            <MarkdownInput
+              inputId="statement"
+              inputName="statement"
+              title="Designer Statement"
+              startingText={statement}
+            />
             <div className="card-actions">
               <button id="submit" type="submit" className="btn btn-primary">
                 Update statement

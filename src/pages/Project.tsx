@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
+import remarkGfm from "remark-gfm";
 import { slideToggle } from "../components/slider";
 import { SlideToggle } from "../components/SlideToggle";
 import { GalleryItem, getProject } from "../entities/GalleryItem";
@@ -54,7 +56,9 @@ export function Project() {
         />
         <div id="project-info" className="hidden text-left text-2xl pt-8">
           <h1 className="font-bold text-5xl">{project.title}</h1>
-          <p className="pt-6">{project.projectInfo}</p>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} className="pt-6">
+            {project.projectInfo}
+          </ReactMarkdown>
         </div>
       </div>
       <article className="block mt-8">

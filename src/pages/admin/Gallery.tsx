@@ -8,6 +8,7 @@ import {
 import { alertService } from "../../services/alert.service";
 import { slideToggle } from "../../components/slider";
 import { NavLink } from "react-router-dom";
+import MarkdownInput from "../../components/MarkdownInput";
 
 interface AddProjectElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
@@ -195,17 +196,11 @@ export function AdminGallery() {
                   required
                 />
               </div>
-              <div className="form-control">
-                <label htmlFor="projectInfo" className="label">
-                  <span className="label-text">Project info</span>
-                </label>
-                <textarea
-                  id="projectInfo"
-                  name="projectInfo"
-                  className="textarea textarea-bordered w-full h-64"
-                  required
-                />
-              </div>
+              <MarkdownInput
+                inputId="projectInfo"
+                inputName="projectInfo"
+                label="Project info"
+              />
               <div className="form-control">
                 <label htmlFor="embedURL" className="label">
                   <span className="label-text">Embed URL (optional)</span>
