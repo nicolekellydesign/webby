@@ -54,17 +54,15 @@ export function AlertContainer({ id }: Props) {
 
   return (
     <div className="container lg:max-w-3xl mx-auto py-2">
-      {alerts.map((alert: AlertProps, index: number) => {
-        return (
-          <Alert
-            key={index}
-            type={alert.type}
-            message={alert.message}
-            fade={alert.fade}
-            onClose={() => removeAlert(alert)}
-          />
-        );
-      })}
+      {alerts.map((alert: AlertProps, index: number) => (
+        <Alert
+          key={index}
+          type={alert.type}
+          message={alert.message}
+          fade={alert.fade}
+          onClose={() => removeAlert(alert)}
+        />
+      ))}
     </div>
   );
 }
