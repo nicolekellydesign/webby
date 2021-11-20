@@ -1,10 +1,4 @@
-import {
-  Link,
-  Route,
-  RouteComponentProps,
-  useHistory,
-  withRouter,
-} from "react-router-dom";
+import { Link, Route, RouteComponentProps, useHistory, withRouter } from "react-router-dom";
 import { adminNavbarData } from "../../components/adminNavbarData";
 import { PrivateRoute } from "../../components/PrivateRoute";
 import { alertService } from "../../services/alert.service";
@@ -66,35 +60,11 @@ const Admin: React.FC<RouterDetailProps> = () => {
       </section>
 
       <div className="mt-8 px-48">
-        <PrivateRoute
-          path="/admin/gallery/:name"
-          authed={authed}
-          component={ProjectSettings}
-        />
-        <PrivateRoute
-          exact
-          path="/admin/gallery"
-          authed={authed}
-          component={AdminGallery}
-        />
-        <PrivateRoute
-          exact
-          path="/admin/photos"
-          authed={authed}
-          component={AdminPhotos}
-        />
-        <PrivateRoute
-          exact
-          path="/admin/about"
-          authed={authed}
-          component={About}
-        />
-        <PrivateRoute
-          exact
-          path="/admin/users"
-          authed={authed}
-          component={AdminUsers}
-        />
+        <PrivateRoute path="/admin/gallery/:name" authed={authed} component={ProjectSettings} />
+        <PrivateRoute exact path="/admin/gallery" authed={authed} component={AdminGallery} />
+        <PrivateRoute exact path="/admin/photos" authed={authed} component={AdminPhotos} />
+        <PrivateRoute exact path="/admin/about" authed={authed} component={About} />
+        <PrivateRoute exact path="/admin/users" authed={authed} component={AdminUsers} />
 
         <Route exact path="/admin/login" component={AdminLogin} />
         <Route exact path="/admin" component={AdminHome} />

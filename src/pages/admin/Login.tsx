@@ -22,8 +22,7 @@ export function AdminLogin() {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const { usernameInput, passwordInput, rememberToggle, submitButton } =
-      form.elements;
+    const { usernameInput, passwordInput, rememberToggle, submitButton } = form.elements;
 
     submitButton.disabled = true;
 
@@ -71,21 +70,12 @@ export function AdminLogin() {
               />
               <div>
                 <label className="cursor-pointer label justify-start">
-                  <input
-                    id="rememberToggle"
-                    type="checkbox"
-                    name="remember"
-                    className="checkbox checkbox-primary"
-                  />
+                  <input id="rememberToggle" type="checkbox" name="remember" className="checkbox checkbox-primary" />
                   <span className="label-text ml-4">Remember me</span>
                 </label>
               </div>
               <div className="card-actions">
-                <button
-                  id="submitButton"
-                  type="submit"
-                  className="btn btn-primary m-0 w-full"
-                >
+                <button id="submitButton" type="submit" className="btn btn-primary m-0 w-full">
                   Log In
                 </button>
               </div>

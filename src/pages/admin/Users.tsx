@@ -93,32 +93,19 @@ export function AdminUsers() {
                 <td className="text-center">
                   {user.protected ? (
                     <div data-tip="User is protected" className="tooltip">
-                      <button
-                        className="btn btn-ghost btn-disabled btn-sm"
-                        disabled
-                      >
+                      <button className="btn btn-ghost btn-disabled btn-sm" disabled>
                         <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
                       </button>
                     </div>
                   ) : (
                     <div data-tip="Delete user" className="tooltip">
-                      <label
-                        htmlFor={`delete-${user.username}-modal`}
-                        className="btn btn-ghost btn-sm modal-open"
-                      >
+                      <label htmlFor={`delete-${user.username}-modal`} className="btn btn-ghost btn-sm modal-open">
                         <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
                       </label>
-                      <input
-                        type="checkbox"
-                        id={`delete-${user.username}-modal`}
-                        className="modal-toggle"
-                      />
+                      <input type="checkbox" id={`delete-${user.username}-modal`} className="modal-toggle" />
                       <div className="modal">
                         <div className="modal-box">
-                          <h2 className="font-bold text-xl">
-                            Are you sure you want to delete user '
-                            {user.username}'?
-                          </h2>
+                          <h2 className="font-bold text-xl">Are you sure you want to delete user '{user.username}'?</h2>
                           <br />
                           <p>This action cannot be reversed.</p>
 
@@ -132,10 +119,7 @@ export function AdminUsers() {
                             >
                               Delete
                             </label>
-                            <label
-                              htmlFor={`delete-${user.username}-modal`}
-                              className="btn"
-                            >
+                            <label htmlFor={`delete-${user.username}-modal`} className="btn">
                               Cancel
                             </label>
                           </div>
@@ -149,11 +133,7 @@ export function AdminUsers() {
           </tbody>
         </table>
 
-        <form
-          id="addUser"
-          className="mt-8 input-group w-full"
-          onSubmit={handleSubmit}
-        >
+        <form id="addUser" className="mt-8 input-group w-full" onSubmit={handleSubmit}>
           <input
             id="username"
             type="text"

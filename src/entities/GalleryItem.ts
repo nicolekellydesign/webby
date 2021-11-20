@@ -16,11 +16,7 @@ export interface GalleryItem {
  * @param {string} filename The name of the uploaded file.
  * @returns {Promise<void>} A promise with the result of the API request.
  */
-export function addGalleryItem(
-  item: GalleryItem,
-  file: File,
-  filename: string
-): Promise<void> {
+export function addGalleryItem(item: GalleryItem, file: File, filename: string): Promise<void> {
   const formData = new FormData();
   formData.append("name", item.name);
   formData.append("title", item.title);
@@ -37,9 +33,7 @@ export function addGalleryItem(
       method: "POST",
       body: formData,
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -62,9 +56,7 @@ export function getGalleryItems(): Promise<GalleryItem[]> {
     fetch("/api/v1/gallery", {
       method: "GET",
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -88,9 +80,7 @@ export function deleteGalleryItem(name: string): Promise<void> {
     fetch(`/api/v1/admin/gallery/${name}`, {
       method: "DELETE",
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -113,9 +103,7 @@ export function getProject(name: string): Promise<GalleryItem> {
     fetch(`/api/v1/gallery/${name}`, {
       method: "GET",
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -145,19 +133,14 @@ export function getProject(name: string): Promise<GalleryItem> {
  * @param {string[]} files The file names to attach to the project.
  * @returns {Promise} A promise with the result of the API request.
  */
-export function addProjectImages(
-  galleryID: string,
-  files: string[]
-): Promise<void> {
+export function addProjectImages(galleryID: string, files: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     fetch(`/api/v1/admin/gallery/${galleryID}/images`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -177,19 +160,14 @@ export function addProjectImages(
  * @param {string[]} files The names of the files to remove.
  * @returns {Promise} A promise with the result of the API request.
  */
-export function deleteProjectImages(
-  galleryID: string,
-  files: string[]
-): Promise<void> {
+export function deleteProjectImages(galleryID: string, files: string[]): Promise<void> {
   return new Promise((resolve, reject) => {
     fetch(`/api/v1/admin/gallery/${galleryID}/images`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -202,11 +180,7 @@ export function deleteProjectImages(
   });
 }
 
-export function changeThumbnail(
-  galleryID: string,
-  file: File,
-  filename: string
-): Promise<void> {
+export function changeThumbnail(galleryID: string, file: File, filename: string): Promise<void> {
   const formData = new FormData();
   formData.append("thumbnail", file, filename);
 
@@ -215,9 +189,7 @@ export function changeThumbnail(
       method: "PATCH",
       body: formData,
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -243,9 +215,7 @@ export function updateProject(item: GalleryItem): Promise<void> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {

@@ -19,4 +19,4 @@ export const NavbarData = [
     path: "/contact",
     cName: "nav-text",
   },
-]
+];

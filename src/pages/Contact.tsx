@@ -21,10 +21,7 @@ export function Contact() {
     // Make sure we have a token to use
     const token = process.env.REACT_APP_EMAIL_TOKEN;
     if (!token || token === "") {
-      alertService.error(
-        "No email token set! Please contact a website administrator.",
-        false
-      );
+      alertService.error("No email token set! Please contact a website administrator.", false);
       return;
     }
 
@@ -53,9 +50,7 @@ export function Contact() {
 
     fetch("https://postmail.invotes.com/send", options)
       .then(async (response: Response) => {
-        const isJson = response.headers
-          .get("content-type")
-          ?.includes("application/json");
+        const isJson = response.headers.get("content-type")?.includes("application/json");
         const data = isJson && (await response.json());
 
         if (!response.ok) {
@@ -63,17 +58,11 @@ export function Contact() {
           return Promise.reject(error);
         }
 
-        alertService.success(
-          "Form submitted! Thank you for your message.",
-          false
-        );
+        alertService.success("Form submitted! Thank you for your message.", false);
       })
       .catch((error) => {
         console.error(`error sending email message: ${error}`);
-        alertService.error(
-          `Error processing contact form submission: ${error}`,
-          false
-        );
+        alertService.error(`Error processing contact form submission: ${error}`, false);
       })
       .finally(() => {
         submit.disabled = false;
@@ -149,11 +138,7 @@ export function Contact() {
                 <button type="reset" className="btn btn-outline">
                   Clear form
                 </button>
-                <button
-                  id="submit"
-                  type="submit"
-                  className="btn btn-outline btn-primary"
-                >
+                <button id="submit" type="submit" className="btn btn-outline btn-primary">
                   Send message
                 </button>
               </div>

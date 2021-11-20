@@ -127,9 +127,7 @@ export function ProjectSettings() {
         setProjectLength(projectLength + 1);
       })
       .catch((error) => {
-        console.error(
-          `error updating project settings for '${name}': ${error}`
-        );
+        console.error(`error updating project settings for '${name}': ${error}`);
         alertService.error(`Error updating project settings: ${error}`, false);
       })
       .finally(() => {
@@ -166,9 +164,7 @@ export function ProjectSettings() {
         setProject(p);
       })
       .catch((error) => {
-        console.error(
-          `error getting project info for project '${name}': ${error}'`
-        );
+        console.error(`error getting project info for project '${name}': ${error}'`);
         alertService.error(`Error getting project info: ${error}`, false);
       });
   }, [name, projectLength]);
@@ -184,17 +180,9 @@ export function ProjectSettings() {
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered">
           <figure className="relative">
-            <img
-              src={`/images/${project.thumbnail}`}
-              alt={project.title}
-              className="rounded-xl h-52"
-            />
+            <img src={`/images/${project.thumbnail}`} alt={project.title} className="rounded-xl h-52" />
           </figure>
-          <form
-            id="thumbnail-upload-form"
-            onSubmit={uploadThumbnail}
-            className="card-body"
-          >
+          <form id="thumbnail-upload-form" onSubmit={uploadThumbnail} className="card-body">
             <div className="form-control">
               <label htmlFor="image" className="card-title">
                 Change thumbnail image
@@ -221,10 +209,7 @@ export function ProjectSettings() {
           </form>
         </div>
 
-        <div
-          id="update-project-form"
-          className="card lg:card-side bordered mt-8"
-        >
+        <div id="update-project-form" className="card lg:card-side bordered mt-8">
           <form onSubmit={onSubmit} className="card-body">
             <h2 className="card-title">Project Details</h2>
 
@@ -290,32 +275,19 @@ export function ProjectSettings() {
           uploadFunc={insertImages}
         />
 
-        <label
-          htmlFor="delete-project-modal"
-          className="btn btn-secondary btn-outline modal-open mt-8"
-        >
+        <label htmlFor="delete-project-modal" className="btn btn-secondary btn-outline modal-open mt-8">
           <AiIcons.AiOutlineDelete className="btn-icon" />
           Delete project
         </label>
-        <input
-          type="checkbox"
-          id="delete-project-modal"
-          className="modal-toggle"
-        />
+        <input type="checkbox" id="delete-project-modal" className="modal-toggle" />
         <div className="modal">
           <div className="modal-box">
-            <h2 className="font-bold text-xl">
-              Are you sure you want to delete this project?
-            </h2>
+            <h2 className="font-bold text-xl">Are you sure you want to delete this project?</h2>
             <br />
             <p>This action cannot be reversed.</p>
 
             <div className="modal-action">
-              <label
-                htmlFor="delete-project-modal"
-                className="btn btn-secondary"
-                onClick={deleteProject}
-              >
+              <label htmlFor="delete-project-modal" className="btn btn-secondary" onClick={deleteProject}>
                 Delete
               </label>
               <label htmlFor="delete-project-modal" className="btn">

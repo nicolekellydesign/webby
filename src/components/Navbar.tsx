@@ -37,20 +37,13 @@ export function Navbar() {
     <nav>
       <div className="w-full h-nav navbar p-5">
         <div className="flex-1">
-          <img
-            src={logo}
-            alt="Nicole Kelly Design"
-            className="max-h-logo max-w-logo"
-          />
+          <img src={logo} alt="Nicole Kelly Design" className="max-h-logo max-w-logo" />
         </div>
 
         <div className="flex-none hidden lg:block self-end">
           <ul className="menu horizontal">
             {NavbarData.map((item, index) => (
-              <li
-                key={index}
-                className="font-lighter lowercase no-underline p-0 relative"
-              >
+              <li key={index} className="font-lighter lowercase no-underline p-0 relative">
                 <Link to={item.path} className="navbar-link block">
                   {item.title}
                 </Link>
@@ -61,11 +54,7 @@ export function Navbar() {
 
         <div className="flex-none lg:hidden">
           <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              className="btn btn-ghost rounded-btn"
-              onClick={toggleNavMenu}
-            >
+            <div tabIndex={0} className="btn btn-ghost rounded-btn" onClick={toggleNavMenu}>
               {navOpen ? (
                 <AiOutlineClose className="icon-md inline-block" />
               ) : (

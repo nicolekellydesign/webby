@@ -17,9 +17,7 @@ export function addPhotos(files: string[]): Promise<void> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -45,9 +43,7 @@ export function deletePhotos(files: string[]): Promise<void> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -70,9 +66,7 @@ export function getPhotos(): Promise<Photo[]> {
     fetch("/api/v1/photos", {
       method: "GET",
     }).then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {

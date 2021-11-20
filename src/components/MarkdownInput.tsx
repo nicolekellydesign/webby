@@ -10,13 +10,7 @@ interface Props {
   startingText?: string;
 }
 
-export default function MarkdownInput({
-  inputId,
-  inputName,
-  title,
-  label,
-  startingText,
-}: Props) {
+export default function MarkdownInput({ inputId, inputName, title, label, startingText }: Props) {
   const [currentText, setCurrentText] = useState("");
 
   const titleElement = title && <div className="card-title mb-0">{title}</div>;

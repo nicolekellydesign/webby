@@ -1,8 +1,4 @@
-import {
-  AiOutlineCheckCircle,
-  AiOutlineCloseSquare,
-  AiOutlineWarning,
-} from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineCloseSquare, AiOutlineWarning } from "react-icons/ai";
 import { MdErrorOutline, MdInfoOutline } from "react-icons/md";
 
 interface Props {
@@ -32,10 +28,7 @@ export function Alert({ type, message, fade, onClose }: Props) {
   const fadeClass = fade ? "fade-out" : "";
 
   return (
-    <div
-      className={`fade-in alert ${alertClass[type]} ${fadeClass}`}
-      role="alertdialog"
-    >
+    <div className={`fade-in alert ${alertClass[type]} ${fadeClass}`} role="alertdialog">
       <div className="flex-1">
         {alertIcon[type]}
         <label className="mx-3">{message}</label>

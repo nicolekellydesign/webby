@@ -39,9 +39,7 @@ export function Project() {
         setProject(p);
       })
       .catch((error) => {
-        console.error(
-          `error getting project info for project '${name}': ${error}'`
-        );
+        console.error(`error getting project info for project '${name}': ${error}'`);
         alertService.error(`Error getting project info: ${error}`, false);
       });
   }, [name]);
@@ -49,11 +47,7 @@ export function Project() {
   return project ? (
     <div className="container text-center mx-auto">
       <div>
-        <SlideToggle
-          isShowing={projectInfoVisible}
-          onClick={toggleProjectInfo}
-          text="Project Information"
-        />
+        <SlideToggle isShowing={projectInfoVisible} onClick={toggleProjectInfo} text="Project Information" />
         <div id="project-info" className="hidden text-left text-2xl pt-8">
           <h1 className="font-bold text-5xl">{project.title}</h1>
           <ReactMarkdown remarkPlugins={[remarkGfm]} className="pt-6">
@@ -77,12 +71,7 @@ export function Project() {
           )}
           {project.images?.map((image) => (
             <div className="box-border px-2 w-full">
-              <img
-                alt=""
-                data-src={`/images/${image}`}
-                src={`/images/${image}`}
-                className="block mb-5 w-full"
-              />
+              <img alt="" data-src={`/images/${image}`} src={`/images/${image}`} className="block mb-5 w-full" />
             </div>
           ))}
         </div>

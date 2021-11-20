@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import { ImageManager } from "../../components/ImageManager";
-import {
-  addPhotos,
-  deletePhotos,
-  getPhotos,
-  Photo,
-} from "../../entities/Photo";
+import { addPhotos, deletePhotos, getPhotos, Photo } from "../../entities/Photo";
 import { alertService } from "../../services/alert.service";
 
 export function AdminPhotos() {
@@ -59,9 +54,7 @@ export function AdminPhotos() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="font-bold text-4xl text-center">
-        Photography Gallery Settings
-      </h1>
+      <h1 className="font-bold text-4xl text-center">Photography Gallery Settings</h1>
       <div className="max-w-max mx-auto my-8">
         <ImageManager
           images={images}

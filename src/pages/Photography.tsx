@@ -22,11 +22,7 @@ export function Photography() {
       {photos.map((photo) => {
         return (
           <div>
-            <img
-              src={`/images/${photo.filename}`}
-              alt={photo.filename}
-              className="w-full h-auto"
-            />
+            <img src={`/images/${photo.filename}`} alt={photo.filename} className="w-full h-auto" />
           </div>
         );
       })}

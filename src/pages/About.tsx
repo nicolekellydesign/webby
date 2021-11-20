@@ -14,9 +14,7 @@ export function About() {
       method: "GET",
     })
       .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
+        const isJson = response.headers.get("Content-Type")?.includes("application/json");
         const body = isJson && (await response.json());
 
         if (!response.ok) {
@@ -51,11 +49,7 @@ export function About() {
 
         <article className="card-body prose pl-24 max-w-4xl">
           <h2 className="card-title">Designer Statement</h2>
-          {statement && (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {statement}
-            </ReactMarkdown>
-          )}
+          {statement && <ReactMarkdown remarkPlugins={[remarkGfm]}>{statement}</ReactMarkdown>}
 
           <div className="card-actions">
             <button

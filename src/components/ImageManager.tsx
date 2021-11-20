@@ -1,10 +1,5 @@
 import { useRef, useState } from "react";
-import {
-  AiOutlineCheck,
-  AiOutlineCheckCircle,
-  AiOutlineDelete,
-  AiOutlineUpload,
-} from "react-icons/ai";
+import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineDelete, AiOutlineUpload } from "react-icons/ai";
 import { alertService } from "../services/alert.service";
 import UploadService, { ProgressInfo } from "../services/upload.service";
 import ProgressInfoDisplay from "./ProgressInfo";
@@ -27,13 +22,7 @@ interface Props {
   deleteImages: (images: string[]) => void;
 }
 
-export function ImageManager({
-  deleteImages,
-  images,
-  label,
-  title,
-  uploadFunc,
-}: Props) {
+export function ImageManager({ deleteImages, images, label, title, uploadFunc }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
 
   const [imageFiles, setImageFiles] = useState<FileList | undefined>(undefined);
@@ -129,9 +118,7 @@ export function ImageManager({
                 <div
                   className="selected"
                   onClick={() => {
-                    setSelected((selected) =>
-                      selected.filter((name) => name !== image)
-                    );
+                    setSelected((selected) => selected.filter((name) => name !== image));
                   }}
                 >
                   <div data-tip="Unselect image" className="tooltip">
@@ -163,11 +150,7 @@ export function ImageManager({
         </ul>
 
         <div className="mt-4">
-          <form
-            id="image-upload-form"
-            onSubmit={handleUpload}
-            className="card-body"
-          >
+          <form id="image-upload-form" onSubmit={handleUpload} className="card-body">
             <div className="form-control">
               <label htmlFor="image" className="card-title">
                 {label}
@@ -203,23 +186,14 @@ export function ImageManager({
               </button>
               {selected.length > 0 && (
                 <>
-                  <label
-                    htmlFor="delete-images-modal"
-                    className="btn btn-secondary btn-outline modal-open"
-                  >
+                  <label htmlFor="delete-images-modal" className="btn btn-secondary btn-outline modal-open">
                     <AiOutlineDelete className="btn-icon" />
                     Delete selected
                   </label>
-                  <input
-                    type="checkbox"
-                    id="delete-images-modal"
-                    className="modal-toggle"
-                  />
+                  <input type="checkbox" id="delete-images-modal" className="modal-toggle" />
                   <div className="modal">
                     <div className="modal-box">
-                      <h2 className="font-bold text-xl">
-                        Are you sure you want to delete these images?
-                      </h2>
+                      <h2 className="font-bold text-xl">Are you sure you want to delete these images?</h2>
                       <br />
                       <p>Images selected: {selected.length}</p>
                       <p>This action cannot be reversed.</p>

@@ -15,9 +15,7 @@ export function useAuth(): AuthProps {
     headers: { Method: "GET" },
   })
     .then(async (response) => {
-      const isJson = response.headers
-        .get("Content-Type")
-        ?.includes("application/json");
+      const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
 
       if (!response.ok) {
@@ -43,9 +41,7 @@ export function useAuth(): AuthProps {
       };
 
       return await fetch("/api/v1/login", options).then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
+        const isJson = response.headers.get("Content-Type")?.includes("application/json");
         const body = isJson && (await response.json());
 
         if (!response.ok) {
@@ -61,9 +57,7 @@ export function useAuth(): AuthProps {
       return await fetch("/api/v1/logout", {
         method: "POST",
       }).then(async (response) => {
-        const isJson = response.headers
-          .get("content-type")
-          ?.includes("application/json");
+        const isJson = response.headers.get("content-type")?.includes("application/json");
         const data = isJson && (await response.json());
 
         if (!response.ok) {

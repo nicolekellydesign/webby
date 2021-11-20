@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import {
-  addGalleryItem,
-  GalleryItem,
-  getGalleryItems,
-} from "../../entities/GalleryItem";
+import { addGalleryItem, GalleryItem, getGalleryItems } from "../../entities/GalleryItem";
 import { alertService } from "../../services/alert.service";
 import { slideToggle } from "../../components/slider";
 import { NavLink } from "react-router-dom";
@@ -52,8 +48,7 @@ export function AdminGallery() {
     }
 
     const form = event.currentTarget;
-    const { name, title, caption, projectInfo, embedURL, submitButton } =
-      form.elements;
+    const { name, title, caption, projectInfo, embedURL, submitButton } = form.elements;
 
     submitButton.disabled = true;
     const item: GalleryItem = {
@@ -113,9 +108,7 @@ export function AdminGallery() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="font-bold text-4xl text-center">
-        Portfolio Gallery Settings
-      </h1>
+      <h1 className="font-bold text-4xl text-center">Portfolio Gallery Settings</h1>
 
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered w-7xl">
@@ -150,9 +143,7 @@ export function AdminGallery() {
 
         <div className="collapse w-96 border rounded-box border-base-300 collapse-plus mt-8">
           <input type="checkbox" />
-          <div className="collapse-title text-xl font-medium">
-            Add new project
-          </div>
+          <div className="collapse-title text-xl font-medium">Add new project</div>
           <div className="collapse-content">
             <form onSubmit={onSubmit} className="text-left">
               <div className="form-control">
@@ -196,11 +187,7 @@ export function AdminGallery() {
                   required
                 />
               </div>
-              <MarkdownInput
-                inputId="projectInfo"
-                inputName="projectInfo"
-                label="Project info"
-              />
+              <MarkdownInput inputId="projectInfo" inputName="projectInfo" label="Project info" />
               <div className="form-control">
                 <label htmlFor="embedURL" className="label">
                   <span className="label-text">Embed URL (optional)</span>
@@ -228,11 +215,7 @@ export function AdminGallery() {
                 />
               </div>
               <div className="form-control mt-4">
-                <button
-                  id="submitButton"
-                  type="submit"
-                  className="btn btn-primary"
-                >
+                <button id="submitButton" type="submit" className="btn btn-primary">
                   Add project
                 </button>
               </div>

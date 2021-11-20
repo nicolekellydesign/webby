@@ -43,9 +43,7 @@ export function AlertContainer({ id }: Props) {
 
   function removeAlert(alert: AlertProps) {
     const alertWithFade = { ...alert, fade: true };
-    setAlerts((alerts) =>
-      alerts.map((obj) => (obj === alert ? alertWithFade : obj))
-    );
+    setAlerts((alerts) => alerts.map((obj) => (obj === alert ? alertWithFade : obj)));
 
     setTimeout(() => {
       setAlerts((alerts) => alerts.filter((obj) => obj !== alertWithFade));

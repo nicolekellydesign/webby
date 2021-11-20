@@ -43,9 +43,7 @@ export function About() {
   const [resumeProgressInfo, setResumeProgressInfo] = useState<ProgressInfo>();
   const resumeProgressInfoRef = useRef<any>(null);
 
-  const portraitChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const portraitChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
 
     if (!files) {
@@ -85,9 +83,7 @@ export function About() {
       body: formData,
     })
       .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
+        const isJson = response.headers.get("Content-Type")?.includes("application/json");
         const body = isJson && (await response.json());
 
         if (!response.ok) {
@@ -121,9 +117,7 @@ export function About() {
       body: JSON.stringify({ statement: statement.value }),
     })
       .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
+        const isJson = response.headers.get("Content-Type")?.includes("application/json");
         const body = isJson && (await response.json());
 
         if (!response.ok) {
@@ -136,10 +130,7 @@ export function About() {
       })
       .catch((error) => {
         console.error(`error updating designer statement: ${error}`);
-        alertService.error(
-          `Error updating designer statement: ${error}`,
-          false
-        );
+        alertService.error(`Error updating designer statement: ${error}`, false);
       })
       .finally(() => {
         submit.disabled = false;
@@ -211,9 +202,7 @@ export function About() {
       method: "GET",
     })
       .then(async (response) => {
-        const isJson = response.headers
-          .get("Content-Type")
-          ?.includes("application/json");
+        const isJson = response.headers.get("Content-Type")?.includes("application/json");
         const body = isJson && (await response.json());
 
         if (!response.ok) {
@@ -247,11 +236,7 @@ export function About() {
               className="rounded-xl h-72"
             />
           </figure>
-          <form
-            id="thumbnail-upload-form"
-            onSubmit={uploadPortrait}
-            className="card-body"
-          >
+          <form id="thumbnail-upload-form" onSubmit={uploadPortrait} className="card-body">
             <div className="form-control">
               <label htmlFor="image" className="card-title">
                 Change portrait
@@ -318,10 +303,7 @@ export function About() {
             </div>
 
             {resumeProgressInfo && (
-              <ProgressInfoDisplay
-                percentage={resumeProgressInfo.percentage}
-                errored={resumeProgressInfo.errored}
-              />
+              <ProgressInfoDisplay percentage={resumeProgressInfo.percentage} errored={resumeProgressInfo.errored} />
             )}
           </form>
         </div>
