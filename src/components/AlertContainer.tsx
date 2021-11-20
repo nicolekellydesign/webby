@@ -49,11 +49,11 @@ export function AlertContainer({ id }: Props) {
 
     setTimeout(() => {
       setAlerts((alerts) => alerts.filter((obj) => obj !== alertWithFade));
-    }, 500);
+    }, 150);
   }
 
   return (
-    <div className="container lg:max-w-3xl mx-auto py-2" role="alert">
+    <div className="container lg:max-w-3xl mx-auto py-2">
       {alerts.map((alert: AlertProps, index: number) => {
         return (
           <Alert

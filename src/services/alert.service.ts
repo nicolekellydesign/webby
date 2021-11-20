@@ -20,19 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Subject } from "rxjs";
+import { filter } from "rxjs/operators";
 
 export interface AlertProps {
-  id: string | undefined,
-  type: string,
-  message: string,
-  autoclose: boolean,
-  fade: boolean,
+  id: string | undefined;
+  type: "error" | "info" | "success" | "warning";
+  message: string;
+  autoclose: boolean;
+  fade: boolean;
 }
 
 const alertSubject = new Subject();
-export const defaultId = 'alerts';
+export const defaultId = "alerts";
 
 export const alertService = {
   onAlert,
@@ -42,13 +42,6 @@ export const alertService = {
   success,
   alert,
   clear,
-};
-
-export const AlertType = {
-  Error: 'error',
-  Warn: 'warn',
-  Info: 'info',
-  Success: 'success',
 };
 
 /**
@@ -68,7 +61,13 @@ function onAlert(id: string = defaultId) {
  * @param autoclose Whether or not the alert should close on it's own.
  */
 function error(message: string, autoclose: boolean) {
-  alert({ id: defaultId, type: AlertType.Error, message, autoclose, fade: false });
+  alert({
+    id: defaultId,
+    type: "error",
+    message,
+    autoclose,
+    fade: false,
+  });
 }
 
 /**
@@ -78,7 +77,13 @@ function error(message: string, autoclose: boolean) {
  * @param autoclose Whether or not the alert should close on it's own.
  */
 function warn(message: string, autoclose: boolean) {
-  alert({ id: defaultId, type: AlertType.Warn, message, autoclose, fade: false });
+  alert({
+    id: defaultId,
+    type: "warning",
+    message,
+    autoclose,
+    fade: false,
+  });
 }
 
 /**
@@ -88,7 +93,13 @@ function warn(message: string, autoclose: boolean) {
  * @param autoclose Whether or not the alert should close on it's own.
  */
 function info(message: string, autoclose: boolean) {
-  alert({ id: defaultId, type: AlertType.Info, message, autoclose, fade: false });
+  alert({
+    id: defaultId,
+    type: "warning",
+    message,
+    autoclose,
+    fade: false,
+  });
 }
 
 /**
@@ -98,7 +109,13 @@ function info(message: string, autoclose: boolean) {
  * @param autoclose Whether or not the alert should close on it's own.
  */
 function success(message: string, autoclose: boolean) {
-  alert({ id: defaultId, type: AlertType.Success, message, autoclose, fade: false });
+  alert({
+    id: defaultId,
+    type: "warning",
+    message,
+    autoclose,
+    fade: false,
+  });
 }
 
 /**

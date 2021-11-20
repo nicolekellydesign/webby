@@ -1,4 +1,3 @@
-import { AlertType } from "../services/alert.service";
 import {
   AiOutlineCheckCircle,
   AiOutlineCloseSquare,
@@ -7,7 +6,7 @@ import {
 import { MdErrorOutline, MdInfoOutline } from "react-icons/md";
 
 interface Props {
-  type: string;
+  type: "error" | "info" | "success" | "warning";
   message: string;
   fade: boolean;
   onClose: () => void;
@@ -15,25 +14,28 @@ interface Props {
 
 export function Alert({ type, message, fade, onClose }: Props) {
   const alertClass = {
-    [AlertType.Error]: "alert-error",
-    [AlertType.Warn]: "alert-warning",
-    [AlertType.Info]: "alert-info",
-    [AlertType.Success]: "alert-success",
+    error: "alert-error",
+    warning: "alert-warning",
+    info: "alert-info",
+    success: "alert-success",
   };
 
   const iconClasses = "icon-sm mx-2";
 
   const alertIcon = {
-    [AlertType.Error]: <MdErrorOutline className={iconClasses} />,
-    [AlertType.Warn]: <AiOutlineWarning className={iconClasses} />,
-    [AlertType.Info]: <MdInfoOutline className={iconClasses} />,
-    [AlertType.Success]: <AiOutlineCheckCircle className={iconClasses} />,
+    error: <MdErrorOutline className={iconClasses} />,
+    warning: <AiOutlineWarning className={iconClasses} />,
+    info: <MdInfoOutline className={iconClasses} />,
+    success: <AiOutlineCheckCircle className={iconClasses} />,
   };
 
   const fadeClass = fade ? "fade-out" : "";
 
   return (
-    <div className={`fade-in alert ${alertClass[type]} ${fadeClass}`}>
+    <div
+      className={`fade-in alert ${alertClass[type]} ${fadeClass}`}
+      role="alertdialog"
+    >
       <div className="flex-1">
         {alertIcon[type]}
         <label className="mx-3">{message}</label>
