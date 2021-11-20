@@ -10,7 +10,7 @@ export function About() {
   const [statementLength] = useState(0);
 
   useEffect(() => {
-    fetch("api/v1/about", {
+    fetch("/api/v1/about", {
       method: "GET",
     })
       .then(async (response) => {
