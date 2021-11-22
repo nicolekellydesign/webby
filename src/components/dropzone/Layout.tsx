@@ -9,7 +9,7 @@ export default function Layout({
   extra: { maxFiles },
 }: ILayoutProps) {
   return (
-    <div {...dropzoneProps} className="flex flex-col w-6xl min-h-36 relative transition rounded-box">
+    <div {...dropzoneProps}>
       {previews && previews.length > 0 && (
         <div className="flex flex-col bg-base-200 bg-opacity-20 rounded-lg overflow-y-scroll px-4 mb-4 max-h-64">
           {previews}

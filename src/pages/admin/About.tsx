@@ -1,19 +1,12 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
-import * as AiIcons from "react-icons/ai";
+import { useEffect, useState } from "react";
 import { alertService } from "../../services/alert.service";
 import BlankAvatar from "../../icons/blank-avatar.svg";
-import UploadService, { ProgressInfo } from "../../services/upload.service";
-import ProgressBar from "../../components/ProgressInfo";
 import MarkdownInput from "../../components/MarkdownInput";
-
-interface PortraitElements extends HTMLFormControlsCollection {
-  image: HTMLInputElement;
-  submit: HTMLInputElement;
-}
-
-interface PortraitFormElement extends HTMLFormElement {
-  readonly elements: PortraitElements;
-}
+import Dropzone from "react-dropzone-uploader";
+import Layout from "../../components/dropzone/Layout";
+import Preview from "../../components/dropzone/Preview";
+import Input from "../../components/dropzone/Input";
+import Submit from "../../components/dropzone/Submit";
 
 interface StatementElements extends HTMLFormControlsCollection {
   statement: HTMLInputElement;
@@ -24,63 +17,16 @@ interface StatementFormElement extends HTMLFormElement {
   readonly elements: StatementElements;
 }
 
-interface ResumeElements extends HTMLFormControlsCollection {
-  resume: HTMLInputElement;
-  submit: HTMLInputElement;
-}
-
-interface ResumeFormElement extends HTMLFormElement {
-  readonly elements: ResumeElements;
-}
-
 export function About() {
   const [aboutLength, setAboutLength] = useState(0);
+  const [portrait, setPortrait] = useState("");
   const [statement, setStatement] = useState("");
 
-  const [portraitFile, setPortraitFile] = useState<File>();
-
-  const [resumeFile, setResumeFile] = useState<File>();
-  const [resumeProgressInfo, setResumeProgressInfo] = useState<ProgressInfo>();
-  const resumeProgressInfoRef = useRef<any>(null);
-
-  const portraitChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-
-    if (!files) {
-      return;
-    }
-
-    setPortraitFile(files[0]);
-  };
-
-  const resumeChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-
-    if (!files) {
-      return;
-    }
-
-    setResumeFile(files[0]);
-    setResumeProgressInfo(undefined);
-  };
-
-  const uploadPortrait = (event: React.FormEvent<PortraitFormElement>) => {
-    event.preventDefault();
-
-    if (!portraitFile) {
-      return;
-    }
-
-    const form = event.currentTarget;
-    const { submit } = form.elements;
-    submit.disabled = true;
-
-    const formData = new FormData();
-    formData.append("file", portraitFile, portraitFile.name);
-
+  const updatePortrait = (portrait: string) => {
     fetch("/api/v1/admin/about/portrait", {
       method: "PATCH",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ portrait: portrait }),
     })
       .then(async (response) => {
         const isJson = response.headers.get("Content-Type")?.includes("application/json");
@@ -99,20 +45,19 @@ export function About() {
         alertService.error(`Error uploading portrait: ${error}`, false);
       })
       .finally(() => {
-        form.reset();
-        submit.disabled = false;
+        window.scrollTo(0, 0);
       });
   };
 
-  const onSubmit = (event: React.FormEvent<StatementFormElement>) => {
+  const updateStatement = (event: React.FormEvent<StatementFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
     const { statement, submit } = form.elements;
     submit.disabled = true;
 
-    fetch("/api/v1/admin/about", {
-      method: "PUT",
+    fetch("/api/v1/admin/about/statement", {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ statement: statement.value }),
     })
@@ -138,28 +83,21 @@ export function About() {
       });
   };
 
-  const handleUploadResume = (event: React.FormEvent<ResumeFormElement>) => {
-    event.preventDefault();
+  const updateResume = (resume: string) => {
+    fetch("/api/v1/admin/about/resume", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resume: resume }),
+    })
+      .then(async (response) => {
+        const isJson = response.headers.get("Content-Type")?.includes("application/json");
+        const body = isJson && (await response.json());
 
-    if (!resumeFile) {
-      return;
-    }
+        if (!response.ok) {
+          const error = (body && body.message) || response.status;
+          Promise.reject(error);
+        }
 
-    const form = event.currentTarget;
-    const { submit } = form.elements;
-    submit.disabled = true;
-
-    let _progressInfo = {
-      percentage: 0,
-      fileName: resumeFile.name,
-      errored: false,
-    };
-    resumeProgressInfoRef.current = {
-      val: _progressInfo,
-    };
-
-    upload(resumeFile, resumeProgressInfoRef)
-      .then(() => {
         alertService.success("Résumé uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
       })
@@ -168,33 +106,8 @@ export function About() {
         alertService.error(`Error uploading résumé: ${error}`, false);
       })
       .finally(() => {
-        setResumeFile(undefined);
-        form.reset();
-        submit.disabled = false;
+        window.scrollTo(0, 0);
       });
-  };
-
-  const upload = (file: File, ref: MutableRefObject<any>): Promise<string> => {
-    let _progressInfo = ref.current.val;
-
-    return new Promise((resolve, reject) => {
-      UploadService.upload(
-        file,
-        (percentage) => {
-          _progressInfo.percentage = percentage;
-          setResumeProgressInfo(_progressInfo);
-        },
-        (status, response) => {
-          if (status !== 200) {
-            _progressInfo.errored = true;
-            setResumeProgressInfo(_progressInfo);
-            reject(response.statusText);
-          } else {
-            resolve(_progressInfo.fileName);
-          }
-        }
-      );
-    });
   };
 
   useEffect(() => {
@@ -210,11 +123,12 @@ export function About() {
           return Promise.reject(error);
         }
 
+        setPortrait(body.portrait);
         setStatement(body.statement);
       })
       .catch((error) => {
-        console.error(`error getting about page statement: ${error}`);
-        alertService.error(`Error getting designer statement: ${error}`, false);
+        console.error(`error getting about page details: ${error}`);
+        alertService.error(`Error getting page details: ${error}`, false);
       });
   }, [aboutLength]);
 
@@ -224,47 +138,50 @@ export function About() {
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered">
           <figure className="relative">
-            <img
-              src="/images/about-portrait.jpg"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.src = BlankAvatar;
-                e.currentTarget.classList.add("bg-white");
-                e.currentTarget.classList.add("p-4");
-              }}
-              alt="portrait"
-              className="rounded-xl h-72"
-            />
+            {portrait && (
+              <img
+                src={`/images/${portrait}`}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = BlankAvatar;
+                  e.currentTarget.classList.add("bg-white");
+                  e.currentTarget.classList.add("p-4");
+                }}
+                alt="portrait"
+                className="rounded-xl h-72"
+              />
+            )}
           </figure>
-          <form id="thumbnail-upload-form" onSubmit={uploadPortrait} className="card-body">
-            <div className="form-control">
-              <label htmlFor="image" className="card-title">
-                Change portrait
-              </label>
-              <div className="text-xs">
-                <p>Max file size: 8 MB</p>
-              </div>
-              <div className="card-actions">
-                <input
-                  type="file"
-                  accept="image/jpeg"
-                  name="image"
-                  title="Only images allowed."
-                  onChange={portraitChangeHandler}
-                  className="btn btn-ghost"
-                  required
-                />
-                <button type="submit" name="submit" className="btn btn-primary">
-                  <AiIcons.AiOutlineUpload className="btn-icon" />
-                  Upload portrait
-                </button>
-              </div>
+          <div className="card-body">
+            <h2 className="card-title">Update portrait</h2>
+
+            <div className="card-actions">
+              <Dropzone
+                getUploadParams={() => {
+                  return { method: "POST", url: "/api/v1/admin/upload" };
+                }}
+                onChangeStatus={({ meta, file }, status) => {
+                  console.log(status, meta, file);
+                }}
+                onSubmit={(files) => {
+                  updatePortrait(files[0].meta.name);
+                }}
+                accept="image/*"
+                maxSizeBytes={8 * 1024 * 1024}
+                multiple={false}
+                LayoutComponent={Layout}
+                PreviewComponent={Preview}
+                InputComponent={Input}
+                SubmitButtonComponent={Submit}
+                classNames={{ dropzone: "dropzone" }}
+                inputContent="Drag or click to upload portrait"
+              />
             </div>
-          </form>
+          </div>
         </div>
 
         <div id="update-about-form" className="card lg:card-side bordered mt-4">
-          <form onSubmit={onSubmit} className="card-body">
+          <form onSubmit={updateStatement} className="card-body">
             <MarkdownInput
               inputId="statement"
               inputName="statement"
@@ -280,32 +197,32 @@ export function About() {
         </div>
 
         <div className="card lg:card-side bordered mt-4">
-          <form onSubmit={handleUploadResume} className="card-body">
-            <div className="form-control">
-              <label htmlFor="resume" className="card-title">
-                Upload résumé
-              </label>
-              <div className="card-actions">
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  name="resume"
-                  title="Only PDF files allowed."
-                  onChange={resumeChangeHandler}
-                  className="btn btn-ghost"
-                  required
-                />
-                <button type="submit" name="submit" className="btn btn-primary">
-                  <AiIcons.AiOutlineUpload className="btn-icon" />
-                  Upload résumé
-                </button>
-              </div>
-            </div>
+          <div className="card-body">
+            <h2 className="card-title">Update résumé</h2>
 
-            {resumeProgressInfo && (
-              <ProgressBar percentage={resumeProgressInfo.percentage} errored={resumeProgressInfo.errored} />
-            )}
-          </form>
+            <div className="card-actions">
+              <Dropzone
+                getUploadParams={() => {
+                  return { method: "POST", url: "/api/v1/admin/upload" };
+                }}
+                onChangeStatus={({ meta, file }, status) => {
+                  console.log(status, meta, file);
+                }}
+                onSubmit={(files) => {
+                  updateResume(files[0].meta.name);
+                }}
+                accept="application/pdf"
+                maxSizeBytes={8 * 1024 * 1024}
+                multiple={false}
+                LayoutComponent={Layout}
+                PreviewComponent={Preview}
+                InputComponent={Input}
+                SubmitButtonComponent={Submit}
+                classNames={{ dropzone: "dropzone" }}
+                inputContent="Drag or click to upload résumé"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -117,6 +117,7 @@ export function ImageManager({ deleteImages, images, title, uploadFunc }: Props)
             PreviewComponent={Preview}
             InputComponent={Input}
             SubmitButtonComponent={Submit}
+            classNames={{ dropzone: "dropzone dropzone-lg" }}
           />
         </div>
       </div>

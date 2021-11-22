@@ -28,12 +28,16 @@ export default function Input({
   );
 
   if (files.length > 0) {
-    return (
-      <label className="btn btn-primary self-start">
-        {withFilesContent}
-        {input}
-      </label>
-    );
+    if (multiple) {
+      return (
+        <label className="btn btn-primary self-start">
+          {withFilesContent}
+          {input}
+        </label>
+      );
+    } else {
+      return <>{input}</>;
+    }
   }
 
   return (

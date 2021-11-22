@@ -3,6 +3,14 @@
     @apply inline-block icon-sm mr-2;
   }
 
+  .dropzone {
+    @apply flex flex-col min-h-36 relative transition rounded-box;
+  }
+
+  .dropzone .dropzone-lg {
+    @apply w-6xl;
+  }
+
   .icon-sm {
     @apply w-6 h-6 stroke-current;
   }

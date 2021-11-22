@@ -43,7 +43,7 @@ export default function Preview({
       <div className="flex items-center w-96">
         {isUpload && (
           <progress
-            className="progress progress-info mr-4"
+            className="progress progress-info mx-4"
             max={100}
             value={status === "done" || status === "headers_received" ? 100 : percent}
           />
