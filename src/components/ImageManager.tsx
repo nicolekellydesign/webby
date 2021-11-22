@@ -1,105 +1,22 @@
-import { useRef, useState } from "react";
-import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineDelete, AiOutlineUpload } from "react-icons/ai";
-import { alertService } from "../services/alert.service";
-import UploadService, { ProgressInfo } from "../services/upload.service";
-import ProgressInfoDisplay from "./ProgressInfo";
+import { useState } from "react";
+import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
+import Dropzone from "react-dropzone-uploader";
+import "react-dropzone-uploader/dist/styles.css";
 import "./ImageManager.css";
-
-interface UploadImageElements extends HTMLFormControlsCollection {
-  image: HTMLInputElement;
-  submit: HTMLInputElement;
-}
-
-export interface UploadImageFormElement extends HTMLFormElement {
-  readonly elements: UploadImageElements;
-}
+import Preview from "./dropzone/Preview";
+import Input from "./dropzone/Input";
+import Layout from "./dropzone/Layout";
+import Submit from "./dropzone/Submit";
 
 interface Props {
   images?: string[];
-  label: string;
   title: string;
   uploadFunc: (images: string[]) => void;
   deleteImages: (images: string[]) => void;
 }
 
-export function ImageManager({ deleteImages, images, label, title, uploadFunc }: Props) {
+export function ImageManager({ deleteImages, images, title, uploadFunc }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
-
-  const [imageFiles, setImageFiles] = useState<FileList | undefined>(undefined);
-
-  const [progressInfos, setProgressInfos] = useState<ProgressInfo[]>([]);
-
-  const progressInfosRef = useRef<any>(null);
-
-  const imageChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-
-    setImageFiles(files || undefined);
-    setProgressInfos([]);
-  };
-
-  const handleUpload = (event: React.FormEvent<UploadImageFormElement>) => {
-    event.preventDefault();
-
-    if (!imageFiles || imageFiles.length === 0) {
-      return;
-    }
-
-    const form = event.currentTarget;
-    const { submit } = form.elements;
-    submit.disabled = true;
-
-    const files = Array.from(imageFiles);
-
-    let _progressInfos = files.map((file) => ({
-      percentage: 0,
-      fileName: file.name,
-      errored: false,
-    }));
-
-    progressInfosRef.current = {
-      val: _progressInfos,
-    };
-
-    const uploadPromises = files.map((file, i) => upload(i, file));
-
-    Promise.all(uploadPromises)
-      .then((uploaded) => {
-        uploadFunc(uploaded);
-      })
-      .then(() => {
-        setImageFiles(undefined);
-        form.reset();
-        submit.disabled = false;
-      })
-      .catch((error) => {
-        console.error(`error uploading files: ${error}`);
-        alertService.error(`Error uploading files: ${error}`, false);
-      });
-  };
-
-  const upload = (i: number, file: File): Promise<string> => {
-    let _progressInfos = [...progressInfosRef.current.val];
-
-    return new Promise((resolve, reject) => {
-      UploadService.upload(
-        file,
-        (percentage) => {
-          _progressInfos[i].percentage = percentage;
-          setProgressInfos(_progressInfos);
-        },
-        (status, response) => {
-          if (status !== 200) {
-            _progressInfos[i].errored = true;
-            setProgressInfos(_progressInfos);
-            reject(response.statusText);
-          } else {
-            resolve(_progressInfos[i].fileName);
-          }
-        }
-      );
-    });
-  };
 
   return (
     <div className="card lg:card-side bordered mt-8 w-7xl">
@@ -149,76 +66,58 @@ export function ImageManager({ deleteImages, images, label, title, uploadFunc }:
           ))}
         </ul>
 
-        <div className="mt-4">
-          <form id="image-upload-form" onSubmit={handleUpload} className="card-body">
-            <div className="form-control">
-              <label htmlFor="image" className="card-title">
-                {label}
-              </label>
-              <div className="text-xs">
-                <p>Max file size: 8 MB</p>
-              </div>
+        {selected.length > 0 && (
+          <div className="mt-8">
+            <label htmlFor="delete-images-modal" className="btn btn-secondary btn-outline modal-open">
+              <AiOutlineDelete className="btn-icon" />
+              Delete selected
+            </label>
+            <input type="checkbox" id="delete-images-modal" className="modal-toggle" />
+            <div className="modal">
+              <div className="modal-box">
+                <h2 className="font-bold text-xl">Are you sure you want to delete these images?</h2>
+                <br />
+                <p>Images selected: {selected.length}</p>
+                <p>This action cannot be reversed.</p>
 
-              <input
-                type="file"
-                accept="image/*"
-                name="image"
-                multiple
-                title="Only images allowed."
-                onChange={imageChangeHandler}
-                className="btn btn-ghost mt-4"
-              />
-
-              {progressInfos.map((info, idx) => (
-                <ProgressInfoDisplay
-                  key={idx}
-                  fileName={info.fileName}
-                  percentage={info.percentage}
-                  errored={info.errored}
-                />
-              ))}
-            </div>
-
-            <div className="card-actions">
-              <button type="submit" name="submit" className="btn btn-primary">
-                <AiOutlineUpload className="btn-icon" />
-                Upload images
-              </button>
-              {selected.length > 0 && (
-                <>
-                  <label htmlFor="delete-images-modal" className="btn btn-secondary btn-outline modal-open">
-                    <AiOutlineDelete className="btn-icon" />
-                    Delete selected
+                <div className="modal-action">
+                  <label
+                    htmlFor="delete-images-modal"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      deleteImages(selected);
+                      setSelected([]);
+                    }}
+                  >
+                    Delete
                   </label>
-                  <input type="checkbox" id="delete-images-modal" className="modal-toggle" />
-                  <div className="modal">
-                    <div className="modal-box">
-                      <h2 className="font-bold text-xl">Are you sure you want to delete these images?</h2>
-                      <br />
-                      <p>Images selected: {selected.length}</p>
-                      <p>This action cannot be reversed.</p>
-
-                      <div className="modal-action">
-                        <label
-                          htmlFor="delete-images-modal"
-                          className="btn btn-secondary"
-                          onClick={() => {
-                            deleteImages(selected);
-                            setSelected([]);
-                          }}
-                        >
-                          Delete
-                        </label>
-                        <label htmlFor="delete-images-modal" className="btn">
-                          Cancel
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+                  <label htmlFor="delete-images-modal" className="btn">
+                    Cancel
+                  </label>
+                </div>
+              </div>
             </div>
-          </form>
+          </div>
+        )}
+
+        <div className="mt-8">
+          <Dropzone
+            getUploadParams={() => {
+              return { method: "POST", url: "/api/v1/admin/upload" };
+            }}
+            onChangeStatus={({ meta, file }, status) => {
+              console.log(status, meta, file);
+            }}
+            onSubmit={(files) => {
+              uploadFunc(files.flatMap((file) => file.meta.name));
+            }}
+            accept="image/*"
+            maxSizeBytes={8 * 1024 * 1024}
+            LayoutComponent={Layout}
+            PreviewComponent={Preview}
+            InputComponent={Input}
+            SubmitButtonComponent={Submit}
+          />
         </div>
       </div>
     </div>

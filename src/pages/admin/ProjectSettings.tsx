@@ -270,7 +270,6 @@ export function ProjectSettings() {
         <ImageManager
           images={project.images}
           title="Project Images"
-          label="Manage project images"
           deleteImages={deleteImages}
           uploadFunc={insertImages}
         />

@@ -3,7 +3,7 @@ import * as AiIcons from "react-icons/ai";
 import { alertService } from "../../services/alert.service";
 import BlankAvatar from "../../icons/blank-avatar.svg";
 import UploadService, { ProgressInfo } from "../../services/upload.service";
-import ProgressInfoDisplay from "../../components/ProgressInfo";
+import ProgressBar from "../../components/ProgressInfo";
 import MarkdownInput from "../../components/MarkdownInput";
 
 interface PortraitElements extends HTMLFormControlsCollection {
@@ -303,7 +303,7 @@ export function About() {
             </div>
 
             {resumeProgressInfo && (
-              <ProgressInfoDisplay percentage={resumeProgressInfo.percentage} errored={resumeProgressInfo.errored} />
+              <ProgressBar percentage={resumeProgressInfo.percentage} errored={resumeProgressInfo.errored} />
             )}
           </form>
         </div>

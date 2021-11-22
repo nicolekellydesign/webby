@@ -59,7 +59,6 @@ export function AdminPhotos() {
         <ImageManager
           images={images}
           title="Photography Images"
-          label="Manage photography images"
           deleteImages={deleteImages}
           uploadFunc={insertImages}
         />
