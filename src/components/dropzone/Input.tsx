@@ -37,7 +37,7 @@ export default function Input({
   }
 
   return (
-    <label className="flex flex-grow justify-center items-center text-2xl link">
+    <label className="btn btn-outline flex flex-grow justify-center items-center text-2xl link h-auto">
       {content}
       {input}
     </label>
