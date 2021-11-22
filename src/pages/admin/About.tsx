@@ -153,7 +153,7 @@ export function About() {
             )}
           </figure>
           <div className="card-body">
-            <h2 className="card-title">Update portrait</h2>
+            <h2 className="card-title">Update Portrait</h2>
 
             <div className="card-actions">
               <Dropzone
@@ -198,7 +198,7 @@ export function About() {
 
         <div className="card lg:card-side bordered mt-4">
           <div className="card-body">
-            <h2 className="card-title">Update résumé</h2>
+            <h2 className="card-title">Update Résumé</h2>
 
             <div className="card-actions">
               <Dropzone

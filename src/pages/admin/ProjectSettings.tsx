@@ -14,18 +14,14 @@ import { alertService } from "../../services/alert.service";
 import { NotFound } from "../NotFound";
 import { ImageManager } from "../../components/ImageManager";
 import MarkdownInput from "../../components/MarkdownInput";
+import Dropzone from "react-dropzone-uploader";
+import Layout from "../../components/dropzone/Layout";
+import Preview from "../../components/dropzone/Preview";
+import Input from "../../components/dropzone/Input";
+import Submit from "../../components/dropzone/Submit";
 
 interface ParamTypes {
   name: string;
-}
-
-interface ThumbnailElements extends HTMLFormControlsCollection {
-  image: HTMLInputElement;
-  submit: HTMLInputElement;
-}
-
-interface ThumbnailFormElement extends HTMLFormElement {
-  readonly elements: ThumbnailElements;
 }
 
 interface UpdateProjectElements extends HTMLFormControlsCollection {
@@ -46,21 +42,7 @@ export function ProjectSettings() {
   const [project, setProject] = useState<GalleryItem>();
   const [projectLength, setProjectLength] = useState(0);
 
-  const [thumbFile, setThumbFile] = useState<File>();
-  const [isThumbPicked, setIsThumbPicked] = useState(false);
-
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
-
-  const thumbChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-
-    if (!files) {
-      return;
-    }
-
-    setThumbFile(files[0]);
-    setIsThumbPicked(true);
-  };
 
   const insertImages = (images: string[]) => {
     addProjectImages(name, images)
@@ -77,18 +59,8 @@ export function ProjectSettings() {
       });
   };
 
-  const uploadThumbnail = (event: React.FormEvent<ThumbnailFormElement>) => {
-    event.preventDefault();
-
-    if (!isThumbPicked || !thumbFile) {
-      return;
-    }
-
-    const form = event.currentTarget;
-    const { submit } = form.elements;
-    submit.disabled = true;
-
-    changeThumbnail(name, thumbFile, thumbFile.name)
+  const uploadThumbnail = (filename: string) => {
+    changeThumbnail(name, filename)
       .then(() => {
         alertService.success("Thumbnail uploaded successfully!", true);
         setProjectLength(projectLength + 1);
@@ -98,10 +70,6 @@ export function ProjectSettings() {
         alertService.error(`Error updating thumbnail: ${error}`, false);
       })
       .finally(() => {
-        setIsThumbPicked(false);
-        setThumbFile(undefined);
-        form.reset();
-        submit.disabled = false;
         window.scrollTo(0, 0);
       });
   };
@@ -180,33 +148,34 @@ export function ProjectSettings() {
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered">
           <figure className="relative">
-            <img src={`/images/${project.thumbnail}`} alt={project.title} className="rounded-xl h-52" />
+            <img src={`/images/${project.thumbnail}`} alt={project.title} className="rounded-xl h-72" />
           </figure>
-          <form id="thumbnail-upload-form" onSubmit={uploadThumbnail} className="card-body">
-            <div className="form-control">
-              <label htmlFor="image" className="card-title">
-                Change thumbnail image
-              </label>
-              <div className="text-xs">
-                <p>Max file size: 8 MB</p>
-              </div>
-              <div className="card-actions">
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="image"
-                  title="Only images allowed."
-                  onChange={thumbChangeHandler}
-                  className="btn btn-ghost"
-                  required
-                />
-                <button type="submit" name="submit" className="btn btn-primary">
-                  <AiIcons.AiOutlineUpload className="btn-icon" />
-                  Upload thumbnail
-                </button>
-              </div>
+          <div className="card-body">
+            <h2 className="card-title">Update Thumbnail</h2>
+
+            <div className="card-actions">
+              <Dropzone
+                getUploadParams={() => {
+                  return { method: "POST", url: "/api/v1/admin/upload" };
+                }}
+                onChangeStatus={({ meta, file }, status) => {
+                  console.log(status, meta, file);
+                }}
+                onSubmit={(files) => {
+                  uploadThumbnail(files[0].meta.name);
+                }}
+                accept="image/*"
+                maxSizeBytes={8 * 1024 * 1024}
+                multiple={false}
+                LayoutComponent={Layout}
+                PreviewComponent={Preview}
+                InputComponent={Input}
+                SubmitButtonComponent={Submit}
+                classNames={{ dropzone: "dropzone" }}
+                inputContent="Drag or click to change thumbnail"
+              />
             </div>
-          </form>
+          </div>
         </div>
 
         <div id="update-project-form" className="card lg:card-side bordered mt-8">

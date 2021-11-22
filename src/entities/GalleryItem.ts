@@ -180,14 +180,12 @@ export function deleteProjectImages(galleryID: string, files: string[]): Promise
   });
 }
 
-export function changeThumbnail(galleryID: string, file: File, filename: string): Promise<void> {
-  const formData = new FormData();
-  formData.append("thumbnail", file, filename);
-
+export function changeThumbnail(galleryID: string, filename: string): Promise<void> {
   return new Promise((resolve, reject) => {
     fetch(`/api/v1/admin/gallery/${galleryID}/thumbnail`, {
       method: "PATCH",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ thumbnail: filename }),
     }).then(async (response) => {
       const isJson = response.headers.get("Content-Type")?.includes("application/json");
       const body = isJson && (await response.json());
