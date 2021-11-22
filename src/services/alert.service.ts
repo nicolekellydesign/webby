@@ -95,7 +95,7 @@ function warn(message: string, autoclose: boolean) {
 function info(message: string, autoclose: boolean) {
   alert({
     id: defaultId,
-    type: "warning",
+    type: "info",
     message,
     autoclose,
     fade: false,
@@ -111,7 +111,7 @@ function info(message: string, autoclose: boolean) {
 function success(message: string, autoclose: boolean) {
   alert({
     id: defaultId,
-    type: "warning",
+    type: "success",
     message,
     autoclose,
     fade: false,
