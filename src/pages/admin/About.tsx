@@ -23,7 +23,7 @@ export function About() {
   const [statement, setStatement] = useState("");
 
   const updatePortrait = (portrait: string) => {
-    fetch("/api/v1/admin/about/portrait", {
+    fetch("/api/v1/admin/about", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ portrait: portrait }),
@@ -56,7 +56,7 @@ export function About() {
     const { statement, submit } = form.elements;
     submit.disabled = true;
 
-    fetch("/api/v1/admin/about/statement", {
+    fetch("/api/v1/admin/about", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ statement: statement.value }),
@@ -84,7 +84,7 @@ export function About() {
   };
 
   const updateResume = (resume: string) => {
-    fetch("/api/v1/admin/about/resume", {
+    fetch("/api/v1/admin/about", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ resume: resume }),
