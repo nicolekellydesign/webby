@@ -76,6 +76,7 @@ export function AdminUsers() {
               <th>ID</th>
               <th>Username</th>
               <th>Created At</th>
+              <th>Last Login</th>
               <th></th>
             </tr>
           </thead>
@@ -89,6 +90,13 @@ export function AdminUsers() {
                     dateStyle: "medium",
                     timeStyle: "medium",
                   })}
+                </td>
+                <td>
+                  {user.lastLogin &&
+                    new Date(user.lastLogin).toLocaleString(undefined, {
+                      dateStyle: "medium",
+                      timeStyle: "medium",
+                    })}
                 </td>
                 <td className="text-center">
                   {user.protected ? (

@@ -6,6 +6,7 @@ export interface User {
   username: string;
   protected: boolean;
   createdAt: Date;
+  lastLogin?: Date;
 }
 
 /**
