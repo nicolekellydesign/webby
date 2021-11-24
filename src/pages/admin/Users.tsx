@@ -91,13 +91,16 @@ export function AdminUsers() {
                     timeStyle: "medium",
                   })}
                 </td>
-                <td>
-                  {user.lastLogin &&
-                    new Date(user.lastLogin).toLocaleString(undefined, {
+                {user.lastLogin ? (
+                  <td>
+                    {new Date(user.lastLogin).toLocaleString(undefined, {
                       dateStyle: "medium",
                       timeStyle: "medium",
                     })}
-                </td>
+                  </td>
+                ) : (
+                  <td className="text-base-300">n/a</td>
+                )}
                 <td className="text-center">
                   {user.protected ? (
                     <div data-tip="User is protected" className="tooltip">
