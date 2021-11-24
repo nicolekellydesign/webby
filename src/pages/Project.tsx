@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import remarkGfm from "remark-gfm";
-import { slideToggle } from "../components/slider";
-import { SlideToggle } from "../components/SlideToggle";
-import { GalleryItem, getProject } from "../entities/GalleryItem";
-import { alertService } from "../services/alert.service";
-import { NotFound } from "./NotFound";
+import { slideToggle } from "@Components/slider";
+import { SlideToggle } from "@Components/SlideToggle";
+import { GalleryItem, getProject } from "@Entities/GalleryItem";
+import { alertService } from "@Services/alert.service";
+import { NotFound } from "@Pages/NotFound";
 
 interface ParamTypes {
   name: string;

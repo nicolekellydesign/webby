@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiOutlineDownload } from "react-icons/ai";
-import { alertService } from "../services/alert.service";
-import BlankAvatar from "../icons/blank-avatar.svg";
+import { alertService } from "@Services/alert.service";
+import BlankAvatar from "@Icons/blank-avatar.svg";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 

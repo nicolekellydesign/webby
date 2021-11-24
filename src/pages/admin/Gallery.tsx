@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { addGalleryItem, GalleryItem, getGalleryItems } from "../../entities/GalleryItem";
-import { alertService } from "../../services/alert.service";
-import { slideToggle } from "../../components/slider";
 import { NavLink } from "react-router-dom";
-import MarkdownInput from "../../components/MarkdownInput";
+import { addGalleryItem, GalleryItem, getGalleryItems } from "@Entities/GalleryItem";
+import { alertService } from "@Services/alert.service";
+import { slideToggle } from "@Components/slider";
+import MarkdownInput from "@Components/MarkdownInput";
 
 interface AddProjectElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;

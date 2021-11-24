@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { GalleryItem, getGalleryItems } from "../entities/GalleryItem";
-import { alertService } from "../services/alert.service";
+import { GalleryItem, getGalleryItems } from "@Entities/GalleryItem";
+import { alertService } from "@Services/alert.service";
 
 export function Home() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);

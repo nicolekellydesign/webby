@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect, withRouter } from "react-router";
-import { alertService } from "../../services/alert.service";
-import { useAuth } from "../../services/auth.service";
+import { alertService } from "@Services/alert.service";
+import { useAuth } from "@Services/auth.service";
 
 interface LoginElements extends HTMLFormControlsCollection {
   usernameInput: HTMLInputElement;

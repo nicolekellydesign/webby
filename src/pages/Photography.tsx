@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getPhotos, Photo } from "../entities/Photo";
-import { alertService } from "../services/alert.service";
+import { getPhotos, Photo } from "@Entities/Photo";
+import { alertService } from "@Services/alert.service";
 
 export function Photography() {
   const [photos, setPhotos] = useState<Photo[]>([]);

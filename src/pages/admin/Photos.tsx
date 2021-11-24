@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { ImageManager } from "../../components/ImageManager";
-import { addPhotos, deletePhotos, getPhotos, Photo } from "../../entities/Photo";
-import { alertService } from "../../services/alert.service";
+import { ImageManager } from "@Components/ImageManager";
+import { addPhotos, deletePhotos, getPhotos, Photo } from "@Entities/Photo";
+import { alertService } from "@Services/alert.service";
 
 export function AdminPhotos() {
   // eslint-disable-next-line

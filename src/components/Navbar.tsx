@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { slideToggle } from "./slider";
-import { NavbarData } from "./navbarData";
-import logo from "../icons/logo_white.png";
-import "./Navbar.css";
+import { slideToggle } from "@Components/slider";
+import { NavbarData } from "@Components/navbarData";
+import logo from "@Icons/logo_white.png";
+import "@Components/Navbar.css";
 
 export function Navbar() {
   const [navOpen, setNavOpen] = useState(false);

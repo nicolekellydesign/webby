@@ -9,16 +9,13 @@ import {
   GalleryItem,
   getProject,
   updateProject,
-} from "../../entities/GalleryItem";
-import { alertService } from "../../services/alert.service";
-import { NotFound } from "../NotFound";
-import { ImageManager } from "../../components/ImageManager";
-import MarkdownInput from "../../components/MarkdownInput";
+} from "@Entities/GalleryItem";
+import { alertService } from "@Services/alert.service";
+import { NotFound } from "@Pages/NotFound";
+import { ImageManager } from "@Components/ImageManager";
+import MarkdownInput from "@Components/MarkdownInput";
 import Dropzone from "react-dropzone-uploader";
-import Layout from "../../components/dropzone/Layout";
-import Preview from "../../components/dropzone/Preview";
-import Input from "../../components/dropzone/Input";
-import Submit from "../../components/dropzone/Submit";
+import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
 
 interface ParamTypes {
   name: string;

@@ -1,7 +1,79 @@
-import { formatBytes, formatDuration, IPreviewProps } from "react-dropzone-uploader";
-import { AiOutlineClose, AiOutlinePause, AiOutlinePlayCircle } from "react-icons/ai";
+import {
+  formatBytes,
+  formatDuration,
+  IInputProps,
+  ILayoutProps,
+  IPreviewProps,
+  ISubmitButtonProps,
+} from "react-dropzone-uploader";
+import { AiOutlineClose, AiOutlinePause, AiOutlinePlayCircle, AiOutlineUpload } from "react-icons/ai";
 
-export default function Preview({
+export function Input({
+  getFilesFromEvent,
+  accept,
+  multiple,
+  disabled,
+  content,
+  withFilesContent,
+  onFiles,
+  files,
+}: IInputProps) {
+  const input = (
+    <input
+      className="hidden"
+      type="file"
+      accept={accept}
+      multiple={multiple}
+      disabled={disabled}
+      onChange={async (e) => {
+        const target = e.target;
+        const chosenFiles = await getFilesFromEvent(e);
+        onFiles(chosenFiles);
+        //@ts-ignore
+        target.value = null;
+      }}
+    />
+  );
+
+  if (files.length > 0) {
+    if (multiple) {
+      return (
+        <label className="btn btn-primary self-start">
+          {withFilesContent}
+          {input}
+        </label>
+      );
+    } else {
+      return <>{input}</>;
+    }
+  }
+
+  return (
+    <label className="btn btn-outline flex flex-grow justify-center items-center text-2xl link h-auto">
+      {content}
+      {input}
+    </label>
+  );
+}
+
+export function Layout({ input, previews, submitButton, dropzoneProps, files, extra: { maxFiles } }: ILayoutProps) {
+  return (
+    <div {...dropzoneProps}>
+      {previews && previews.length > 0 && (
+        <div className="flex flex-col bg-base-200 bg-opacity-20 rounded-lg overflow-y-scroll px-4 mb-4 max-h-64">
+          {previews}
+        </div>
+      )}
+
+      <div className="flex flex-row flex-grow gap-4">
+        {files.length < maxFiles && input}
+        {files.length > 0 && submitButton}
+      </div>
+    </div>
+  );
+}
+
+export function Preview({
   fileWithMeta: { cancel, remove, restart },
   meta: { name = "", percent = 0, size = 0, previewUrl, status, duration, validationError },
   isUpload,
@@ -66,6 +138,25 @@ export default function Preview({
             </button>
           )}
       </div>
+    </div>
+  );
+}
+
+export function Submit({ disabled, onSubmit, files }: ISubmitButtonProps) {
+  const _disabled =
+    files.some((f) => ["preparing", "getting_upload_params", "uploading"].includes(f.meta.status)) ||
+    !files.some((f) => ["headers_received", "done"].includes(f.meta.status));
+
+  const handleSubmit = () => {
+    onSubmit(files.filter((f) => ["headers_received", "done"].includes(f.meta.status)));
+  };
+
+  return (
+    <div>
+      <button className="btn" onClick={handleSubmit} disabled={disabled || _disabled}>
+        <AiOutlineUpload className="btn-icon" />
+        Upload files
+      </button>
     </div>
   );
 }

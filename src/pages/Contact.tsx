@@ -1,4 +1,4 @@
-import { alertService } from "../services/alert.service";
+import { alertService } from "@Services/alert.service";
 
 interface FormElements extends HTMLFormControlsCollection {
   firstname: HTMLInputElement;

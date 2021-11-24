@@ -1,15 +1,15 @@
 import { Link, Route, RouteComponentProps, useHistory, withRouter } from "react-router-dom";
-import { adminNavbarData } from "../../components/adminNavbarData";
-import { PrivateRoute } from "../../components/PrivateRoute";
-import { alertService } from "../../services/alert.service";
-import { useAuth } from "../../services/auth.service";
-import { About } from "./About";
-import { AdminGallery } from "./Gallery";
-import { AdminHome } from "./Home";
-import { AdminLogin } from "./Login";
-import { AdminPhotos } from "./Photos";
-import { ProjectSettings } from "./ProjectSettings";
-import { AdminUsers } from "./Users";
+import { adminNavbarData } from "@Components/adminNavbarData";
+import { PrivateRoute } from "@Components/PrivateRoute";
+import { alertService } from "@Services/alert.service";
+import { useAuth } from "@Services/auth.service";
+import { About } from "@Pages/admin/About";
+import { AdminGallery } from "@Pages/admin/Gallery";
+import { AdminHome } from "@Pages/admin/Home";
+import { AdminLogin } from "@Pages/admin/Login";
+import { AdminPhotos } from "@Pages/admin/Photos";
+import { ProjectSettings } from "@Pages/admin/ProjectSettings";
+import { AdminUsers } from "@Pages/admin/Users";
 
 interface RouterProps {
   path: string;

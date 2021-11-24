@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { AlertProps, alertService } from "../services/alert.service";
-import { Alert } from "./Alert";
+import { AlertProps, alertService } from "@Services/alert.service";
+import { Alert } from "@Components/Alert";
 
 interface Props {
   id: string;

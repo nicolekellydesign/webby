@@ -2,11 +2,8 @@ import { useState } from "react";
 import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
 import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
-import "./ImageManager.css";
-import Preview from "./dropzone/Preview";
-import Input from "./dropzone/Input";
-import Layout from "./dropzone/Layout";
-import Submit from "./dropzone/Submit";
+import "@Components/ImageManager.css";
+import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
 
 interface Props {
   images?: string[];

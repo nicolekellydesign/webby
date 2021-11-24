@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { alertService } from "../../services/alert.service";
-import BlankAvatar from "../../icons/blank-avatar.svg";
-import MarkdownInput from "../../components/MarkdownInput";
+import { alertService } from "@Services/alert.service";
+import BlankAvatar from "@Icons/blank-avatar.svg";
+import MarkdownInput from "@Components/MarkdownInput";
 import Dropzone from "react-dropzone-uploader";
-import Layout from "../../components/dropzone/Layout";
-import Preview from "../../components/dropzone/Preview";
-import Input from "../../components/dropzone/Input";
-import Submit from "../../components/dropzone/Submit";
+import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
 
 interface StatementElements extends HTMLFormControlsCollection {
   statement: HTMLInputElement;
