@@ -17,21 +17,22 @@ export function About() {
       method: "GET",
     })
       .then(async (response) => {
-        const isJson = response.headers.get("Content-Type")?.includes("application/json");
-        const body = isJson && (await response.json());
+        const body = await response.json();
 
         if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
+          return Promise.reject(body);
         }
 
+        return body;
+      })
+      .then((body) => {
         setPortrait(body.portrait);
         setStatement(body.statement);
         setResume(body.resume);
       })
       .catch((error) => {
-        console.error(`error getting about page statement: ${error}`);
-        alertService.error(`Error getting designer statement: ${error}`, false);
+        console.error("error getting about page statement", error);
+        alertService.error(`Error getting designer statement: ${error.message}`, false);
       });
   }, [aboutLength]);
 

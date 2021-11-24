@@ -17,8 +17,8 @@ export function AdminPhotos() {
         setPhotosLength(photosLength + 1);
       })
       .catch((error) => {
-        console.error(`error removing photography images: ${error}`);
-        alertService.error(`Error removing images: ${error}`, false);
+        console.error("error removing photography images", error);
+        alertService.error(`Error removing images: ${error.message}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -32,8 +32,8 @@ export function AdminPhotos() {
         setPhotosLength(photosLength + 1);
       })
       .catch((error) => {
-        console.error(`error adding photography gallery items: ${error}`);
-        alertService.error(`Error uploading photos: ${error}`, false);
+        console.error("error adding photography gallery items", error);
+        alertService.error(`Error uploading photos: ${error.message}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -47,8 +47,8 @@ export function AdminPhotos() {
         setImages(photos.map((photo) => photo.filename));
       })
       .catch((error) => {
-        console.error(`error getting photography images: ${error}`);
-        alertService.error(`Error getting photos: ${error}`, false);
+        console.error("error getting photography images", error);
+        alertService.error(`Error getting photos: ${error.message}`, false);
       });
   }, [photosLength]);
 

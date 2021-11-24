@@ -31,8 +31,8 @@ export function AdminUsers() {
         setUsersLength(usersLength + 1);
       })
       .catch((error) => {
-        console.error(`error sending addUser request: ${error}`);
-        alertService.error(`Error adding user: ${error}`, false);
+        console.error("error sending addUser request", error);
+        alertService.error(`Error adding user: ${error.message}`, false);
       })
       .finally(() => {
         submit.disabled = false;

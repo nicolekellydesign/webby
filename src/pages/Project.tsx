@@ -39,8 +39,8 @@ export function Project() {
         setProject(p);
       })
       .catch((error) => {
-        console.error(`error getting project info for project '${name}': ${error}'`);
-        alertService.error(`Error getting project info: ${error}`, false);
+        console.error(`error getting project info for project '${name}'`, error);
+        alertService.error(`Error getting project info: ${error.message}`, false);
       });
   }, [name]);
 

@@ -12,8 +12,8 @@ export function Photography() {
         setPhotos(photos);
       })
       .catch((error) => {
-        console.error(`error getting photography images: ${error}`);
-        alertService.error(`Error getting photos: ${error}`, false);
+        console.error("error getting photography images", error);
+        alertService.error(`Error getting photos: ${error.message}`, false);
       });
   }, [photosLength]);
 

@@ -15,18 +15,16 @@ export function useAuth(): AuthProps {
     headers: { Method: "GET" },
   })
     .then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
+      const body = await response.json();
 
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        return Promise.reject(error);
+        return Promise.reject(body);
       }
 
       setAuthed(body.valid);
     })
     .catch((error) => {
-      console.error(`error checking for valid login session: ${error}`);
+      console.error("error checking for valid login session", error);
       setAuthed(false);
     });
 
@@ -41,12 +39,10 @@ export function useAuth(): AuthProps {
       };
 
       return await fetch("/api/v1/login", options).then(async (response) => {
-        const isJson = response.headers.get("Content-Type")?.includes("application/json");
-        const body = isJson && (await response.json());
+        const body = await response.json();
 
         if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
+          return Promise.reject(body);
         }
 
         setAuthed(true);
@@ -57,12 +53,8 @@ export function useAuth(): AuthProps {
       return await fetch("/api/v1/logout", {
         method: "POST",
       }).then(async (response) => {
-        const isJson = response.headers.get("content-type")?.includes("application/json");
-        const data = isJson && (await response.json());
-
         if (!response.ok) {
-          const error = (data && data.message) || response.status;
-          return Promise.reject(error);
+          return Promise.reject(await response.json());
         }
 
         setAuthed(false);

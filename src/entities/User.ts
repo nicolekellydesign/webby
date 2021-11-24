@@ -23,12 +23,8 @@ export function addUser(username: string, password: string): Promise<void> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -47,12 +43,8 @@ export function deleteUser(id: number): Promise<void> {
     fetch(`/api/v1/admin/users/${id}`, {
       method: "DELETE",
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -70,15 +62,11 @@ export function getUsers(): Promise<User[]> {
     fetch("/api/v1/admin/users", {
       method: "GET",
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
+      const body = await response.json();
 
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(body);
       }
-
-      console.info({ body });
 
       resolve(body.users);
     });

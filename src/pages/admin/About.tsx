@@ -29,20 +29,17 @@ export function About() {
       body: JSON.stringify({ portrait: portrait }),
     })
       .then(async (response) => {
-        const isJson = response.headers.get("Content-Type")?.includes("application/json");
-        const body = isJson && (await response.json());
-
         if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          Promise.reject(error);
+          return Promise.reject(await response.json());
         }
-
+      })
+      .then(() => {
         alertService.success("Portrait uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
       })
       .catch((error) => {
-        console.error(`error uploading portrait: ${error}`);
-        alertService.error(`Error uploading portrait: ${error}`, false);
+        console.error("error uploading portrait", error);
+        alertService.error(`Error uploading portrait: ${error.message}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -62,20 +59,17 @@ export function About() {
       body: JSON.stringify({ statement: statement.value }),
     })
       .then(async (response) => {
-        const isJson = response.headers.get("Content-Type")?.includes("application/json");
-        const body = isJson && (await response.json());
-
         if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
+          return Promise.reject(await response.json());
         }
-
+      })
+      .then(() => {
         alertService.success("Designer statement updated!", true);
         setAboutLength(aboutLength + 1);
       })
       .catch((error) => {
-        console.error(`error updating designer statement: ${error}`);
-        alertService.error(`Error updating designer statement: ${error}`, false);
+        console.error("error updating designer statement", error);
+        alertService.error(`Error updating designer statement: ${error.message}`, false);
       })
       .finally(() => {
         submit.disabled = false;
@@ -90,20 +84,17 @@ export function About() {
       body: JSON.stringify({ resume: resume }),
     })
       .then(async (response) => {
-        const isJson = response.headers.get("Content-Type")?.includes("application/json");
-        const body = isJson && (await response.json());
-
         if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          Promise.reject(error);
+          return Promise.reject(await response.json());
         }
-
+      })
+      .then(() => {
         alertService.success("Résumé uploaded successfully!", true);
         setAboutLength(aboutLength + 1);
       })
       .catch((error) => {
-        console.error(`error uploading résumé: ${error}`);
-        alertService.error(`Error uploading résumé: ${error}`, false);
+        console.error("error uploading résumé", error);
+        alertService.error(`Error uploading résumé: ${error.message}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -115,20 +106,21 @@ export function About() {
       method: "GET",
     })
       .then(async (response) => {
-        const isJson = response.headers.get("Content-Type")?.includes("application/json");
-        const body = isJson && (await response.json());
+        const resp = await response.json();
 
         if (!response.ok) {
-          const error = (body && body.message) || response.status;
-          return Promise.reject(error);
+          return Promise.reject(resp);
         }
 
-        setPortrait(body.portrait);
-        setStatement(body.statement);
+        return resp;
+      })
+      .then((json) => {
+        setPortrait(json.portrait);
+        setStatement(json.statement);
       })
       .catch((error) => {
-        console.error(`error getting about page details: ${error}`);
-        alertService.error(`Error getting page details: ${error}`, false);
+        console.error("error getting about page details", error);
+        alertService.error(`Error getting page details: ${error.message}`, false);
       });
   }, [aboutLength]);
 

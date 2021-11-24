@@ -51,8 +51,8 @@ export function ProjectSettings() {
         setProjectLength(projectLength + 1);
       })
       .catch((error) => {
-        console.error(`error uploading project images: ${error}`);
-        alertService.error(`Error uploading images: ${error}`, false);
+        console.error("error uploading project images", error);
+        alertService.error(`Error uploading images: ${error.message}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -66,8 +66,8 @@ export function ProjectSettings() {
         setProjectLength(projectLength + 1);
       })
       .catch((error) => {
-        console.error(`error updating project thumbnail: ${error}`);
-        alertService.error(`Error updating thumbnail: ${error}`, false);
+        console.error("error updating project thumbnail", error);
+        alertService.error(`Error updating thumbnail: ${error.message}`, false);
       })
       .finally(() => {
         window.scrollTo(0, 0);
@@ -95,8 +95,8 @@ export function ProjectSettings() {
         setProjectLength(projectLength + 1);
       })
       .catch((error) => {
-        console.error(`error updating project settings for '${name}': ${error}`);
-        alertService.error(`Error updating project settings: ${error}`, false);
+        console.error(`error updating project settings for '${name}'`, error);
+        alertService.error(`Error updating project settings: ${error.message}`, false);
       })
       .finally(() => {
         submit.disabled = false;

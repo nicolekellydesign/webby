@@ -61,7 +61,7 @@ export function Contact() {
         alertService.success("Form submitted! Thank you for your message.", false);
       })
       .catch((error) => {
-        console.error(`error sending email message: ${error}`);
+        console.error("error sending email message", error);
         alertService.error(`Error processing contact form submission: ${error}`, false);
       })
       .finally(() => {

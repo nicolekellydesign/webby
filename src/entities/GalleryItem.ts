@@ -33,12 +33,8 @@ export function addGalleryItem(item: GalleryItem, file: File, filename: string):
       method: "POST",
       body: formData,
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -56,12 +52,10 @@ export function getGalleryItems(): Promise<GalleryItem[]> {
     fetch("/api/v1/gallery", {
       method: "GET",
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
+      const body = await response.json();
 
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(body);
       }
 
       resolve(body.items);
@@ -80,12 +74,8 @@ export function deleteGalleryItem(name: string): Promise<void> {
     fetch(`/api/v1/admin/gallery/${name}`, {
       method: "DELETE",
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -103,12 +93,10 @@ export function getProject(name: string): Promise<GalleryItem> {
     fetch(`/api/v1/gallery/${name}`, {
       method: "GET",
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
+      const body = await response.json();
 
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(body);
       }
 
       const project: GalleryItem = {
@@ -140,12 +128,8 @@ export function addProjectImages(galleryID: string, files: string[]): Promise<vo
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -167,12 +151,8 @@ export function deleteProjectImages(galleryID: string, files: string[]): Promise
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -187,12 +167,8 @@ export function changeThumbnail(galleryID: string, filename: string): Promise<vo
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ thumbnail: filename }),
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -213,12 +189,8 @@ export function updateProject(item: GalleryItem): Promise<void> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();

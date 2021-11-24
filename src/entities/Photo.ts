@@ -17,12 +17,8 @@ export function addPhotos(files: string[]): Promise<void> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -43,12 +39,8 @@ export function deletePhotos(files: string[]): Promise<void> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(files),
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
-
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(await response.json());
       }
 
       resolve();
@@ -66,12 +58,10 @@ export function getPhotos(): Promise<Photo[]> {
     fetch("/api/v1/photos", {
       method: "GET",
     }).then(async (response) => {
-      const isJson = response.headers.get("Content-Type")?.includes("application/json");
-      const body = isJson && (await response.json());
+      const body = await response.json();
 
       if (!response.ok) {
-        const error = (body && body.message) || response.status;
-        reject(error);
+        reject(body);
       }
 
       resolve(body.photos);

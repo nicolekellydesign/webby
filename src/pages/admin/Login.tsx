@@ -31,8 +31,8 @@ export function AdminLogin() {
         setRedirectToReferrer(true);
       })
       .catch((error) => {
-        console.error(`error sending login request: ${error}`);
-        alertService.error(`Error trying to log in: ${error}`, false);
+        console.error("error sending login request", error);
+        alertService.error(`Error trying to log in: ${error.message}`, false);
       })
       .finally(() => {
         submitButton.disabled = false;

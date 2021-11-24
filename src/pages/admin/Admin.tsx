@@ -27,8 +27,8 @@ const Admin: React.FC<RouterDetailProps> = () => {
         history.push("/admin");
       })
       .catch((error) => {
-        console.error(`error sending logout request: ${error}`);
-        alertService.error(`Error trying to log out: ${error}`, false);
+        console.error("error sending logout request", error);
+        alertService.error(`Error trying to log out: ${error.message}`, false);
       });
   };
 

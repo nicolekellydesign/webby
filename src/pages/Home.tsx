@@ -13,8 +13,8 @@ export function Home() {
         setGalleryItems(items);
       })
       .catch((error) => {
-        console.error(`error getting gallery items: ${error}`);
-        alertService.error(`Error getting gallery items: ${error}`, false);
+        console.error("error getting gallery items", error);
+        alertService.error(`Error getting gallery items: ${error.message}`, false);
       });
   }, [galleryLength]);
 
