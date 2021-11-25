@@ -1,6 +1,10 @@
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, RouteProps } from "react-router-dom";
 
-export function PrivateRoute({ authed, children, ...rest }: any) {
+interface Props extends RouteProps {
+  authed: boolean;
+}
+
+export function PrivateRoute({ authed, children, ...rest }: Props) {
   return (
     <Route
       {...rest}
