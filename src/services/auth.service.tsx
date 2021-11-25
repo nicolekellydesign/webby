@@ -39,10 +39,8 @@ export function useAuth(): AuthProps {
       };
 
       return await fetch("/api/v1/login", options).then(async (response) => {
-        const body = await response.json();
-
         if (!response.ok) {
-          return Promise.reject(body);
+          return Promise.reject(await response.json());
         }
 
         setAuthed(true);
