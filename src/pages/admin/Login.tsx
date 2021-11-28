@@ -1,43 +1,56 @@
+import { AxiosError } from "axios";
 import React from "react";
 import { Redirect, withRouter } from "react-router";
+import { useMutation } from "react-query";
+
 import { alertService } from "@Services/alert.service";
 import { useAuth } from "@Services/auth.service";
+import { APIError, Login } from "../../declarations";
 
 interface LoginElements extends HTMLFormControlsCollection {
-  usernameInput: HTMLInputElement;
-  passwordInput: HTMLInputElement;
-  rememberToggle: HTMLInputElement;
-  submitButton: HTMLInputElement;
+  username: HTMLInputElement;
+  password: HTMLInputElement;
+  remember: HTMLInputElement;
 }
 
 interface LoginFormElement extends HTMLFormElement {
   readonly elements: LoginElements;
 }
 
-export function AdminLogin() {
+export const AdminLogin: React.FC = () => {
   const { login } = useAuth();
   const [redirectToReferrer, setRedirectToReferrer] = React.useState(false);
+
+  const mutation = useMutation(
+    (data: Login) => {
+      return login(data);
+    },
+    {
+      onSuccess: () => {
+        alertService.success("Logged in successfully", true);
+        setRedirectToReferrer(true);
+      },
+      onError: (error: AxiosError) => {
+        const err: APIError = error.response?.data;
+
+        if (err.code === 401) {
+          alertService.warn("Invalid login credentials", false);
+        } else {
+          console.error("error sending login request", { err });
+          alertService.error(`Error trying to log in: ${err.message}`, false);
+        }
+      },
+    }
+  );
 
   const onSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const { usernameInput, passwordInput, rememberToggle, submitButton } = form.elements;
+    const { username, password, remember } = form.elements;
 
-    submitButton.disabled = true;
-
-    login(usernameInput.value, passwordInput.value, rememberToggle.checked)
-      .then(() => {
-        setRedirectToReferrer(true);
-      })
-      .catch((error) => {
-        console.error("error sending login request", error);
-        alertService.error(`Error trying to log in: ${error.message}`, false);
-      })
-      .finally(() => {
-        submitButton.disabled = false;
-        form.reset();
-      });
+    mutation.mutate({ username: username.value, password: password.value, remember: remember.checked });
+    form.reset();
   };
 
   if (redirectToReferrer) {
@@ -52,7 +65,7 @@ export function AdminLogin() {
           <form id="login" onSubmit={onSubmit}>
             <div className="form-control">
               <input
-                id="usernameInput"
+                id="username"
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -61,7 +74,7 @@ export function AdminLogin() {
                 className="input input-bordered mb-3 w-full"
               />
               <input
-                id="passwordInput"
+                id="password"
                 type="password"
                 name="password"
                 placeholder="Password"
@@ -70,12 +83,12 @@ export function AdminLogin() {
               />
               <div>
                 <label className="cursor-pointer label justify-start">
-                  <input id="rememberToggle" type="checkbox" name="remember" className="checkbox checkbox-primary" />
+                  <input id="remember" type="checkbox" name="remember" className="checkbox checkbox-primary" />
                   <span className="label-text ml-4">Remember me</span>
                 </label>
               </div>
               <div className="card-actions">
-                <button id="submitButton" type="submit" className="btn btn-primary m-0 w-full">
+                <button id="submit" type="submit" className="btn btn-primary m-0 w-full">
                   Log In
                 </button>
               </div>
@@ -85,6 +98,6 @@ export function AdminLogin() {
       </div>
     </div>
   );
-}
+};
 
 export default withRouter(AdminLogin);

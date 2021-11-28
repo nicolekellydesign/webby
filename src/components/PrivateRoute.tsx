@@ -1,10 +1,10 @@
 import { Redirect, Route, RouteProps } from "react-router-dom";
 
-interface Props extends RouteProps {
+interface IPrivateRouteProps extends RouteProps {
   authed: boolean;
 }
 
-export function PrivateRoute({ authed, children, ...rest }: Props) {
+export const PrivateRoute: React.FC<IPrivateRouteProps> = ({ authed, children, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -21,4 +21,4 @@ export function PrivateRoute({ authed, children, ...rest }: Props) {
       }
     />
   );
-}
+};

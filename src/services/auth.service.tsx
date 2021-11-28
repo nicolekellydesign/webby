@@ -1,71 +1,65 @@
+import axios, { AxiosError } from "axios";
 import React from "react";
+
+import { Login } from "../declarations";
 
 interface AuthProps {
   authed: boolean;
-  login(username: string, password: string, extended: boolean): Promise<void>;
+  login(data: Login): Promise<void>;
   logout(): Promise<void>;
 }
 
 const authContext = React.createContext({});
 
-export function useAuth(): AuthProps {
+export const useAuth = (): AuthProps => {
   const [authed, setAuthed] = React.useState(false);
 
-  fetch("/api/v1/check", {
-    headers: { Method: "GET" },
-  })
+  axios
+    .get("/api/v1/check")
     .then(async (response) => {
-      const body = await response.json();
+      const ret = response.data;
 
-      if (!response.ok) {
-        return Promise.reject(body);
+      setAuthed(ret.valid);
+    })
+    .catch((error: AxiosError) => {
+      if (error.response) {
+        const err = error.response.data;
+        console.error("error checking for valid login session", { err });
       }
 
-      setAuthed(body.valid);
-    })
-    .catch((error) => {
-      console.error("error checking for valid login session", error);
       setAuthed(false);
     });
 
   return {
     authed,
 
-    async login(username: string, password: string, extended: boolean) {
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, extended }),
-      };
+    async login(data: Login) {
+      const res = await axios.post("/api/v1/login", data);
 
-      return await fetch("/api/v1/login", options).then(async (response) => {
-        if (!response.ok) {
-          return Promise.reject(await response.json());
-        }
-
+      if (res.status === 200) {
         setAuthed(true);
-      });
+      }
+
+      return res.data;
     },
 
     async logout() {
-      return await fetch("/api/v1/logout", {
-        method: "POST",
-      }).then(async (response) => {
-        if (!response.ok) {
-          return Promise.reject(await response.json());
-        }
+      const res = await axios.post("/api/v1/logout");
 
+      if (res.status === 200) {
         setAuthed(false);
-      });
+      }
+
+      return res.data;
     },
   };
-}
+};
 
-export function AuthProvider({ children }: any) {
+export const AuthProvider = ({ children }: any) => {
   const auth = useAuth;
 
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
-}
+};
 
 export default function AuthConsumer() {
   return React.useContext(authContext);

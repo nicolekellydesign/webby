@@ -1,4 +1,4 @@
-export function AdminHome() {
+export const AdminHome: React.FC = () => {
   return (
     <div className="container text-center mx-auto">
       <h1 className="font-bold text-5xl">Welcome!</h1>
@@ -10,4 +10,4 @@ export function AdminHome() {
       </p>
     </div>
   );
-}
+};

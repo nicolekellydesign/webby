@@ -1,37 +1,48 @@
 import { Switch, Route, BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import { defaultId } from "@Services/alert.service";
 
 import { AlertContainer } from "@Components/AlertContainer";
 import { Navbar } from "@Components/Navbar";
 
-import { About } from "@Pages/About";
+import { AboutView } from "@Pages/AboutView";
 import Admin from "@Pages/admin/Admin";
-import { Contact } from "@Pages/Contact";
+import { ContactView } from "@Pages/ContactView";
 import { Home } from "@Pages/Home";
-import { Photography } from "@Pages/Photography";
-
-import "./App.css";
-import { Project } from "@Pages/Project";
+import { PhotographyView } from "@Pages/PhotographyView";
+import { ProjectView } from "@Pages/ProjectView";
 import { NotFound } from "@Pages/NotFound";
 
-export function App() {
+import "./App.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+export const App: React.FC = () => {
   return (
-    <div className="relative min-h-full -mb-24 pb-24">
-      <BrowserRouter>
-        <Navbar />
-        <hr className="mx-5" />
-        <AlertContainer id={defaultId} />
-        <Switch>
-          <Route path="/about" exact component={About} />
-          <Route path="/admin" component={Admin} />
-          <Route path="/contact" exact component={Contact} />
-          <Route path="/photography" exact component={Photography} />
-          <Route path="/project/:name" component={Project} />
-          <Route path="/" exact component={Home} />
-          <Route component={NotFound} />
-        </Switch>
-      </BrowserRouter>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="relative min-h-full -mb-24 pb-24">
+        <BrowserRouter>
+          <Navbar />
+          <hr className="mx-5" />
+          <AlertContainer id={defaultId} />
+          <Switch>
+            <Route path="/about" exact component={AboutView} />
+            <Route path="/admin" component={Admin} />
+            <Route path="/contact" exact component={ContactView} />
+            <Route path="/photography" exact component={PhotographyView} />
+            <Route path="/project/:name" component={ProjectView} />
+            <Route path="/" exact component={Home} />
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </BrowserRouter>
+      </div>
+    </QueryClientProvider>
   );
-}
+};

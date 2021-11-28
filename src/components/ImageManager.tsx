@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
+
 import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
-import "@Components/ImageManager.css";
-import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
 
-interface Props {
+import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
+import "@Components/ImageManager.css";
+
+interface IImageManagerProps extends Object {
   images?: string[];
   title: string;
   uploadFunc: (images: string[]) => void;
   deleteImages: (images: string[]) => void;
 }
 
-export function ImageManager({ deleteImages, images, title, uploadFunc }: Props) {
+export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, images, title, uploadFunc }) => {
   const [selected, setSelected] = useState<string[]>([]);
 
   return (
@@ -120,4 +122,4 @@ export function ImageManager({ deleteImages, images, title, uploadFunc }: Props)
       </div>
     </div>
   );
-}
+};

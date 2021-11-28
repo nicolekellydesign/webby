@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-interface Props {
+interface IMarkdownInputProps extends Object {
   inputId?: string;
   inputName?: string;
   title?: string;
@@ -10,7 +11,7 @@ interface Props {
   startingText?: string;
 }
 
-export default function MarkdownInput({ inputId, inputName, title, label, startingText }: Props) {
+export const MarkdownInput: React.FC<IMarkdownInputProps> = ({ inputId, inputName, title, label, startingText }) => {
   const [currentText, setCurrentText] = useState("");
 
   const titleElement = title && <div className="card-title mb-0">{title}</div>;
@@ -69,4 +70,4 @@ export default function MarkdownInput({ inputId, inputName, title, label, starti
       )}
     </div>
   );
-}
+};

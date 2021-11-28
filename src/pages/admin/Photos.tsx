@@ -1,68 +1,89 @@
-import { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
 import { ImageManager } from "@Components/ImageManager";
-import { addPhotos, deletePhotos, getPhotos, Photo } from "@Entities/Photo";
+import { LoadingCard } from "@Components/LoadingCard";
 import { alertService } from "@Services/alert.service";
+import { APIError, Photo } from "../../declarations";
+import { PhotosQuery } from "../../Queries";
 
-export function AdminPhotos() {
-  // eslint-disable-next-line
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [photosLength, setPhotosLength] = useState(0);
+export const AdminPhotos: React.FC = () => {
+  const queryClient = useQueryClient();
+  const photosQuery = useQuery("photos", PhotosQuery);
 
-  const [images, setImages] = useState<string[]>([]);
+  const addImagesMutation = useMutation(
+    async (images: string[]) => {
+      await queryClient.cancelQueries("photos");
+      return axios.post("/api/v1/admin/photos", images);
+    },
+    {
+      onSuccess: () => {
+        alertService.success("Images uploaded successfully!", true);
+      },
+      onError: (error: AxiosError) => {
+        const err: APIError = error.response?.data;
+        console.error("error uploading photography images", { err });
+        alertService.error(`Error uploading images: ${err.message}`, false);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("photos");
+        window.scrollTo(0, 0);
+      },
+    }
+  );
 
-  const deleteImages = (images: string[]) => {
-    deletePhotos(images)
-      .then(() => {
+  const deleteImagesMutation = useMutation(
+    async (images: string[]) => {
+      await queryClient.cancelQueries("photos");
+      return axios({
+        url: "/api/v1/admin/photos",
+        method: "DELETE",
+        data: images,
+      });
+    },
+    {
+      onSuccess: () => {
         alertService.success("Image(s) deleted successfully!", true);
-        setPhotosLength(photosLength + 1);
-      })
-      .catch((error) => {
-        console.error("error removing photography images", error);
-        alertService.error(`Error removing images: ${error.message}`, false);
-      })
-      .finally(() => {
+      },
+      onError: (error: AxiosError) => {
+        const err: APIError = error.response?.data;
+        console.error(`error removing photography images`, { err });
+        alertService.error(`Error removing images: ${err.message}`, false);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("photos");
         window.scrollTo(0, 0);
-      });
-  };
+      },
+    }
+  );
 
-  const insertImages = (files: string[]) => {
-    addPhotos(files)
-      .then(() => {
-        alertService.success("Photos uploaded successfully!", true);
-        setPhotosLength(photosLength + 1);
-      })
-      .catch((error) => {
-        console.error("error adding photography gallery items", error);
-        alertService.error(`Error uploading photos: ${error.message}`, false);
-      })
-      .finally(() => {
-        window.scrollTo(0, 0);
-      });
-  };
+  if (photosQuery.isLoading) {
+    return <LoadingCard />;
+  }
 
-  useEffect(() => {
-    getPhotos()
-      .then((photos) => {
-        setPhotos(photos);
-        setImages(photos.map((photo) => photo.filename));
-      })
-      .catch((error) => {
-        console.error("error getting photography images", error);
-        alertService.error(`Error getting photos: ${error.message}`, false);
-      });
-  }, [photosLength]);
+  if (photosQuery.isError) {
+    console.error("Error fetching photos", photosQuery.error);
+    alertService.error(`Error getting photos: ${photosQuery.error}`, false);
+  }
+
+  // Get the photos
+  const photos = (photosQuery.data as Photo[]).flatMap((photo) => photo.filename);
 
   return (
     <div className="container mx-auto">
       <h1 className="font-bold text-4xl text-center">Photography Gallery Settings</h1>
       <div className="max-w-max mx-auto my-8">
-        <ImageManager
-          images={images}
-          title="Photography Images"
-          deleteImages={deleteImages}
-          uploadFunc={insertImages}
-        />
+        {addImagesMutation.isLoading || deleteImagesMutation.isLoading ? (
+          <LoadingCard />
+        ) : (
+          <ImageManager
+            images={photos}
+            title="Photography Images"
+            deleteImages={deleteImagesMutation.mutate}
+            uploadFunc={addImagesMutation.mutate}
+          />
+        )}
       </div>
     </div>
   );
-}
+};

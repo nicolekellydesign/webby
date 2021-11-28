@@ -1,22 +1,24 @@
-import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { GalleryItem, getGalleryItems } from "@Entities/GalleryItem";
+import { useQuery } from "react-query";
+
+import { LoadingCard } from "@Components/LoadingCard";
 import { alertService } from "@Services/alert.service";
+import { Project } from "../declarations";
+import { ProjectsQuery } from "../Queries";
 
-export function Home() {
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [galleryLength] = useState(0);
+export const Home: React.FC = () => {
+  const projectsQuery = useQuery("projects", ProjectsQuery);
 
-  useEffect(() => {
-    getGalleryItems()
-      .then((items) => {
-        setGalleryItems(items);
-      })
-      .catch((error) => {
-        console.error("error getting gallery items", error);
-        alertService.error(`Error getting gallery items: ${error.message}`, false);
-      });
-  }, [galleryLength]);
+  if (projectsQuery.isLoading) {
+    return <LoadingCard />;
+  }
+
+  if (projectsQuery.isError) {
+    console.error("error getting projects", projectsQuery.error);
+    alertService.error(`Error getting projects: ${projectsQuery.error}`, false);
+  }
+
+  const projects = projectsQuery.data as Project[];
 
   return (
     <>
@@ -28,22 +30,22 @@ export function Home() {
         </div>
 
         <div className="flex flex-wrap">
-          {galleryItems.map((item) => (
+          {projects.map((project) => (
             <div className="w-full xl:w-1/2 p-4">
               <div
                 className="bg-cover bg-center bg-no-repeat"
-                data-src={`/images/${item.thumbnail}`}
+                data-src={`/images/${project.thumbnail}`}
                 style={{
-                  backgroundImage: `url("/images/${item.thumbnail}")`,
+                  backgroundImage: `url("/images/${project.thumbnail}")`,
                 }}
               >
                 <NavLink
-                  to={`/project/${item.name}`}
+                  to={`/project/${project.name}`}
                   className="opacity-0 hover:opacity-70 hover:bg-black block relative overflow-hidden pb-2/3 transition"
                 >
                   <div className="absolute box-border max-w-xs h-full p-5">
-                    <h2 className="text-white mb-0 font-bold text-2xl">{item.title}</h2>
-                    <p className="text-white text-xl">{item.caption}</p>
+                    <h2 className="text-white mb-0 font-bold text-2xl">{project.title}</h2>
+                    <p className="text-white text-xl">{project.caption}</p>
                   </div>
                 </NavLink>
               </div>
@@ -53,4 +55,4 @@ export function Home() {
       </div>
     </>
   );
-}
+};

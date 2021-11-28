@@ -1,21 +1,41 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
+import { useQuery } from "react-query";
+
 import remarkGfm from "remark-gfm";
+
+import { LoadingCard } from "@Components/LoadingCard";
 import { slideToggle } from "@Components/slider";
 import { SlideToggle } from "@Components/SlideToggle";
-import { GalleryItem, getProject } from "@Entities/GalleryItem";
 import { alertService } from "@Services/alert.service";
 import { NotFound } from "@Pages/NotFound";
+import { Project } from "../declarations";
+import { ProjectQuery } from "../Queries";
 
 interface ParamTypes {
   name: string;
 }
 
-export function Project() {
+export const ProjectView: React.FC = () => {
   const { name } = useParams<ParamTypes>();
-  const [project, setProject] = useState<GalleryItem>();
+  const projectQuery = useQuery(["projects", name], () => ProjectQuery(name));
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
+
+  if (typeof name !== "string" || name === "") {
+    return <NotFound />;
+  }
+
+  if (projectQuery.isLoading) {
+    return <LoadingCard />;
+  }
+
+  if (projectQuery.isError) {
+    console.error("error getting projects", projectQuery.error);
+    alertService.error(`Error getting project: ${projectQuery.error}`, false);
+  }
+
+  const project = projectQuery.data as Project;
 
   const toggleProjectInfo = () => {
     const toggle = document.getElementById("slide-toggle");
@@ -33,18 +53,7 @@ export function Project() {
     setProjectInfoVisible(!projectInfoVisible);
   };
 
-  useEffect(() => {
-    getProject(name)
-      .then((p) => {
-        setProject(p);
-      })
-      .catch((error) => {
-        console.error(`error getting project info for project '${name}'`, error);
-        alertService.error(`Error getting project info: ${error.message}`, false);
-      });
-  }, [name]);
-
-  return project ? (
+  return (
     <div className="container text-center mx-auto">
       <div>
         <SlideToggle isShowing={projectInfoVisible} onClick={toggleProjectInfo} text="Project Information" />
@@ -77,7 +86,5 @@ export function Project() {
         </div>
       </article>
     </div>
-  ) : (
-    <NotFound />
   );
-}
+};

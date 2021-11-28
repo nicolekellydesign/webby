@@ -1,7 +1,7 @@
 import { useHistory } from "react-router";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-export function NotFound() {
+export const NotFound: React.FC = () => {
   const history = useHistory();
 
   return (
@@ -18,4 +18,4 @@ export function NotFound() {
       </div>
     </div>
   );
-}
+};

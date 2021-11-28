@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
-import * as AiIcons from "react-icons/ai";
-import { addUser, deleteUser, getUsers, User } from "@Entities/User";
+import axios, { AxiosError } from "axios";
+import { AiOutlineClose } from "react-icons/ai";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
+import { LoadingCard } from "@Components/LoadingCard";
 import { alertService } from "@Services/alert.service";
+import { User } from "../../declarations";
+import { UsersQuery } from "../../Queries";
 
 interface LoginElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;
@@ -13,57 +17,84 @@ interface LoginFormElement extends HTMLFormElement {
   readonly elements: LoginElements;
 }
 
-export function AdminUsers() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [usersLength, setUsersLength] = useState(0);
+interface AddUserReq extends Object {
+  username: string;
+  password: string;
+}
+
+export const AdminUsers: React.FC = () => {
+  const queryClient = useQueryClient();
+  const usersQuery = useQuery("users", UsersQuery);
+
+  const addUserMutation = useMutation(
+    (data: AddUserReq) => {
+      return axios.post("/api/v1/admin/users", data);
+    },
+    {
+      onSuccess: () => {
+        alertService.success("User added successfully!", true);
+      },
+      onError: (error: AxiosError) => {
+        const err = error.response?.data;
+        console.error("error adding user", { err });
+        alertService.error(`Error adding user: ${err.message}`, false);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("users");
+        window.scrollTo(0, 0);
+      },
+    }
+  );
+
+  const deleteUserMutation = useMutation(
+    (id: number) => {
+      return axios.delete(`/api/v1/admin/users/${id}`);
+    },
+    {
+      onSuccess: () => {
+        alertService.success("User deleted successfully!", true);
+      },
+      onError: (error: AxiosError) => {
+        const err = error.response?.data;
+        console.error("error deleting user", { err });
+        alertService.error(`Error deleting user: ${err.message}`, false);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("users");
+        window.scrollTo(0, 0);
+      },
+    }
+  );
 
   const handleSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const { username, password, submit } = form.elements;
+    const { username, password } = form.elements;
+    const data = { username: username.value, password: password.value };
 
-    submit.disabled = true;
-
-    addUser(username.value, password.value)
-      .then(() => {
-        alertService.success("User added successfully!", true);
-        setUsersLength(usersLength + 1);
-      })
-      .catch((error) => {
-        console.error("error sending addUser request", error);
-        alertService.error(`Error adding user: ${error.message}`, false);
-      })
-      .finally(() => {
-        submit.disabled = false;
-        form.reset();
-      });
+    addUserMutation.mutate(data);
+    form.reset();
   };
 
-  const handleDelete = (user: User) => {
-    if (!user.protected) {
-      deleteUser(user.id)
-        .then(() => {
-          alertService.success("User deleted successfully!", true);
-          setUsersLength(usersLength + 1);
-        })
-        .catch((error) => {
-          console.error(`error deleting user: ${error}`);
-          alertService.error(`Error removing user: ${error}`, false);
-        });
+  if (usersQuery.isLoading) {
+    return <LoadingCard />;
+  }
+
+  if (usersQuery.isError) {
+    console.error("Error fetching users", usersQuery.error);
+    alertService.error(`Error getting users: ${usersQuery.error}`, false);
+  }
+
+  const users = (usersQuery.data as User[]).sort((a, b) => {
+    if (a.id < b.id) {
+      return -1;
+    } else if (a.id > b.id) {
+      return 1;
+    } else {
+      return 0;
     }
-  };
-
-  useEffect(() => {
-    getUsers()
-      .then((users) => {
-        setUsers(users);
-      })
-      .catch((error) => {
-        console.error(`error getting user list: ${error}`);
-        alertService.error(`Error getting user list: ${error}`, false);
-      });
-  }, [usersLength]);
+  });
 
   return (
     <div className="container mx-auto">
@@ -105,13 +136,13 @@ export function AdminUsers() {
                   {user.protected ? (
                     <div data-tip="User is protected" className="tooltip">
                       <button className="btn btn-ghost btn-disabled btn-sm" disabled>
-                        <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                        <AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
                       </button>
                     </div>
                   ) : (
                     <div data-tip="Delete user" className="tooltip">
                       <label htmlFor={`delete-${user.username}-modal`} className="btn btn-ghost btn-sm modal-open">
-                        <AiIcons.AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
+                        <AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
                       </label>
                       <input type="checkbox" id={`delete-${user.username}-modal`} className="modal-toggle" />
                       <div className="modal">
@@ -125,7 +156,7 @@ export function AdminUsers() {
                               htmlFor={`delete-${user.username}-modal`}
                               className="btn btn-secondary"
                               onClick={() => {
-                                handleDelete(user);
+                                deleteUserMutation.mutate(user.id);
                               }}
                             >
                               Delete
@@ -170,4 +201,4 @@ export function AdminUsers() {
       </div>
     </div>
   );
-}
+};

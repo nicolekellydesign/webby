@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { AlertProps, alertService } from "@Services/alert.service";
-import { Alert } from "@Components/Alert";
 
-interface Props {
+import { Alert } from "@Components/Alert";
+import { AlertProps, alertService } from "@Services/alert.service";
+
+interface IAlertContainerProps extends Object {
   id: string;
 }
 
-export function AlertContainer({ id }: Props) {
+export const AlertContainer: React.FC<IAlertContainerProps> = ({ id }) => {
   const [alerts, setAlerts] = useState<Array<AlertProps>>([]);
   const history = useHistory();
 
@@ -63,4 +64,4 @@ export function AlertContainer({ id }: Props) {
       ))}
     </div>
   );
-}
+};

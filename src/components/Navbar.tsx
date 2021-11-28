@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+
 import { slideToggle } from "@Components/slider";
 import { NavbarData } from "@Components/navbarData";
-import logo from "@Icons/logo_white.png";
 import "@Components/Navbar.css";
+import logo from "@Icons/logo_white.png";
 
-export function Navbar() {
+export const Navbar: React.FC = () => {
   const [navOpen, setNavOpen] = useState(false);
   const history = useHistory();
 
@@ -76,4 +77,4 @@ export function Navbar() {
       </ul>
     </nav>
   );
-}
+};

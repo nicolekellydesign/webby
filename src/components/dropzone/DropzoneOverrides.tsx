@@ -8,7 +8,7 @@ import {
 } from "react-dropzone-uploader";
 import { AiOutlineClose, AiOutlinePause, AiOutlinePlayCircle, AiOutlineUpload } from "react-icons/ai";
 
-export function Input({
+export const Input: React.FC<IInputProps> = ({
   getFilesFromEvent,
   accept,
   multiple,
@@ -17,7 +17,7 @@ export function Input({
   withFilesContent,
   onFiles,
   files,
-}: IInputProps) {
+}) => {
   const input = (
     <input
       className="hidden"
@@ -54,9 +54,16 @@ export function Input({
       {input}
     </label>
   );
-}
+};
 
-export function Layout({ input, previews, submitButton, dropzoneProps, files, extra: { maxFiles } }: ILayoutProps) {
+export const Layout: React.FC<ILayoutProps> = ({
+  input,
+  previews,
+  submitButton,
+  dropzoneProps,
+  files,
+  extra: { maxFiles },
+}) => {
   return (
     <div {...dropzoneProps}>
       {previews && previews.length > 0 && (
@@ -71,9 +78,9 @@ export function Layout({ input, previews, submitButton, dropzoneProps, files, ex
       </div>
     </div>
   );
-}
+};
 
-export function Preview({
+export const Preview: React.FC<IPreviewProps> = ({
   fileWithMeta: { cancel, remove, restart },
   meta: { name = "", percent = 0, size = 0, previewUrl, status, duration, validationError },
   isUpload,
@@ -81,7 +88,7 @@ export function Preview({
   canRemove,
   canRestart,
   extra: { minSizeBytes },
-}: IPreviewProps) {
+}) => {
   let title = `${name || "?"}, ${formatBytes(size)}`;
   if (duration) title = `${title}, ${formatDuration(duration)}`;
 
@@ -140,9 +147,9 @@ export function Preview({
       </div>
     </div>
   );
-}
+};
 
-export function Submit({ disabled, onSubmit, files }: ISubmitButtonProps) {
+export const Submit: React.FC<ISubmitButtonProps> = ({ disabled, onSubmit, files }) => {
   const _disabled =
     files.some((f) => ["preparing", "getting_upload_params", "uploading"].includes(f.meta.status)) ||
     !files.some((f) => ["headers_received", "done"].includes(f.meta.status));
@@ -159,4 +166,4 @@ export function Submit({ disabled, onSubmit, files }: ISubmitButtonProps) {
       </button>
     </div>
   );
-}
+};

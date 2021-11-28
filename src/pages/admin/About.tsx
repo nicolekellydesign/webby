@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
-import { alertService } from "@Services/alert.service";
-import BlankAvatar from "@Icons/blank-avatar.svg";
-import MarkdownInput from "@Components/MarkdownInput";
+import axios, { AxiosError } from "axios";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
 import Dropzone from "react-dropzone-uploader";
+
 import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
+import { LoadingCard } from "@Components/LoadingCard";
+import { MarkdownInput } from "@Components/MarkdownInput";
+import BlankAvatar from "@Icons/blank-avatar.svg";
+import { alertService } from "@Services/alert.service";
+import { About, APIError } from "../../declarations";
+import { AboutQuery } from "../../Queries";
 
 interface StatementElements extends HTMLFormControlsCollection {
   statement: HTMLInputElement;
@@ -14,112 +20,68 @@ interface StatementFormElement extends HTMLFormElement {
   readonly elements: StatementElements;
 }
 
-export function About() {
-  const [aboutLength, setAboutLength] = useState(0);
-  const [portrait, setPortrait] = useState("");
-  const [statement, setStatement] = useState("");
+export const AdminAboutView: React.FC = () => {
+  const queryClient = useQueryClient();
+  const aboutQuery = useQuery("about", AboutQuery);
+
+  const mutation = useMutation(
+    (update) => {
+      return axios.patch("/api/v1/admin/about", update);
+    },
+    {
+      onMutate: async (newAbout: About) => {
+        await queryClient.cancelQueries("about");
+
+        const previousAbout = queryClient.getQueryData("about");
+
+        queryClient.setQueryData("about", newAbout);
+
+        return { previousAbout, newAbout };
+      },
+      onSuccess: () => {
+        alertService.success("About info updated successfully!", true);
+      },
+      onError: (error: AxiosError, _, context) => {
+        const err: APIError = error.response?.data;
+        queryClient.setQueryData("about", context?.previousAbout);
+
+        console.error("error updating about info", { err });
+        alertService.error(`Error updating About page: ${err.message}`, false);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("about");
+        window.scrollTo(0, 0);
+      },
+    }
+  );
+
+  if (aboutQuery.isLoading) {
+    return <LoadingCard />;
+  }
+
+  if (aboutQuery.isError) {
+    console.error("error getting about info", aboutQuery.error);
+    alertService.error(`Error getting about info: ${aboutQuery.error}`, false);
+  }
+
+  const about = aboutQuery.data as About;
 
   const updatePortrait = (portrait: string) => {
-    fetch("/api/v1/admin/about", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ portrait: portrait }),
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          return Promise.reject(await response.json());
-        }
-      })
-      .then(() => {
-        alertService.success("Portrait uploaded successfully!", true);
-        setAboutLength(aboutLength + 1);
-      })
-      .catch((error) => {
-        console.error("error uploading portrait", error);
-        alertService.error(`Error uploading portrait: ${error.message}`, false);
-      })
-      .finally(() => {
-        window.scrollTo(0, 0);
-      });
+    mutation.mutate({ portrait: portrait });
   };
 
   const updateStatement = (event: React.FormEvent<StatementFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const { statement, submit } = form.elements;
-    submit.disabled = true;
+    const { statement } = form.elements;
 
-    fetch("/api/v1/admin/about", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ statement: statement.value }),
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          return Promise.reject(await response.json());
-        }
-      })
-      .then(() => {
-        alertService.success("Designer statement updated!", true);
-        setAboutLength(aboutLength + 1);
-      })
-      .catch((error) => {
-        console.error("error updating designer statement", error);
-        alertService.error(`Error updating designer statement: ${error.message}`, false);
-      })
-      .finally(() => {
-        submit.disabled = false;
-        window.scrollTo(0, 0);
-      });
+    mutation.mutate({ statement: statement.value });
   };
 
   const updateResume = (resume: string) => {
-    fetch("/api/v1/admin/about", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ resume: resume }),
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          return Promise.reject(await response.json());
-        }
-      })
-      .then(() => {
-        alertService.success("Résumé uploaded successfully!", true);
-        setAboutLength(aboutLength + 1);
-      })
-      .catch((error) => {
-        console.error("error uploading résumé", error);
-        alertService.error(`Error uploading résumé: ${error.message}`, false);
-      })
-      .finally(() => {
-        window.scrollTo(0, 0);
-      });
+    mutation.mutate({ resume: resume });
   };
-
-  useEffect(() => {
-    fetch("/api/v1/about", {
-      method: "GET",
-    })
-      .then(async (response) => {
-        const resp = await response.json();
-
-        if (!response.ok) {
-          return Promise.reject(resp);
-        }
-
-        return resp;
-      })
-      .then((json) => {
-        setPortrait(json.portrait);
-        setStatement(json.statement);
-      })
-      .catch((error) => {
-        console.error("error getting about page details", error);
-        alertService.error(`Error getting page details: ${error.message}`, false);
-      });
-  }, [aboutLength]);
 
   return (
     <div className="container mx-auto">
@@ -127,9 +89,9 @@ export function About() {
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered">
           <figure className="relative">
-            {portrait && (
+            {about.portrait && (
               <img
-                src={`/images/${portrait}`}
+                src={`/images/${about.portrait}`}
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = BlankAvatar;
@@ -164,6 +126,7 @@ export function About() {
                 SubmitButtonComponent={Submit}
                 classNames={{ dropzone: "dropzone" }}
                 inputContent="Drag or click to upload portrait"
+                disabled={mutation.isLoading}
               />
             </div>
           </div>
@@ -175,10 +138,10 @@ export function About() {
               inputId="statement"
               inputName="statement"
               title="Designer Statement"
-              startingText={statement}
+              startingText={about.statement}
             />
             <div className="card-actions">
-              <button id="submit" type="submit" className="btn btn-primary">
+              <button id="submit" type="submit" className="btn btn-primary" disabled={mutation.isLoading}>
                 Update statement
               </button>
             </div>
@@ -209,6 +172,7 @@ export function About() {
                 SubmitButtonComponent={Submit}
                 classNames={{ dropzone: "dropzone" }}
                 inputContent="Drag or click to upload résumé"
+                disabled={mutation.isLoading}
               />
             </div>
           </div>
@@ -216,4 +180,4 @@ export function About() {
       </div>
     </div>
   );
-}
+};

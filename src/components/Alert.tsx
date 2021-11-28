@@ -1,14 +1,14 @@
 import { AiOutlineCheckCircle, AiOutlineCloseSquare, AiOutlineWarning } from "react-icons/ai";
 import { MdErrorOutline, MdInfoOutline } from "react-icons/md";
 
-interface Props {
+interface IAlertProps extends Object {
   type: "error" | "info" | "success" | "warning";
   message: string;
   fade: boolean;
   onClose: () => void;
 }
 
-export function Alert({ type, message, fade, onClose }: Props) {
+export const Alert: React.FC<IAlertProps> = ({ type, message, fade, onClose }) => {
   const alertClass = {
     error: "alert-error",
     warning: "alert-warning",
@@ -41,4 +41,4 @@ export function Alert({ type, message, fade, onClose }: Props) {
       </div>
     </div>
   );
-}
+};

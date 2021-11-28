@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
-import * as AiIcons from "react-icons/ai";
+import axios, { AxiosError } from "axios";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { addGalleryItem, GalleryItem, getGalleryItems } from "@Entities/GalleryItem";
-import { alertService } from "@Services/alert.service";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
+import { AiOutlineSetting } from "react-icons/ai";
+
+import { LoadingCard } from "@Components/LoadingCard";
+import { MarkdownInput } from "@Components/MarkdownInput";
 import { slideToggle } from "@Components/slider";
-import MarkdownInput from "@Components/MarkdownInput";
+import { alertService } from "@Services/alert.service";
+import { APIError, Project } from "../../declarations";
+import { ProjectsQuery } from "../../Queries";
 
 interface AddProjectElements extends HTMLFormControlsCollection {
   name: HTMLInputElement;
@@ -13,21 +19,52 @@ interface AddProjectElements extends HTMLFormControlsCollection {
   projectInfo: HTMLInputElement;
   embedURL: HTMLInputElement;
   thumbnail: HTMLInputElement;
-  submitButton: HTMLInputElement;
 }
 
 interface AddProjectFormElement extends HTMLFormElement {
   readonly elements: AddProjectElements;
 }
 
-export function AdminGallery() {
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [galleryItemsLength, setGalleryItemsLength] = useState(0);
+export const AdminGalleryView: React.FC = () => {
+  const queryClient = useQueryClient();
+  const projectsQuery = useQuery("projects", ProjectsQuery);
 
   const [selectedFile, setSelectedFile] = useState<File>();
   const [isFilePicked, setIsFilePicked] = useState(false);
 
   const [addProjectVisible, setAddProjectVisible] = useState(false);
+
+  const mutation = useMutation(
+    (data: FormData) => {
+      return axios.post("/api/v1/admin/gallery", data);
+    },
+    {
+      onSuccess: () => {
+        toggleAddProject();
+        alertService.success("Project list updated successfully!", true);
+      },
+      onError: (error: AxiosError) => {
+        const err: APIError = error.response?.data;
+        console.error("error adding or deleting project", { err });
+        alertService.error(`Error updating project list: ${err.message}`, false);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries("projects");
+        window.scrollTo(0, 0);
+      },
+    }
+  );
+
+  if (projectsQuery.isLoading) {
+    return <LoadingCard />;
+  }
+
+  if (projectsQuery.isError) {
+    console.error("error getting projects", projectsQuery.error);
+    alertService.error(`Error getting projects: ${projectsQuery.error}`, false);
+  }
+
+  const projects = projectsQuery.data as Project[];
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -48,35 +85,11 @@ export function AdminGallery() {
     }
 
     const form = event.currentTarget;
-    const { name, title, caption, projectInfo, embedURL, submitButton } = form.elements;
+    const data = new FormData(form);
+    data.append("thumbnail", selectedFile, selectedFile.name);
 
-    submitButton.disabled = true;
-    const item: GalleryItem = {
-      name: name.value,
-      title: title.value,
-      caption: caption.value,
-      projectInfo: projectInfo.value,
-      embedURL: embedURL.value,
-    };
-
-    addGalleryItem(item, selectedFile, selectedFile.name)
-      .then(() => {
-        alertService.success("Gallery project added successfully!", false);
-        setGalleryItemsLength(galleryItemsLength + 1);
-      })
-      .catch((error) => {
-        console.error("error adding new gallery project", error);
-        alertService.error(`Error adding new project: ${error.message}`, false);
-      })
-      .finally(() => {
-        toggleAddProject();
-
-        setIsFilePicked(false);
-        setSelectedFile(undefined);
-
-        form.reset();
-        submitButton.disabled = false;
-      });
+    mutation.mutate(data);
+    form.reset();
   };
 
   const toggleAddProject = () => {
@@ -95,17 +108,6 @@ export function AdminGallery() {
     setAddProjectVisible(!addProjectVisible);
   };
 
-  useEffect(() => {
-    getGalleryItems()
-      .then((items) => {
-        setGalleryItems(items);
-      })
-      .catch((error) => {
-        console.error("error getting gallery items", error);
-        alertService.error(`Error getting gallery items: ${error.message}`, false);
-      });
-  }, [galleryItemsLength]);
-
   return (
     <div className="container mx-auto">
       <h1 className="font-bold text-4xl text-center">Portfolio Gallery Settings</h1>
@@ -116,21 +118,21 @@ export function AdminGallery() {
             <h2 className="card-title">Gallery Projects</h2>
 
             <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4">
-              {galleryItems.map((galleryItem) => (
+              {projects.map((project) => (
                 <li
-                  data-src={`/images/${galleryItem.thumbnail}`}
+                  data-src={`/images/${project.thumbnail}`}
                   className="carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64"
                   style={{
-                    backgroundImage: `url("/images/${galleryItem.thumbnail}")`,
+                    backgroundImage: `url("/images/${project.thumbnail}")`,
                   }}
                 >
                   <NavLink
-                    to={`/admin/gallery/${galleryItem.name}`}
+                    to={`/admin/gallery/${project.name}`}
                     className="opacity-0 hover:opacity-70 hover:bg-black rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
                   >
                     <div className="box-border font-bold text-lg mx-auto w-max">
                       <div className="font-bold text-lg w-max">
-                        <AiIcons.AiOutlineSetting className="mx-auto w-8 h-8" />
+                        <AiOutlineSetting className="mx-auto w-8 h-8" />
                         Project Settings
                       </div>
                     </div>
@@ -215,7 +217,7 @@ export function AdminGallery() {
                 />
               </div>
               <div className="form-control mt-4">
-                <button id="submitButton" type="submit" className="btn btn-primary">
+                <button id="submitButton" type="submit" className="btn btn-primary" disabled={mutation.isLoading}>
                   Add project
                 </button>
               </div>
@@ -225,4 +227,4 @@ export function AdminGallery() {
       </div>
     </div>
   );
-}
+};

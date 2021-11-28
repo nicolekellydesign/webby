@@ -1,3 +1,5 @@
+import axios, { AxiosError, AxiosResponse } from "axios";
+
 import { alertService } from "@Services/alert.service";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -14,7 +16,7 @@ interface MessageFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-export function Contact() {
+export const ContactView: React.FC = () => {
   const onSubmit = (event: React.FormEvent<MessageFormElement>) => {
     event.preventDefault();
 
@@ -42,27 +44,16 @@ export function Contact() {
     params.append("subject", encodeURIComponent(subject));
     params.append("text", encodeURIComponent(body));
 
-    const options = {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params,
-    };
-
-    fetch("https://postmail.invotes.com/send", options)
-      .then(async (response: Response) => {
-        const isJson = response.headers.get("content-type")?.includes("application/json");
-        const data = isJson && (await response.json());
-
-        if (!response.ok) {
-          const error = (data && data.message) || response.status;
-          return Promise.reject(error);
+    axios
+      .post("https://postmail.invotes.com/send", params)
+      .then((response: AxiosResponse) => {
+        if (response.status === 200) {
+          alertService.success("Form submitted! Thank you for your message.", false);
         }
-
-        alertService.success("Form submitted! Thank you for your message.", false);
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         console.error("error sending email message", error);
-        alertService.error(`Error processing contact form submission: ${error}`, false);
+        alertService.error(`Error processing contact form submission: ${error.message}`, false);
       })
       .finally(() => {
         submit.disabled = false;
@@ -148,4 +139,4 @@ export function Contact() {
       </div>
     </div>
   );
-}
+};
