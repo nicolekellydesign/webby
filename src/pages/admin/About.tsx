@@ -10,6 +10,7 @@ import BlankAvatar from "@Icons/blank-avatar.svg";
 import { alertService } from "@Services/alert.service";
 import { About, APIError } from "../../declarations";
 import { AboutQuery } from "../../Queries";
+import { Form } from "@Components/Form";
 
 interface StatementElements extends HTMLFormControlsCollection {
   statement: HTMLInputElement;
@@ -133,19 +134,19 @@ export const AdminAboutView: React.FC = () => {
         </div>
 
         <div id="update-about-form" className="card lg:card-side bordered mt-4">
-          <form onSubmit={updateStatement} className="card-body">
+          <Form
+            disabled={mutation.isLoading}
+            onSubmit={updateStatement}
+            submitText="Update statement"
+            className="card-body"
+          >
             <MarkdownInput
               inputId="statement"
               inputName="statement"
               title="Designer Statement"
               startingText={about.statement}
             />
-            <div className="card-actions">
-              <button id="submit" type="submit" className="btn btn-primary" disabled={mutation.isLoading}>
-                Update statement
-              </button>
-            </div>
-          </form>
+          </Form>
         </div>
 
         <div className="card lg:card-side bordered mt-4">

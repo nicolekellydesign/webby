@@ -5,9 +5,11 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { AiOutlineSetting } from "react-icons/ai";
 
+import { Form } from "@Components/Form";
 import { LoadingCard } from "@Components/LoadingCard";
 import { MarkdownInput } from "@Components/MarkdownInput";
 import { slideToggle } from "@Components/slider";
+import { TextInput } from "@Components/TextInput";
 import { alertService } from "@Services/alert.service";
 import { APIError, Project } from "../../declarations";
 import { ProjectsQuery } from "../../Queries";
@@ -147,66 +149,31 @@ export const AdminGalleryView: React.FC = () => {
           <input type="checkbox" />
           <div className="collapse-title text-xl font-medium">Add new project</div>
           <div className="collapse-content">
-            <form onSubmit={onSubmit} className="text-left">
-              <div className="form-control">
-                <label htmlFor="name" className="label">
-                  <span className="label-text">Project name</span>
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  name="name"
-                  placeholder="project-name"
-                  pattern="[A-z\d\-_]+"
-                  title="Only use letters, numbers, - and _ characters."
-                  className="input input-bordered w-full"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label htmlFor="title" className="label">
-                  <span className="label-text">Title</span>
-                </label>
-                <input
-                  id="title"
-                  type="text"
-                  name="title"
-                  placeholder="Project Title"
-                  className="input input-bordered w-full"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label htmlFor="caption" className="label">
-                  <span className="label-text">Caption</span>
-                </label>
-                <input
-                  id="caption"
-                  type="text"
-                  name="caption"
-                  placeholder="Short thumbnail caption"
-                  className="input input-bordered w-full"
-                  required
-                />
-              </div>
+            <Form disabled={mutation.isLoading} onSubmit={onSubmit} submitText="Add project" className="text-left">
+              <TextInput
+                id="name"
+                name="name"
+                label="Project name"
+                pattern="[A-z\d\-_]+"
+                placeholder="project-name"
+                title="Only use letters, numbers, - and _ characters."
+                required
+              />
+              <TextInput id="title" name="title" label="Title" placeholder="Project Title" required />
+              <TextInput id="caption" name="caption" label="Caption" placeholder="Short thumbnail caption" required />
               <MarkdownInput inputId="projectInfo" inputName="projectInfo" label="Project info" />
-              <div className="form-control">
-                <label htmlFor="embedURL" className="label">
-                  <span className="label-text">Embed URL (optional)</span>
-                </label>
-                <input
-                  id="embedURL"
-                  type="text"
-                  name="embedURL"
-                  placeholder="https://youtube.com/embed/video-key"
-                  className="input input-bordered w-full"
-                />
-              </div>
+              <TextInput
+                id="embedURL"
+                name="embedURL"
+                label="Embed URL (optional)"
+                placeholder="https://youtube.com/embed/video-key"
+              />
               <div className="form-control">
                 <label htmlFor="thumbnail" className="label">
                   <span className="label-text">Project thumbnail</span>
                 </label>
                 <input
+                  id="thumbnail"
                   type="file"
                   accept="image/*"
                   name="thumbnail"
@@ -216,12 +183,7 @@ export const AdminGalleryView: React.FC = () => {
                   required
                 />
               </div>
-              <div className="form-control mt-4">
-                <button id="submitButton" type="submit" className="btn btn-primary" disabled={mutation.isLoading}>
-                  Add project
-                </button>
-              </div>
-            </form>
+            </Form>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { LoadingCard } from "@Components/LoadingCard";
+import { Modal } from "@Components/Modal";
 import { alertService } from "@Services/alert.service";
 import { User } from "../../declarations";
 import { UsersQuery } from "../../Queries";
@@ -141,32 +142,20 @@ export const AdminUsers: React.FC = () => {
                     </div>
                   ) : (
                     <div data-tip="Delete user" className="tooltip">
-                      <label htmlFor={`delete-${user.username}-modal`} className="btn btn-ghost btn-sm modal-open">
-                        <AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
-                      </label>
-                      <input type="checkbox" id={`delete-${user.username}-modal`} className="modal-toggle" />
-                      <div className="modal">
-                        <div className="modal-box">
-                          <h2 className="font-bold text-xl">Are you sure you want to delete user '{user.username}'?</h2>
-                          <br />
-                          <p>This action cannot be reversed.</p>
-
-                          <div className="modal-action">
-                            <label
-                              htmlFor={`delete-${user.username}-modal`}
-                              className="btn btn-secondary"
-                              onClick={() => {
-                                deleteUserMutation.mutate(user.id);
-                              }}
-                            >
-                              Delete
-                            </label>
-                            <label htmlFor={`delete-${user.username}-modal`} className="btn">
-                              Cancel
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+                      <Modal
+                        id={`delete-${user.username}-modal`}
+                        openIcon={<AiOutlineClose className="inline-block w-6 h-6 stroke-current" />}
+                        title={`Are you sure you want to delete user '${user.username}'?`}
+                        primaryText="Delete"
+                        secondaryText="Cancel"
+                        onConfirm={() => {
+                          deleteUserMutation.mutate(user.id);
+                        }}
+                        destructive
+                        ghost
+                      >
+                        <p>This action cannot be reversed.</p>
+                      </Modal>
                     </div>
                   )}
                 </td>
@@ -194,7 +183,7 @@ export const AdminUsers: React.FC = () => {
             required
             className="input input-bordered"
           />
-          <button id="submit" type="submit" className="btn btn-primary">
+          <button id="submit" type="submit" className="btn btn-outline btn-primary">
             Add user
           </button>
         </form>

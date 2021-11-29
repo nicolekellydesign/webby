@@ -5,6 +5,7 @@ import Dropzone from "react-dropzone-uploader";
 import "react-dropzone-uploader/dist/styles.css";
 
 import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
+import { Modal } from "@Components/Modal";
 import "@Components/ImageManager.css";
 
 interface IImageManagerProps extends Object {
@@ -67,35 +68,22 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
 
         {selected.length > 0 && (
           <div className="mt-8">
-            <label htmlFor="delete-images-modal" className="btn btn-secondary btn-outline modal-open">
-              <AiOutlineDelete className="btn-icon" />
-              Delete selected
-            </label>
-            <input type="checkbox" id="delete-images-modal" className="modal-toggle" />
-            <div className="modal">
-              <div className="modal-box">
-                <h2 className="font-bold text-xl">Are you sure you want to delete these images?</h2>
-                <br />
-                <p>Images selected: {selected.length}</p>
-                <p>This action cannot be reversed.</p>
-
-                <div className="modal-action">
-                  <label
-                    htmlFor="delete-images-modal"
-                    className="btn btn-secondary"
-                    onClick={() => {
-                      deleteImages(selected);
-                      setSelected([]);
-                    }}
-                  >
-                    Delete
-                  </label>
-                  <label htmlFor="delete-images-modal" className="btn">
-                    Cancel
-                  </label>
-                </div>
-              </div>
-            </div>
+            <Modal
+              id="delete-images-modal"
+              openIcon={<AiOutlineDelete className="btn-icon" />}
+              openText="Delete selected"
+              title="Are you sure you want to delete these images?"
+              primaryText="Delete"
+              secondaryText="Cancel"
+              onConfirm={() => {
+                deleteImages(selected);
+                setSelected([]);
+              }}
+              destructive
+            >
+              <p>Images selected: {selected.length}</p>
+              <p>This action cannot be reversed.</p>
+            </Modal>
           </div>
         )}
 

@@ -1,5 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
+import { Form } from "@Components/Form";
+import { TextArea } from "@Components/TextArea";
+import { TextInput } from "@Components/TextInput";
 import { alertService } from "@Services/alert.service";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -65,76 +68,29 @@ export const ContactView: React.FC = () => {
     <div className="container mx-auto">
       <div className="max-w-max mx-auto my-8">
         <div className="card lg:card-side bordered">
-          <form id="form" onSubmit={onSubmit} className="card-body">
-            <h2 className="card-title">Contact Form</h2>
-
+          <Form
+            id="form"
+            header="Contact Form"
+            onSubmit={onSubmit}
+            hasReset
+            resetText="Clear form"
+            submitText="Send message"
+            className="card-body"
+          >
             <div className="form-control lg:flex-row">
-              <div className="form-control">
-                <label htmlFor="firstname" className="label">
-                  <span className="label-text">First Name</span>
-                </label>
-                <input
-                  id="firstname"
-                  type="text"
-                  name="firstname"
-                  placeholder="John"
-                  required
-                  className="input input-bordered"
-                />
-              </div>
-              <div className="form-control">
-                <label htmlFor="lastname" className="label">
-                  <span className="label-text">Last Name</span>
-                </label>
-                <input
-                  id="lastname"
-                  type="text"
-                  name="lastname"
-                  placeholder="Doe"
-                  required
-                  className="input input-bordered"
-                />
-              </div>
+              <TextInput id="firstname" name="firstname" label="First Name" placeholder="John" required />
+              <TextInput id="lastname" name="lastname" label="Last Name" placeholder="Doe" required />
             </div>
 
-            <div className="form-control">
-              <label htmlFor="email" className="label">
-                <span className="label-text">Email Address</span>
-              </label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="you@example.com"
-                required
-                className="input input-bordered"
-              />
-            </div>
-
-            <div className="form-control">
-              <label htmlFor="message" className="label">
-                <span className="label-text">Message</span>
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                placeholder="Write your message for me here"
-                required
-                className="textarea textarea-bordered h-64"
-              />
-            </div>
-
-            <div className="card-actions">
-              <div className="input-group">
-                <button type="reset" className="btn btn-outline">
-                  Clear form
-                </button>
-                <button id="submit" type="submit" className="btn btn-outline btn-primary">
-                  Send message
-                </button>
-              </div>
-            </div>
-          </form>
+            <TextInput id="email" name="email" label="Email Address" placeholder="you@example.com" required />
+            <TextArea
+              id="message"
+              name="message"
+              label="Message"
+              placeholder="Write your message for me here"
+              required
+            />
+          </Form>
         </div>
       </div>
     </div>

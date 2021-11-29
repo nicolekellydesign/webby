@@ -7,9 +7,12 @@ import * as AiIcons from "react-icons/ai";
 import Dropzone from "react-dropzone-uploader";
 
 import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
+import { Form } from "@Components/Form";
 import { ImageManager } from "@Components/ImageManager";
 import { LoadingCard } from "@Components/LoadingCard";
 import { MarkdownInput } from "@Components/MarkdownInput";
+import { Modal } from "@Components/Modal";
+import { TextInput } from "@Components/TextInput";
 import { NotFound } from "@Pages/NotFound";
 import { alertService } from "@Services/alert.service";
 import { APIError, Project } from "../../declarations";
@@ -229,61 +232,43 @@ export const ProjectSettings: React.FC = () => {
           {detailsMutation.isLoading ? (
             <LoadingCard />
           ) : (
-            <form onSubmit={onSubmit} className="card-body">
-              <h2 className="card-title">Project Details</h2>
-
-              <div className="form-control">
-                <label htmlFor="title" className="label">
-                  <span className="label-text">Title</span>
-                </label>
-                <input
-                  id="title"
-                  type="text"
-                  name="title"
-                  placeholder="Project Title"
-                  defaultValue={project.title}
-                  className="input input-bordered"
-                  required
-                />
-              </div>
-              <div className="form-control">
-                <label htmlFor="caption" className="label">
-                  <span className="label-text">Caption</span>
-                </label>
-                <input
-                  id="caption"
-                  type="text"
-                  name="caption"
-                  placeholder="Short thumbnail caption"
-                  defaultValue={project.caption}
-                  className="input input-bordered"
-                  required
-                />
-              </div>
+            <Form
+              disabled={detailsMutation.isLoading}
+              header="Project Details"
+              onSubmit={onSubmit}
+              submitText="Update project"
+              className="card-body"
+            >
+              <TextInput
+                id="title"
+                name="title"
+                label="Title"
+                placeholder="Project Title"
+                defaultValue={project.title}
+                required
+              />
+              <TextInput
+                id="caption"
+                name="caption"
+                label="Caption"
+                placeholder="Short thumbnail caption"
+                defaultValue={project.caption}
+                required
+              />
               <MarkdownInput
                 inputId="projectInfo"
                 inputName="projectInfo"
                 label="Project info"
                 startingText={project.projectInfo}
               />
-              <div className="form-control">
-                <label htmlFor="embedURL" className="label">
-                  <span className="label-text">Embed URL (optional)</span>
-                </label>
-                <input
-                  id="embedURL"
-                  type="text"
-                  name="embedURL"
-                  defaultValue={project.embedURL}
-                  className="input input-bordered"
-                />
-              </div>
-              <div className="card-actions">
-                <button id="submit" type="submit" className="btn btn-primary" disabled={detailsMutation.isLoading}>
-                  Update project
-                </button>
-              </div>
-            </form>
+              <TextInput
+                id="embedURL"
+                name="embedURL"
+                label="embedURL"
+                placeholder="Embed URL (optional)"
+                defaultValue={project.embedURL}
+              />
+            </Form>
           )}
         </div>
 
@@ -298,31 +283,20 @@ export const ProjectSettings: React.FC = () => {
           />
         )}
 
-        <label htmlFor="delete-project-modal" className="btn btn-secondary btn-outline modal-open mt-8">
-          <AiIcons.AiOutlineDelete className="btn-icon" />
-          Delete project
-        </label>
-        <input type="checkbox" id="delete-project-modal" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box">
-            <h2 className="font-bold text-xl">Are you sure you want to delete this project?</h2>
-            <br />
-            <p>This action cannot be reversed.</p>
-
-            <div className="modal-action">
-              <label
-                htmlFor="delete-project-modal"
-                className="btn btn-secondary"
-                onClick={() => deleteProjectMutation.mutate()}
-              >
-                Delete
-              </label>
-              <label htmlFor="delete-project-modal" className="btn">
-                Cancel
-              </label>
-            </div>
-          </div>
-        </div>
+        <Modal
+          id="delete-project-modal"
+          openIcon={<AiIcons.AiOutlineDelete className="btn-icon" />}
+          openText="Delete project"
+          title="Are you sure you want to delete this project?"
+          primaryText="Delete"
+          secondaryText="Cancel"
+          onConfirm={() => {
+            deleteProjectMutation.mutate();
+          }}
+          destructive
+        >
+          <p>This action cannot be reversed.</p>
+        </Modal>
       </div>
     </div>
   );

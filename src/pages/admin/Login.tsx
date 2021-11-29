@@ -88,7 +88,7 @@ export const AdminLogin: React.FC = () => {
                 </label>
               </div>
               <div className="card-actions">
-                <button id="submit" type="submit" className="btn btn-primary m-0 w-full">
+                <button id="submit" type="submit" className="btn btn-outline btn-primary m-0 w-full">
                   Log In
                 </button>
               </div>
