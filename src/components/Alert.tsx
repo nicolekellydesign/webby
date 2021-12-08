@@ -1,3 +1,4 @@
+import React from "react";
 import { AiOutlineCheckCircle, AiOutlineCloseSquare, AiOutlineWarning } from "react-icons/ai";
 import { MdErrorOutline, MdInfoOutline } from "react-icons/md";
 

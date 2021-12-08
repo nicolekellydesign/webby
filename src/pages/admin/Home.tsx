@@ -1,3 +1,5 @@
+import React from "react";
+
 export const AdminHome: React.FC = () => {
   return (
     <div className="container text-center mx-auto">

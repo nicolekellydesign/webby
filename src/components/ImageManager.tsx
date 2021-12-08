@@ -1,10 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { AiOutlineCheck, AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
 
-import Dropzone from "react-dropzone-uploader";
-import "react-dropzone-uploader/dist/styles.css";
-
-import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
+import { Dropzone } from "@Components/Dropzone";
 import { Modal } from "@Components/Modal";
 import "@Components/ImageManager.css";
 
@@ -23,8 +20,9 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
       <div className="card-body">
         <h2 className="card-title">{title}</h2>
         <ul className="webby-carousel">
-          {images?.map((image) => (
+          {images?.map((image, idx) => (
             <li
+              key={idx}
               className="webby-carousel-item"
               data-src={`/images/${image}`}
               style={{
@@ -89,22 +87,11 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
 
         <div className="mt-8">
           <Dropzone
-            getUploadParams={() => {
-              return { method: "POST", url: "/api/v1/admin/upload" };
-            }}
-            onChangeStatus={({ meta, file }, status) => {
-              console.log(status, meta, file);
-            }}
             onSubmit={(files) => {
-              uploadFunc(files.flatMap((file) => file.meta.name));
+              uploadFunc(files.flatMap((file) => file.name));
             }}
             accept="image/*"
-            maxSizeBytes={8 * 1024 * 1024}
-            LayoutComponent={Layout}
-            PreviewComponent={Preview}
-            InputComponent={Input}
-            SubmitButtonComponent={Submit}
-            classNames={{ dropzone: "dropzone dropzone-lg" }}
+            maxSize={8 * 1024 * 1024}
           />
         </div>
       </div>

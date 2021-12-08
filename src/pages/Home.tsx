@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "react-query";
 
@@ -30,8 +31,8 @@ export const Home: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap">
-          {projects.map((project) => (
-            <div className="w-full xl:w-1/2 p-4">
+          {projects.map((project, idx) => (
+            <div key={idx} className="w-full xl:w-1/2 p-4">
               <div
                 className="bg-cover bg-center bg-no-repeat"
                 data-src={`/images/${project.thumbnail}`}

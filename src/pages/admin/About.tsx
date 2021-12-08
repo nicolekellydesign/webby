@@ -1,9 +1,7 @@
 import axios, { AxiosError } from "axios";
+import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-import Dropzone from "react-dropzone-uploader";
-
-import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
 import { LoadingCard } from "@Components/LoadingCard";
 import { MarkdownInput } from "@Components/MarkdownInput";
 import BlankAvatar from "@Icons/blank-avatar.svg";
@@ -11,6 +9,7 @@ import { alertService } from "@Services/alert.service";
 import { About, APIError } from "../../declarations";
 import { AboutQuery } from "../../Queries";
 import { Form } from "@Components/Form";
+import { Dropzone } from "@Components/Dropzone";
 
 interface StatementElements extends HTMLFormControlsCollection {
   statement: HTMLInputElement;
@@ -109,24 +108,12 @@ export const AdminAboutView: React.FC = () => {
 
             <div className="card-actions">
               <Dropzone
-                getUploadParams={() => {
-                  return { method: "POST", url: "/api/v1/admin/upload" };
-                }}
-                onChangeStatus={({ meta, file }, status) => {
-                  console.log(status, meta, file);
-                }}
                 onSubmit={(files) => {
-                  updatePortrait(files[0].meta.name);
+                  updatePortrait(files[0].name);
                 }}
                 accept="image/*"
-                maxSizeBytes={8 * 1024 * 1024}
+                maxSize={8 * 1024 * 1024}
                 multiple={false}
-                LayoutComponent={Layout}
-                PreviewComponent={Preview}
-                InputComponent={Input}
-                SubmitButtonComponent={Submit}
-                classNames={{ dropzone: "dropzone" }}
-                inputContent="Drag or click to upload portrait"
                 disabled={mutation.isLoading}
               />
             </div>
@@ -155,24 +142,12 @@ export const AdminAboutView: React.FC = () => {
 
             <div className="card-actions">
               <Dropzone
-                getUploadParams={() => {
-                  return { method: "POST", url: "/api/v1/admin/upload" };
-                }}
-                onChangeStatus={({ meta, file }, status) => {
-                  console.log(status, meta, file);
-                }}
                 onSubmit={(files) => {
-                  updateResume(files[0].meta.name);
+                  updateResume(files[0].name);
                 }}
                 accept="application/pdf"
-                maxSizeBytes={8 * 1024 * 1024}
                 multiple={false}
-                LayoutComponent={Layout}
-                PreviewComponent={Preview}
-                InputComponent={Input}
-                SubmitButtonComponent={Submit}
-                classNames={{ dropzone: "dropzone" }}
-                inputContent="Drag or click to upload résumé"
+                maxSize={8 * 1024 * 1024}
                 disabled={mutation.isLoading}
               />
             </div>

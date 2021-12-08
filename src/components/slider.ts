@@ -61,7 +61,7 @@ export function slideDown(target: HTMLElement, duration: number) {
   }, 10);
 }
 
-export function slideToggle(target: HTMLElement, visible: boolean, duration: number = 500) {
+export function slideToggle(target: HTMLElement, visible: boolean, duration = 500) {
   if (visible) {
     slideUp(target, duration);
   } else {

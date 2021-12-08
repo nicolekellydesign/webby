@@ -1,3 +1,5 @@
+import React from "react";
+
 export const LoadingCard: React.FC = () => {
   return (
     <div

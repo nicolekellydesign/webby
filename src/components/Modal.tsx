@@ -1,3 +1,5 @@
+import React from "react";
+
 interface IModalProps extends Object {
   id: string;
   destructive?: boolean;

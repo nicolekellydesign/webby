@@ -1,3 +1,4 @@
+import React from "react";
 import { useQuery } from "react-query";
 
 import { LoadingCard } from "@Components/LoadingCard";
@@ -24,8 +25,8 @@ export const PhotographyView: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-3 md:gap-1">
       {console.info(typeof photos)}
       {photos &&
-        photos.map((photo) => (
-          <div>
+        photos.map((photo, idx) => (
+          <div key={idx}>
             <img src={`/images/${photo}`} alt={photo} className="w-full h-auto" />
           </div>
         ))}

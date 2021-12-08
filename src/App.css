@@ -4,11 +4,15 @@
   }
 
   .dropzone {
-    @apply flex flex-col min-h-36 relative transition rounded-box;
+    @apply btn btn-outline flex flex-1 flex-col p-6 border-2 rounded-lg outline-none transition-all text-2xl;
   }
 
-  .dropzone .dropzone-lg {
-    @apply w-6xl;
+  .dropzone:disabled {
+    @apply btn-disabled;
+  }
+
+  .dropzone.dropzone-dragging:not(:disabled) {
+    @apply border-dashed;
   }
 
   .icon-sm {

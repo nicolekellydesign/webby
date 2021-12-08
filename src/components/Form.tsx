@@ -1,3 +1,5 @@
+import React from "react";
+
 interface IFormProps extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {
   disabled?: boolean;
   hasReset?: boolean;

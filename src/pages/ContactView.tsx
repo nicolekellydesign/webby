@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import React from "react";
 
 import { Form } from "@Components/Form";
 import { TextArea } from "@Components/TextArea";
@@ -24,7 +25,7 @@ export const ContactView: React.FC = () => {
     event.preventDefault();
 
     // Make sure we have a token to use
-    const token = process.env.REACT_APP_EMAIL_TOKEN;
+    const token = import.meta.env.VITE_EMAIL_TOKEN;
     if (!token || token === "") {
       alertService.error("No email token set! Please contact a website administrator.", false);
       return;

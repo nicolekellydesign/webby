@@ -1,3 +1,4 @@
+import React from "react";
 import { Link, Route, RouteComponentProps, useHistory, withRouter } from "react-router-dom";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
@@ -22,7 +23,7 @@ interface RouterProps {
   path: string;
 }
 
-interface RouterDetailProps extends RouteComponentProps<RouterProps> {}
+type RouterDetailProps = RouteComponentProps<RouterProps>
 
 const Admin: React.FC<RouterDetailProps> = () => {
   const { authed, logout } = useAuth();

@@ -1,3 +1,5 @@
+import React from "react";
+
 interface ITextInputProps extends Object {
   defaultValue?: string;
   id?: string;

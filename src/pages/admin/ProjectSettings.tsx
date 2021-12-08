@@ -1,12 +1,9 @@
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Redirect, useParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import * as AiIcons from "react-icons/ai";
 
-import Dropzone from "react-dropzone-uploader";
-
-import { Input, Layout, Preview, Submit } from "@Components/dropzone/DropzoneOverrides";
 import { Form } from "@Components/Form";
 import { ImageManager } from "@Components/ImageManager";
 import { LoadingCard } from "@Components/LoadingCard";
@@ -17,6 +14,7 @@ import { NotFound } from "@Pages/NotFound";
 import { alertService } from "@Services/alert.service";
 import { APIError, Project } from "../../declarations";
 import { ProjectQuery } from "../../Queries";
+import { Dropzone } from "@Components/Dropzone";
 
 interface ParamTypes {
   name: string;
@@ -204,24 +202,12 @@ export const ProjectSettings: React.FC = () => {
 
             <div className="card-actions">
               <Dropzone
-                getUploadParams={() => {
-                  return { method: "POST", url: "/api/v1/admin/upload" };
-                }}
-                onChangeStatus={({ meta, file }, status) => {
-                  console.log(status, meta, file);
-                }}
                 onSubmit={(files) => {
-                  thumbMutation.mutate(files[0].meta.name);
+                  thumbMutation.mutate(files[0].name);
                 }}
                 accept="image/*"
-                maxSizeBytes={8 * 1024 * 1024}
+                maxSize={8 * 1024 * 1024}
                 multiple={false}
-                LayoutComponent={Layout}
-                PreviewComponent={Preview}
-                InputComponent={Input}
-                SubmitButtonComponent={Submit}
-                classNames={{ dropzone: "dropzone" }}
-                inputContent="Drag or click to change thumbnail"
                 disabled={thumbMutation.isLoading}
               />
             </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router";
 import { useQuery } from "react-query";
@@ -78,8 +78,8 @@ export const ProjectView: React.FC = () => {
               </div>
             </div>
           )}
-          {project.images?.map((image) => (
-            <div className="box-border px-2 w-full">
+          {project.images?.map((image, idx) => (
+            <div key={idx} className="box-border px-2 w-full">
               <img alt="" data-src={`/images/${image}`} src={`/images/${image}`} className="block mb-5 w-full" />
             </div>
           ))}

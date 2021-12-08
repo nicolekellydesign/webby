@@ -11,13 +11,13 @@ Webby is built using TypeScript and React with [TailwindCSS](https://tailwindcss
 To build Webby, you need NodeJS 16 and Yarn.
 
 The app needs an environment variable while building to enable the email feature to function:
-`REACT_APP_EMAIL_TOKEN`.
+`VITE_EMAIL_TOKEN`.
 
 First, run `yarn install` to download the project's dependencies.
 
 Then, run `yarn build` to build the webapp.
 One way to pass the needed environment variable to Yarn is like this:
-`REACT_APP_EMAIL_TOKEN=<token> yarn build`
+`VITE_EMAIL_TOKEN=<token> yarn build`
 
 Once that completes, the webapp is ready to deploy in the `build/` folder.
 

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
@@ -120,8 +120,9 @@ export const AdminGalleryView: React.FC = () => {
             <h2 className="card-title">Gallery Projects</h2>
 
             <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4">
-              {projects.map((project) => (
+              {projects.map((project, idx) => (
                 <li
+                  key={idx}
                   data-src={`/images/${project.thumbnail}`}
                   className="carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64"
                   style={{
