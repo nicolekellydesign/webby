@@ -23,7 +23,7 @@ interface RouterProps {
   path: string;
 }
 
-type RouterDetailProps = RouteComponentProps<RouterProps>
+type RouterDetailProps = RouteComponentProps<RouterProps>;
 
 const Admin: React.FC<RouterDetailProps> = () => {
   const { authed, logout } = useAuth();
@@ -39,6 +39,8 @@ const Admin: React.FC<RouterDetailProps> = () => {
       alertService.error(`Error trying to log out: ${err.message}`, false);
     },
   });
+
+  console.log(authed);
 
   return (
     <div>
