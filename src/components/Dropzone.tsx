@@ -77,6 +77,8 @@ export const Dropzone: React.FC<IDropzoneProps> = ({ onSubmit: onUpload, disable
   // Called when files are added to the uploader
   const onDropAccepted = useCallback(
     (acceptedFiles: FileWithPath[]) => {
+      const p: IPreviewProps[] = [];
+
       acceptedFiles.forEach((file) => {
         const preview: IPreviewProps = {
           file: file,
@@ -87,8 +89,11 @@ export const Dropzone: React.FC<IDropzoneProps> = ({ onSubmit: onUpload, disable
             setPreviews(previews.filter((p) => p !== preview));
           },
         };
-        setPreviews((previews) => previews.concat(preview));
+
+        p.push(preview);
       });
+
+      setPreviews(p);
     },
     [files, previews]
   );
@@ -156,7 +161,7 @@ export const Dropzone: React.FC<IDropzoneProps> = ({ onSubmit: onUpload, disable
       disabled = true;
     }
 
-    if (maxFiles && maxFiles >= 0 && previews.length >= maxFiles) {
+    if (maxFiles !== undefined && maxFiles >= 0 && previews.length >= maxFiles) {
       disabled = true;
     }
   }

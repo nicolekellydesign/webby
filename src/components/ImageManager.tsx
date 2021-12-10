@@ -92,6 +92,7 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
             }}
             accept="image/*"
             maxSize={8 * 1024 * 1024}
+            multiple
           />
         </div>
       </div>
