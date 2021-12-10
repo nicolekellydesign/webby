@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useQuery } from "react-query";
 
 import { LoadingCard } from "@Components/LoadingCard";
+import { SmoothImage } from "@Components/SmoothImage";
 import { alertService } from "@Services/alert.service";
 import { Project } from "../declarations";
 import { ProjectsQuery } from "../Queries";
@@ -33,23 +34,18 @@ export const Home: React.FC = () => {
         <div className="flex flex-wrap">
           {projects.map((project, idx) => (
             <div key={idx} className="w-full xl:w-1/2 p-4">
-              <div
-                className="bg-cover bg-center bg-no-repeat"
-                data-src={`/images/${project.thumbnail}`}
-                style={{
-                  backgroundImage: `url("/images/${project.thumbnail}")`,
-                }}
-              >
+              <SmoothImage src={`/images/${project.thumbnail}`} alt={project.title}>
                 <NavLink
                   to={`/project/${project.name}`}
-                  className="opacity-0 hover:opacity-70 hover:bg-black block relative overflow-hidden pb-2/3 transition"
+                  className="opacity-0 hover:opacity-70 hover:bg-black block absolute overflow-hidden w-full h-full transition"
+                  style={{ transform: "translateY(-100%)" }}
                 >
-                  <div className="absolute box-border max-w-xs h-full p-5">
+                  <div className="box-border max-w-xs h-full p-5">
                     <h2 className="text-white mb-0 font-bold text-2xl">{project.title}</h2>
                     <p className="text-white text-xl">{project.caption}</p>
                   </div>
                 </NavLink>
-              </div>
+              </SmoothImage>
             </div>
           ))}
         </div>

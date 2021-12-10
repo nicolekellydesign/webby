@@ -40,8 +40,6 @@ const Admin: React.FC<RouterDetailProps> = () => {
     },
   });
 
-  console.log(authed);
-
   return (
     <div>
       <section className="absolute pl-4">

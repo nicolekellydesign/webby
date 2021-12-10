@@ -8,8 +8,9 @@ import remarkGfm from "remark-gfm";
 import { LoadingCard } from "@Components/LoadingCard";
 import { slideToggle } from "@Components/slider";
 import { SlideToggle } from "@Components/SlideToggle";
-import { alertService } from "@Services/alert.service";
+import { SmoothImage } from "@Components/SmoothImage";
 import { NotFound } from "@Pages/NotFound";
+import { alertService } from "@Services/alert.service";
 import { Project } from "../declarations";
 import { ProjectQuery } from "../Queries";
 
@@ -79,8 +80,8 @@ export const ProjectView: React.FC = () => {
             </div>
           )}
           {project.images?.map((image, idx) => (
-            <div key={idx} className="box-border px-2 w-full">
-              <img alt="" data-src={`/images/${image}`} src={`/images/${image}`} className="block mb-5 w-full" />
+            <div key={idx} className="mb-5">
+              <SmoothImage alt={image} src={`/images/${image}`} />
             </div>
           ))}
         </div>
