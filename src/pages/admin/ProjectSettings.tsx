@@ -250,8 +250,8 @@ export const ProjectSettings: React.FC = () => {
               <TextInput
                 id="embedURL"
                 name="embedURL"
-                label="embedURL"
-                placeholder="Embed URL (optional)"
+                label="Embed URL (optional)"
+                placeholder="https://youtube.com/embed/video-key"
                 defaultValue={project.embedURL}
               />
             </Form>
