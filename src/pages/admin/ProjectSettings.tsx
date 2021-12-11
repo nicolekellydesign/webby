@@ -269,20 +269,22 @@ export const ProjectSettings: React.FC = () => {
           />
         )}
 
-        <Modal
-          id="delete-project-modal"
-          openIcon={<AiIcons.AiOutlineDelete className="btn-icon" />}
-          openText="Delete project"
-          title="Are you sure you want to delete this project?"
-          primaryText="Delete"
-          secondaryText="Cancel"
-          onConfirm={() => {
-            deleteProjectMutation.mutate();
-          }}
-          destructive
-        >
-          <p>This action cannot be reversed.</p>
-        </Modal>
+        <div className="mt-8">
+          <Modal
+            id="delete-project-modal"
+            openIcon={<AiIcons.AiOutlineDelete className="btn-icon" />}
+            openText="Delete project"
+            title="Are you sure you want to delete this project?"
+            primaryText="Delete"
+            secondaryText="Cancel"
+            onConfirm={() => {
+              deleteProjectMutation.mutate();
+            }}
+            destructive
+          >
+            <p>This action cannot be reversed.</p>
+          </Modal>
+        </div>
       </div>
     </div>
   );
