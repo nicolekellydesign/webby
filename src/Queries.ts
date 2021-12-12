@@ -22,6 +22,11 @@ export async function ProjectsQuery() {
   return projects.data;
 }
 
+export async function SessionQuery() {
+  const check = await axios.get("/api/v1/check");
+  return check.data;
+}
+
 export async function UsersQuery() {
   const users = await axios.get("/api/v1/admin/users");
   return users.data;

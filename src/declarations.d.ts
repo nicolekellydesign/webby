@@ -28,6 +28,10 @@ export interface Login extends Object {
   remember: boolean;
 }
 
+export interface Session extends Object {
+  valid: boolean;
+}
+
 export interface User extends Object {
   id: number;
   username: string;
