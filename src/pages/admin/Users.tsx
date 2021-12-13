@@ -110,6 +110,7 @@ export const AdminUsers: React.FC = () => {
               <th>Username</th>
               <th>Created At</th>
               <th>Last Login</th>
+              <th>Sessions</th>
               <th></th>
             </tr>
           </thead>
@@ -134,6 +135,7 @@ export const AdminUsers: React.FC = () => {
                 ) : (
                   <td className="text-base-300">n/a</td>
                 )}
+                <td>{user.sessions}</td>
                 <td className="text-center">
                   {user.protected ? (
                     <div data-tip="User is protected" className="tooltip">

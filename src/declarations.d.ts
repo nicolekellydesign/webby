@@ -38,4 +38,5 @@ export interface User extends Object {
   protected: boolean;
   createdAt: Date;
   lastLogin?: Date;
+  sessions: number;
 }
