@@ -1,8 +1,26 @@
-import { alertService } from "@Services/alert.service";
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import React, { useCallback, useEffect, useState } from "react";
+import { AiOutlineFile, AiOutlineUpload } from "react-icons/ai";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
+
+import {
+  Box,
+  Button,
+  CloseButton,
+  Container,
+  Flex,
+  Heading,
+  Icon,
+  Image,
+  ListItem,
+  Progress,
+  Text,
+  Tooltip,
+  UnorderedList,
+} from "@chakra-ui/react";
+
 import { DropzoneProps, FileRejection, FileWithPath, useDropzone } from "react-dropzone";
-import { AiOutlineClose, AiOutlineFile, AiOutlineUpload } from "react-icons/ai";
+
+import { alertService } from "@Services/alert.service";
 
 interface IDropzoneProps extends DropzoneProps {
   onSubmit: (files: FileWithPath[]) => void;
@@ -18,36 +36,40 @@ interface IPreviewProps extends Object {
 
 const Preview: React.FC<IPreviewProps> = ({ file: { name }, percentage = 0, preview, state, remove }) => {
   const barColor = {
-    errored: "progress-errror",
-    finished: "progress-success",
-    starting: "progress-info",
-    uploading: "progress-info",
+    errored: "red",
+    finished: "green",
+    starting: "blue",
+    uploading: "blue",
   };
 
   return (
-    <li className="flex flex-row relative py-4 w-full">
+    <ListItem display="flex" flexDirection="row" position="relative" paddingY="1rem" width="100%">
       {state === "finished" && preview ? (
-        <img className="w-24 h-24" src={`/images/${preview}`} />
+        <Image
+          width="6rem"
+          height="6rem"
+          alt={preview}
+          src={`/images/${preview}`}
+          fallback={<Icon as={AiOutlineFile} w="6rem" h="6rem" />}
+        />
       ) : (
-        <AiOutlineFile className="w-24 h-24 stroke-current" />
+        <Icon as={AiOutlineFile} w="6rem" h="6rem" />
       )}
 
-      <div className="flex items-center">
-        <div className="flex flex-col mx-4 w-96">
-          <div className="font-bold">{name}</div>
-          <div className="font-bold">{percentage}%</div>
-          <progress className={`progress ${barColor[state]}`} max={100} value={percentage} />
-        </div>
+      <Flex align="center">
+        <Flex direction="column" marginX="1rem" width="16rem">
+          <Text fontWeight="bold">{name}</Text>
+          <Text fontWeight="bold">{percentage}</Text>
+          <Progress hasStripe value={percentage} colorScheme={barColor[state]} />
+        </Flex>
 
         {state === "finished" && (
-          <div data-tip="Remove file" className="tooltip">
-            <button className="btn btn-sm btn-ghost" onClick={remove}>
-              <AiOutlineClose className="icon-sm" />
-            </button>
-          </div>
+          <Tooltip label="Remove file">
+            <CloseButton aria-label="Remove file" size="md" onClick={remove} />
+          </Tooltip>
         )}
-      </div>
-    </li>
+      </Flex>
+    </ListItem>
   );
 };
 
@@ -178,33 +200,42 @@ export const Dropzone: React.FC<IDropzoneProps> = ({ onSubmit: onUpload, disable
   const dropzoneClasses = isDragActive ? "dropzone dropzone-dragging" : "dropzone";
 
   return (
-    <section className="container flex flex-col">
-      <button {...getRootProps({ className: dropzoneClasses, disabled: disabled })}>
-        <input {...getInputProps({ disabled: disabled })} />
-        {isDragActive ? <p>Drop files here</p> : <p>Drag files here or click to select</p>}
-      </button>
+    <Container>
+      <Flex direction="column">
+        <Button {...getRootProps({ className: dropzoneClasses, disabled: disabled })} variant="outline">
+          <input {...getInputProps({ disabled: disabled })} />
+          <Text fontSize="1.5rem" lineHeight="2rem">
+            {isDragActive ? "Drop files here" : "Drag files here or click to select"}
+          </Text>
+        </Button>
 
-      {previews.length > 0 && (
-        <aside>
-          <h4 className="py-4 text-lg">File Uploads</h4>
-          <ul className="flex flex-wrap gap-4">
-            {previews.map((preview, idx) => (
-              <Preview key={idx} {...preview} />
-            ))}
-          </ul>
+        {previews.length > 0 && (
+          <Box marginTop="1rem">
+            <Heading as="h4" fontSize="lg">
+              File Uploads
+            </Heading>
+            <UnorderedList display="flex" flexWrap="wrap" gap="1rem">
+              {previews.map((preview, idx) => (
+                <Preview key={idx} {...preview} />
+              ))}
+            </UnorderedList>
 
-          <button
-            onClick={() => {
-              onUpload(files);
-            }}
-            className="btn btn-outline btn-primary mt-4"
-            disabled={!allFinished}
-          >
-            <AiOutlineUpload className="btn-icon" />
-            Finish upload
-          </button>
-        </aside>
-      )}
-    </section>
+            <Button
+              leftIcon={<Icon as={AiOutlineUpload} />}
+              variant="outline"
+              marginTop="1rem"
+              isLoading={!allFinished}
+              onClick={() => {
+                onUpload(files);
+                setFiles([]);
+                setPreviews([]);
+              }}
+            >
+              Finish upload
+            </Button>
+          </Box>
+        )}
+      </Flex>
+    </Container>
   );
 };

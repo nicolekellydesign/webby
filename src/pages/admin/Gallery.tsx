@@ -3,13 +3,30 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-import { AiOutlineSetting } from "react-icons/ai";
+import {
+  Box,
+  Button,
+  Collapse,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Link,
+  List,
+  ListItem,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
+import { AddIcon, SettingsIcon } from "@chakra-ui/icons";
 
+import { Card, CardBody } from "@Components/Card";
 import { Form } from "@Components/Form";
 import { LoadingCard } from "@Components/LoadingCard";
 import { MarkdownInput } from "@Components/MarkdownInput";
-import { slideToggle } from "@Components/slider";
-import { TextInput } from "@Components/TextInput";
 import { alertService } from "@Services/alert.service";
 import { APIError, Project } from "../../declarations";
 import { ProjectsQuery } from "../../Queries";
@@ -34,7 +51,7 @@ export const AdminGalleryView: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [isFilePicked, setIsFilePicked] = useState(false);
 
-  const [addProjectVisible, setAddProjectVisible] = useState(false);
+  const { isOpen, onToggle } = useDisclosure();
 
   const mutation = useMutation(
     (data: FormData) => {
@@ -42,7 +59,7 @@ export const AdminGalleryView: React.FC = () => {
     },
     {
       onSuccess: () => {
-        toggleAddProject();
+        onToggle();
         alertService.success("Project list updated successfully!", true);
       },
       onError: (error: AxiosError) => {
@@ -94,100 +111,127 @@ export const AdminGalleryView: React.FC = () => {
     form.reset();
   };
 
-  const toggleAddProject = () => {
-    const toggle = document.getElementById("slide-toggle");
-    if (!toggle) {
-      return;
-    }
-
-    const form = document.getElementById("add-project-form");
-    if (!form) {
-      return;
-    }
-
-    toggle.classList.toggle("active");
-    slideToggle(form, addProjectVisible, 150);
-    setAddProjectVisible(!addProjectVisible);
-  };
-
   return (
-    <div className="container mx-auto">
-      <h1 className="font-bold text-4xl text-center">Portfolio Gallery Settings</h1>
+    <Container>
+      <Heading as="h1" fontSize="4xl" fontWeight="bold" textAlign="center">
+        Portfolio Gallery Settings
+      </Heading>
 
-      <div className="max-w-max mx-auto my-8">
-        <div className="card lg:card-side bordered w-7xl">
-          <div className="card-body">
-            <h2 className="card-title">Gallery Projects</h2>
+      <VStack marginY="2rem" spacing="1rem">
+        <Card>
+          <CardBody>
+            <Heading as="h2" size="md" marginBottom={4}>
+              Gallery Projects
+            </Heading>
 
-            <ul className="max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4">
+            <List
+              display="flex"
+              borderRadius="1rem"
+              maxWidth="72rem"
+              maxHeight="20rem"
+              gap="1rem"
+              padding="1rem"
+              className="image-scroller"
+            >
               {projects.map((project, idx) => (
-                <li
+                <ListItem
                   key={idx}
-                  data-src={`/images/${project.thumbnail}`}
-                  className="carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64"
-                  style={{
-                    backgroundImage: `url("/images/${project.thumbnail}")`,
-                  }}
+                  boxSizing="content-box"
+                  display="flex"
+                  flex="none"
+                  borderRadius="1rem"
+                  backgroundImage={`url("/images/${project.thumbnail}")`}
+                  backgroundSize="cover"
+                  backgroundPosition="center"
+                  backgroundRepeat="no-repeat"
+                  cursor="pointer"
+                  justifyContent="center"
+                  width="12rem"
+                  height="12rem"
                 >
-                  <NavLink
+                  <Link
+                    as={NavLink}
                     to={`/admin/gallery/${project.name}`}
-                    className="opacity-0 hover:opacity-70 hover:bg-black rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition"
+                    borderRadius="1rem"
+                    position="relative"
+                    flex="1 1 0%"
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    verticalAlign="middle"
+                    overflow="hidden"
+                    transitionProperty="background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter"
+                    transitionTimingFunction="cubic-bezier(0.4, 0, 0.2, 1)"
+                    transitionDuration="150ms"
+                    opacity={0}
+                    _hover={{ backgroundColor: "black", opacity: 0.7 }}
                   >
-                    <div className="box-border font-bold text-lg mx-auto w-max">
-                      <div className="font-bold text-lg w-max">
-                        <AiOutlineSetting className="mx-auto w-8 h-8" />
-                        Project Settings
-                      </div>
-                    </div>
-                  </NavLink>
-                </li>
+                    <Box
+                      boxSizing="border-box"
+                      display="flex"
+                      flexDirection="column"
+                      fontSize="lg"
+                      fontWeight="bold"
+                      marginX="auto"
+                      width="max-content"
+                    >
+                      <SettingsIcon width="2rem" height="2rem" marginX="auto" />
+                      <Text marginTop="0.5rem">Project Settings</Text>
+                    </Box>
+                  </Link>
+                </ListItem>
               ))}
-            </ul>
-          </div>
-        </div>
+            </List>
+          </CardBody>
+        </Card>
 
-        <div className="collapse w-96 border rounded-box border-base-300 collapse-plus mt-8">
-          <input type="checkbox" />
-          <div className="collapse-title text-xl font-medium">Add new project</div>
-          <div className="collapse-content">
-            <Form disabled={mutation.isLoading} onSubmit={onSubmit} submitText="Add project" className="text-left">
-              <TextInput
+        <Button leftIcon={<AddIcon />} onClick={onToggle} variant="outline">
+          Add new project
+        </Button>
+        <Collapse in={isOpen} style={{ width: "100%" }} animate>
+          <Form disabled={mutation.isLoading} onSubmit={onSubmit} submitText="Add project" className="text-left">
+            <FormControl isRequired>
+              <FormLabel htmlFor="name">Project name</FormLabel>
+              <Input
                 id="name"
                 name="name"
-                label="Project name"
+                type="text"
                 pattern="[A-z\d\-_]+"
                 placeholder="project-name"
                 title="Only use letters, numbers, - and _ characters."
-                required
               />
-              <TextInput id="title" name="title" label="Title" placeholder="Project Title" required />
-              <TextInput id="caption" name="caption" label="Caption" placeholder="Short thumbnail caption" required />
-              <MarkdownInput inputId="projectInfo" inputName="projectInfo" label="Project info" />
-              <TextInput
-                id="embedURL"
-                name="embedURL"
-                label="Embed URL (optional)"
-                placeholder="https://youtube.com/embed/video-key"
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="title">Project title</FormLabel>
+              <Input id="title" name="title" type="text" placeholder="Project Title" />
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="caption">Caption</FormLabel>
+              <Input id="caption" name="caption" type="text" placeholder="Short thumbnail caption" />
+            </FormControl>
+            <MarkdownInput inputId="projectInfo" inputName="projectInfo" label="Project info" />
+            <FormControl>
+              <FormLabel htmlFor="videoKey">Embed URL (optional)</FormLabel>
+              <InputGroup>
+                <InputLeftAddon>https://youtube.com/embed/</InputLeftAddon>
+                <Input id="videoKey" name="videoKey" type="text" placeholder="video-key" />
+              </InputGroup>
+            </FormControl>
+            <FormControl isRequired>
+              <FormLabel htmlFor="thumbnail">Project thumbnail</FormLabel>
+              <Input
+                id="thumbnail"
+                name="thumbnail"
+                type="file"
+                accept="image/*"
+                title="Only images allowed."
+                onChange={changeHandler}
+                requierd
               />
-              <div className="form-control">
-                <label htmlFor="thumbnail" className="label">
-                  <span className="label-text">Project thumbnail</span>
-                </label>
-                <input
-                  id="thumbnail"
-                  type="file"
-                  accept="image/*"
-                  name="thumbnail"
-                  title="Only images allowed."
-                  onChange={changeHandler}
-                  className="btn btn-ghost"
-                  required
-                />
-              </div>
-            </Form>
-          </div>
-        </div>
-      </div>
-    </div>
+            </FormControl>
+          </Form>
+        </Collapse>
+      </VStack>
+    </Container>
   );
 };

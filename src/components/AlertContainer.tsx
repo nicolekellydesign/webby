@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Alert } from "@Components/Alert";
+import { Alert, AlertDescription, AlertIcon, CloseButton, Stack } from "@chakra-ui/react";
+
 import { AlertProps, alertService } from "@Services/alert.service";
 
 interface IAlertContainerProps extends Object {
@@ -52,16 +53,14 @@ export const AlertContainer: React.FC<IAlertContainerProps> = ({ id }) => {
   }
 
   return (
-    <div className="container lg:max-w-3xl mx-auto py-2">
-      {alerts.map((alert: AlertProps, index: number) => (
-        <Alert
-          key={index}
-          type={alert.type}
-          message={alert.message}
-          fade={alert.fade}
-          onClose={() => removeAlert(alert)}
-        />
+    <Stack spacing="1rem" marginX="auto" paddingY="1rem" width={{ base: "100%", lg: "48rem" }}>
+      {alerts.map((alert: AlertProps, idx) => (
+        <Alert key={idx} status={alert.type} borderRadius="0.5rem" minHeight="4rem">
+          <AlertIcon />
+          <AlertDescription>{alert.message}</AlertDescription>
+          <CloseButton position="absolute" right="1rem" top="1rem" onClick={() => removeAlert(alert)} />
+        </Alert>
       ))}
-    </div>
+    </Stack>
   );
 };

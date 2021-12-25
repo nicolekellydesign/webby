@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Button, ButtonGroup, Heading, VStack } from "@chakra-ui/react";
+
 interface IFormProps extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {
   disabled?: boolean;
   hasReset?: boolean;
@@ -18,27 +20,35 @@ export const Form: React.FC<IFormProps> = ({
   ...rest
 }) => {
   const controls = hasReset ? (
-    <div className="input-group">
-      <button type="reset" disabled={disabled} className="btn btn-outline">
+    <ButtonGroup variant="outline" spacing="1rem">
+      <Button type="reset" disabled={disabled}>
         {resetText}
-      </button>
-      <button id="submit" type="submit" disabled={disabled} className="btn btn-outline btn-primary">
+      </Button>
+      <Button id="submit" type="submit" disabled={disabled} colorScheme="blue">
         {submitText}
-      </button>
-    </div>
+      </Button>
+    </ButtonGroup>
   ) : (
-    <button id="submit" type="submit" disabled={disabled} className="btn btn-outline btn-primary">
-      {submitText}
-    </button>
+    <ButtonGroup variant="outline" spacing="1rem">
+      <Button id="submit" type="submit" disabled={disabled} colorScheme="blue">
+        {submitText}
+      </Button>
+    </ButtonGroup>
   );
 
   return (
     <form {...rest}>
-      {header && <h2 className="card-title">{header}</h2>}
+      {header && (
+        <Heading as="h2" size="lg">
+          {header}
+        </Heading>
+      )}
 
-      {children}
+      <VStack spacing="1rem" marginY="1rem">
+        {children}
+      </VStack>
 
-      <div className="card-actions">{controls}</div>
+      {controls}
     </form>
   );
 };

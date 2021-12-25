@@ -3,10 +3,6 @@
     @apply inline-block icon-sm mr-2;
   }
 
-  .dropzone {
-    @apply btn btn-outline flex flex-1 flex-col p-6 border-2 rounded-lg outline-none transition-all text-2xl;
-  }
-
   .dropzone:disabled {
     @apply btn-disabled;
   }
@@ -14,14 +10,40 @@
   .dropzone.dropzone-dragging:not(:disabled) {
     @apply border-dashed;
   }
+}
 
-  .icon-sm {
-    @apply w-6 h-6 stroke-current;
-  }
+.dropzone {
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-width: 2px;
+  border-radius: 0.5rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 
-  .icon-md {
-    @apply w-10 h-10 stroke-current;
-  }
+.dropzone:disabled {
+  pointer-events: none;
+}
+
+.dropzone.dropzone-dragging:not(:disabled) {
+  border-style: dashed;
+}
+
+.icon-sm {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke: currentColor;
+}
+
+.icon-md {
+  width: 2.5rem;
+  height: 2.5rem;
+  stroke: currentColor;
 }
 
 @layer utilities {
