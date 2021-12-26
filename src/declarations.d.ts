@@ -18,7 +18,7 @@ export interface Project extends Object {
   caption: string;
   projectInfo: string;
   thumbnail?: string | undefined;
-  embedURL?: string | undefined;
+  videoKey?: string | undefined;
   images?: string[] | undefined;
 }
 

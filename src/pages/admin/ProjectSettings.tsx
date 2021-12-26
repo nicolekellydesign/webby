@@ -46,7 +46,7 @@ interface UpdateProjectElements extends HTMLFormControlsCollection {
   title: HTMLInputElement;
   caption: HTMLInputElement;
   projectInfo: HTMLInputElement;
-  embedURL: HTMLInputElement;
+  videoKey: HTMLInputElement;
 }
 
 interface UpdateProjectFormElement extends HTMLFormElement {
@@ -175,14 +175,14 @@ export const ProjectSettings: React.FC = () => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const { title, caption, projectInfo, embedURL } = form.elements;
+    const { title, caption, projectInfo, videoKey } = form.elements;
 
     const updatedProject: Project = {
       name: name,
       title: title.value,
       caption: caption.value,
       projectInfo: projectInfo.value,
-      embedURL: embedURL.value,
+      videoKey: videoKey.value,
     };
 
     detailsMutation.mutate(updatedProject);
@@ -274,7 +274,13 @@ export const ProjectSettings: React.FC = () => {
                 <FormLabel htmlFor="videoKey">Embed URL (optional)</FormLabel>
                 <InputGroup>
                   <InputLeftAddon>https://youtube.com/embed/</InputLeftAddon>
-                  <Input id="videoKey" name="videoKey" type="text" placeholder="video-key" />
+                  <Input
+                    id="videoKey"
+                    name="videoKey"
+                    type="text"
+                    placeholder="video-key"
+                    defaultValue={project.videoKey}
+                  />
                 </InputGroup>
               </FormControl>
             </Form>

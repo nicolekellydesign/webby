@@ -75,11 +75,11 @@ export const ProjectView: React.FC = () => {
 
       <Box marginTop="2rem">
         <Flex wrap="wrap">
-          {project.embedURL && project.embedURL?.length > 0 && (
+          {project.videoKey && project.videoKey?.length > 0 && (
             <Box boxSizing="border-box" paddingX="0.5rem" width="full">
               <Box position="relative" padding={0} width="full">
                 <iframe
-                  src={project.embedURL}
+                  src={`https://youtube.com/embed/${project.videoKey}`}
                   title="0"
                   allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                   style={{
