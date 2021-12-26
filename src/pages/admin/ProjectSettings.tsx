@@ -2,19 +2,41 @@ import axios, { AxiosError } from "axios";
 import React, { useState } from "react";
 import { Redirect, useParams } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import * as AiIcons from "react-icons/ai";
 
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Image,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
+
+import { Card, CardBody } from "@Components/Card";
+import { Dropzone } from "@Components/Dropzone";
 import { Form } from "@Components/Form";
 import { ImageManager } from "@Components/ImageManager";
 import { LoadingCard } from "@Components/LoadingCard";
 import { MarkdownInput } from "@Components/MarkdownInput";
-import { Modal } from "@Components/Modal";
-import { TextInput } from "@Components/TextInput";
 import { NotFound } from "@Pages/NotFound";
 import { alertService } from "@Services/alert.service";
 import { APIError, Project } from "../../declarations";
 import { ProjectQuery } from "../../Queries";
-import { Dropzone } from "@Components/Dropzone";
 
 interface ParamTypes {
   name: string;
@@ -35,6 +57,7 @@ export const ProjectSettings: React.FC = () => {
   const { name } = useParams<ParamTypes>();
   const queryClient = useQueryClient();
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const projectQuery = useQuery(["projects", name], () => ProjectQuery(name));
 
@@ -185,22 +208,27 @@ export const ProjectSettings: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto">
-      <h1 className="font-bold text-4xl text-center">Project Settings</h1>
+    <Container>
+      <Heading as="h1" textAlign="center">
+        About Page Settings
+      </Heading>
 
-      <div className="max-w-max mx-auto my-8">
-        <div className="card lg:card-side bordered">
-          <figure className="relative">
+      <VStack marginTop="2rem" spacing="1rem">
+        <Card>
+          <Flex>
             {thumbMutation.isLoading ? (
               <LoadingCard />
             ) : (
-              <img src={`/images/${project.thumbnail}`} alt={project.title} className="rounded-xl h-72" />
+              <Image alt={project.title} src={`/images/${project.thumbnail}`} borderLeftRadius={12} boxSize={256} />
             )}
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title">Update Thumbnail</h2>
+          </Flex>
 
-            <div className="card-actions">
+          <CardBody>
+            <Heading as="h2" size="md" marginBottom="1rem">
+              Update Thumbnail
+            </Heading>
+
+            <Flex wrap="wrap" align="start" marginTop="2rem">
               <Dropzone
                 onSubmit={(files) => {
                   thumbMutation.mutate(files[0].name);
@@ -210,53 +238,48 @@ export const ProjectSettings: React.FC = () => {
                 multiple={false}
                 disabled={thumbMutation.isLoading}
               />
-            </div>
-          </div>
-        </div>
+            </Flex>
+          </CardBody>
+        </Card>
 
-        <div id="update-project-form" className="card lg:card-side bordered mt-8">
-          {detailsMutation.isLoading ? (
-            <LoadingCard />
-          ) : (
+        <Card>
+          <CardBody>
             <Form
               disabled={detailsMutation.isLoading}
               header="Project Details"
               onSubmit={onSubmit}
               submitText="Update project"
-              className="card-body"
             >
-              <TextInput
-                id="title"
-                name="title"
-                label="Title"
-                placeholder="Project Title"
-                defaultValue={project.title}
-                required
-              />
-              <TextInput
-                id="caption"
-                name="caption"
-                label="Caption"
-                placeholder="Short thumbnail caption"
-                defaultValue={project.caption}
-                required
-              />
+              <FormControl isRequired>
+                <FormLabel htmlFor="title">Title</FormLabel>
+                <Input id="title" name="title" type="text" placeholder="Project Title" defaultValue={project.title} />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel htmlFor="caption">Caption</FormLabel>
+                <Input
+                  id="caption"
+                  name="caption"
+                  type="text"
+                  placeholder="Short thumbnail caption"
+                  defaultValue={project.caption}
+                />
+              </FormControl>
               <MarkdownInput
                 inputId="projectInfo"
                 inputName="projectInfo"
                 label="Project info"
                 startingText={project.projectInfo}
               />
-              <TextInput
-                id="embedURL"
-                name="embedURL"
-                label="Embed URL (optional)"
-                placeholder="https://youtube.com/embed/video-key"
-                defaultValue={project.embedURL}
-              />
+              <FormControl>
+                <FormLabel htmlFor="videoKey">Embed URL (optional)</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon>https://youtube.com/embed/</InputLeftAddon>
+                  <Input id="videoKey" name="videoKey" type="text" placeholder="video-key" />
+                </InputGroup>
+              </FormControl>
             </Form>
-          )}
-        </div>
+          </CardBody>
+        </Card>
 
         {addImagesMutation.isLoading || deleteImagesMutation.isLoading ? (
           <LoadingCard />
@@ -269,23 +292,39 @@ export const ProjectSettings: React.FC = () => {
           />
         )}
 
-        <div className="mt-8">
-          <Modal
-            id="delete-project-modal"
-            openIcon={<AiIcons.AiOutlineDelete className="btn-icon" />}
-            openText="Delete project"
-            title="Are you sure you want to delete this project?"
-            primaryText="Delete"
-            secondaryText="Cancel"
-            onConfirm={() => {
-              deleteProjectMutation.mutate();
-            }}
-            destructive
-          >
-            <p>This action cannot be reversed.</p>
+        <Box marginTop="2rem">
+          <Button onClick={onOpen} leftIcon={<DeleteIcon />} variant="outline" colorScheme="red">
+            Delete project
+          </Button>
+          <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Delete Project</ModalHeader>
+
+              <ModalBody>
+                <Text>Are you sure you want to delete this project?</Text>
+                <Text>This action cannot be reversed.</Text>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button variant="outline" marginRight="1rem" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="outline"
+                  colorScheme="red"
+                  onClick={() => {
+                    deleteProjectMutation.mutate();
+                    onClose();
+                  }}
+                >
+                  Delete
+                </Button>
+              </ModalFooter>
+            </ModalContent>
           </Modal>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </VStack>
+    </Container>
   );
 };

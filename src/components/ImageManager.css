@@ -1,30 +1,9 @@
-@layer components {
-  :root {
-    --b4: 0 0% 40%;
-  }
-  .image-scroller {
-    display: flex;
-    flex-wrap: wrap;
-    overflow-y: scroll;
-    justify-content: flex-start;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;
-    scrollbar-width: thin;
-  }
-
-  .selected {
-    @apply opacity-70 bg-black hover:text-blue-400 rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition;
-  }
-
-  .unselected {
-    @apply opacity-0 hover:opacity-70 hover:bg-black rounded-box relative flex-1 flex flex-col justify-center align-middle overflow-hidden transition;
-  }
-
-  .webby-carousel {
-    @apply max-w-6xl max-h-80 gap-4 image-scroller carousel-center rounded-box p-4;
-  }
-
-  .webby-carousel-item {
-    @apply carousel-item rounded-box bg-cover bg-center bg-no-repeat cursor-pointer justify-center w-64 h-64;
-  }
+.image-scroller {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: scroll;
+  justify-content: flex-start;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: thin;
 }

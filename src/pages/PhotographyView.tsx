@@ -6,6 +6,7 @@ import { SmoothImage } from "@Components/SmoothImage";
 import { alertService } from "@Services/alert.service";
 import { Photo } from "../declarations";
 import { PhotosQuery } from "../Queries";
+import { Grid } from "@chakra-ui/react";
 
 export const PhotographyView: React.FC = () => {
   const photosQuery = useQuery("photos", PhotosQuery);
@@ -23,9 +24,8 @@ export const PhotographyView: React.FC = () => {
   const photos = (photosQuery.data as Photo[]).flatMap((photo) => photo.filename);
 
   return (
-    <div className="grid gap-1 grid-cols-1 md:grid-cols-3">
-      {console.info(typeof photos)}
+    <Grid gap="0.25rem" templateColumns={{ base: "repeat(1, minmax(0, 1fr))", md: "repeat(3, minmax(0, 1fr))" }}>
       {photos && photos.map((photo, idx) => <SmoothImage key={idx} src={`/images/${photo}`} alt={photo} />)}
-    </div>
+    </Grid>
   );
 };

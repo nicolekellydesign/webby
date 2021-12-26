@@ -1,5 +1,20 @@
-import React from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import React, { useRef } from "react";
+
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  Input,
+  Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 import { Login } from "../declarations";
 
@@ -18,6 +33,10 @@ interface ILoginModalProps extends Object {
 }
 
 export const LoginModal: React.FC<ILoginModalProps> = ({ login }) => {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+
   const onSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
 
@@ -26,61 +45,58 @@ export const LoginModal: React.FC<ILoginModalProps> = ({ login }) => {
 
     login({ username: username.value, password: password.value, remember: remember.checked });
     form.reset();
+    onClose();
   };
 
   return (
     <>
-      <a href="/admin#login">Log In</a>
-      <div id="login" className="modal">
-        <div className="modal-box">
-          <div className="absolute right-6 top-6">
-            <div data-tip="Close" className="tooltip">
-              <a href="/admin#" className="btn btn-ghost btn-sm">
-                <AiOutlineClose className="inline-block stroke-current w-6 h-6" />
-              </a>
-            </div>
-          </div>
+      <Link onClick={onOpen} width="full" ref={finalRef}>
+        Log In
+      </Link>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered initialFocusRef={initialRef} finalFocusRef={finalRef}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Log In</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <form
+              id="login-form"
+              onSubmit={onSubmit}
+              onKeyDown={(e) => {
+                e.stopPropagation();
+              }}
+              style={{ padding: "1.5rem" }}
+            >
+              <Stack spacing="0.75rem">
+                <FormControl isRequired>
+                  <Input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="Username"
+                    pattern="^(\w+)$"
+                    isRequired
+                    width="full"
+                    ref={initialRef}
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <Input id="password" name="password" type="password" placeholder="Password" isRequired width="full" />
+                </FormControl>
+                <FormControl>
+                  <Checkbox id="remember" name="remember">
+                    Remember me
+                  </Checkbox>
+                </FormControl>
 
-          <h1 className="font-bold text-xl text-center">Log In</h1>
-          <br />
-
-          <form id="login-form" onSubmit={onSubmit} className="p-6">
-            <div className="form-control">
-              <input
-                id="username"
-                type="text"
-                name="username"
-                placeholder="Username"
-                pattern="^(\w+)$"
-                required
-                className="input input-bordered mb-3 w-full"
-              />
-              <input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-                className="input input-bordered mb-3 w-full"
-              />
-              <div>
-                <label className="cursor-pointer label justify-start">
-                  <input id="remember" type="checkbox" name="remember" className="checkbox checkbox-primary" />
-                  <span className="label-text ml-4">Remember me</span>
-                </label>
-              </div>
-
-              <div className="modal-action">
-                <a href="/admin#" className="w-full">
-                  <button id="submit" type="submit" className="btn btn-outline btn-primary m-0 w-full">
-                    Log In
-                  </button>
-                </a>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+                <Button id="submit" type="submit" variant="outline" margin={0} width="full">
+                  Log In
+                </Button>
+              </Stack>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

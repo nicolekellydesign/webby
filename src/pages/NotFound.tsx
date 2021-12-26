@@ -1,22 +1,42 @@
 import React from "react";
-import { useHistory } from "react-router";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useLocation } from "react-router";
+import { Link as ReactLink } from "react-router-dom";
+
+import { Box, Container, Heading, Link, Text } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 export const NotFound: React.FC = () => {
-  const history = useHistory();
+  const location = useLocation();
+  const isAdminRoute = location.pathname.includes("/admin");
+
+  const link = (
+    <Link
+      as={ReactLink}
+      to={isAdminRoute ? "/admin/home" : "/"}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      fontSize="2xl"
+      marginTop="1rem"
+      marginX="auto"
+      width="fit-content"
+    >
+      <ArrowBackIcon width="3rem" height="2rem" />
+      <Text>{isAdminRoute ? "Go to admin home" : "Go to home"}</Text>
+    </Link>
+  );
 
   return (
-    <div className="container text-center mx-auto mt-28">
-      <div className="m-auto text-center text-2xl">
-        <h2 className="text-5xl">Page Not Found</h2>
-        <p className="pt-6">Sorry, that page doesn&apos;t exist!</p>
-        {history.length > 0 && (
-          <div onClick={() => history.goBack()} className="cursor-pointer mt-4">
-            <AiOutlineArrowLeft className="w-8 h-8 relative inline mr-3" />
-            <span className="align-middle">Go back</span>
-          </div>
-        )}
-      </div>
-    </div>
+    <Container marginTop="15vh">
+      <Box marginX="auto" textAlign="center">
+        <Heading as="h2" fontSize="5xl">
+          Page Not Found
+        </Heading>
+        <Text fontSize="2xl" paddingTop="1.5rem">
+          Sorry, that page doesn&apos;t exist!
+        </Text>
+        {link}
+      </Box>
+    </Container>
   );
 };

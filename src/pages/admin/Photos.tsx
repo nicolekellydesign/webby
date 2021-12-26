@@ -2,6 +2,8 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
+import { Container, Heading } from "@chakra-ui/react";
+
 import { ImageManager } from "@Components/ImageManager";
 import { LoadingCard } from "@Components/LoadingCard";
 import { alertService } from "@Services/alert.service";
@@ -71,20 +73,21 @@ export const AdminPhotos: React.FC = () => {
   const photos = (photosQuery.data as Photo[]).flatMap((photo) => photo.filename);
 
   return (
-    <div className="container mx-auto">
-      <h1 className="font-bold text-4xl text-center">Photography Gallery Settings</h1>
-      <div className="max-w-max mx-auto my-8">
-        {addImagesMutation.isLoading || deleteImagesMutation.isLoading ? (
-          <LoadingCard />
-        ) : (
-          <ImageManager
-            images={photos}
-            title="Photography Images"
-            deleteImages={deleteImagesMutation.mutate}
-            uploadFunc={addImagesMutation.mutate}
-          />
-        )}
-      </div>
-    </div>
+    <Container>
+      <Heading as="h1" textAlign="center">
+        Photography Gallery Settings
+      </Heading>
+
+      {addImagesMutation.isLoading || deleteImagesMutation.isLoading ? (
+        <LoadingCard />
+      ) : (
+        <ImageManager
+          images={photos}
+          title="Photography Images"
+          deleteImages={deleteImagesMutation.mutate}
+          uploadFunc={addImagesMutation.mutate}
+        />
+      )}
+    </Container>
   );
 };

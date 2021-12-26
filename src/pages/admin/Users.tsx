@@ -1,10 +1,40 @@
 import axios, { AxiosError } from "axios";
-import React from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
+import {
+  Container,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Table,
+  TableCaption,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
+  ModalFooter,
+  Button,
+  Tooltip,
+  IconButton,
+  Input,
+  FormControl,
+  FormLabel,
+  InputGroup,
+  InputRightElement,
+  VStack,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+
+import { Card, CardBody } from "@Components/Card";
 import { LoadingCard } from "@Components/LoadingCard";
-import { Modal } from "@Components/Modal";
 import { alertService } from "@Services/alert.service";
 import { User } from "../../declarations";
 import { UsersQuery } from "../../Queries";
@@ -12,6 +42,7 @@ import { UsersQuery } from "../../Queries";
 interface LoginElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;
   password: HTMLInputElement;
+  confirm: HTMLInputElement;
   submit: HTMLInputElement;
 }
 
@@ -27,6 +58,23 @@ interface AddUserReq extends Object {
 export const AdminUsers: React.FC = () => {
   const queryClient = useQueryClient();
   const usersQuery = useQuery("users", UsersQuery);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const [activeID, setActiveID] = useState(0);
+
+  const [show, setShow] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const [usernameError, setUsernameError] = useState("");
+  const [confirmError, setConfirmError] = useState("");
+
+  const handleShowClick = () => setShow(!show);
+  const handleShowConfirmClick = () => setShowConfirm(!showConfirm);
+
+  const handleDeleteClick = (id: number) => {
+    setActiveID(id);
+    onOpen();
+  };
 
   const addUserMutation = useMutation(
     (data: AddUserReq) => {
@@ -71,11 +119,34 @@ export const AdminUsers: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<LoginFormElement>) => {
     event.preventDefault();
 
-    const form = event.currentTarget;
-    const { username, password } = form.elements;
-    const data = { username: username.value, password: password.value };
+    setUsernameError("");
+    setConfirmError("");
 
-    addUserMutation.mutate(data);
+    const form = event.currentTarget;
+    const { username, password, confirm } = form.elements;
+
+    // Validate the inputs
+    const usernameInput = username.value;
+    const passwordInput = password.value;
+    const confirmInput = confirm.value;
+    let errored = false;
+
+    if (!usernameInput.match(/^(\w+)$/g)) {
+      errored = true;
+      setUsernameError("Username cannot contain spaces!");
+    }
+
+    if (passwordInput !== confirmInput) {
+      errored = true;
+      setConfirmError("Passwords do not match!");
+    }
+
+    if (errored) {
+      return;
+    }
+
+    // Send the data to the backend
+    addUserMutation.mutate({ username: username.value, password: password.value });
     form.reset();
   };
 
@@ -99,98 +170,152 @@ export const AdminUsers: React.FC = () => {
   });
 
   return (
-    <div className="container mx-auto">
-      <h1 className="font-bold text-4xl text-center">Administrators</h1>
+    <Container>
+      <Heading as="h1" textAlign="center">
+        Admin Users
+      </Heading>
 
-      <div className="mx-auto my-8 w-1/2">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Created At</th>
-              <th>Last Login</th>
-              <th>Sessions</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user: User) => (
-              <tr key={user.id}>
-                <th>{user.id}</th>
-                <td>{user.username}</td>
-                <td>
-                  {new Date(user.createdAt).toLocaleString(undefined, {
-                    dateStyle: "medium",
-                    timeStyle: "medium",
-                  })}
-                </td>
-                {user.lastLogin ? (
-                  <td>
-                    {new Date(user.lastLogin).toLocaleString(undefined, {
+      <Table marginTop="2rem">
+        <TableCaption>Registered administrators</TableCaption>
+        <Thead>
+          <Tr>
+            <Th>ID</Th>
+            <Th>Username</Th>
+            <Th>Created At</Th>
+            <Th>Last Login</Th>
+            <Th>Sessions</Th>
+            <Th></Th>
+          </Tr>
+        </Thead>
+
+        <Tbody>
+          {users.map((user, idx) => (
+            <Tr key={idx}>
+              <Th>{user.id}</Th>
+              <Td>{user.username}</Td>
+              <Td>
+                {new Date(user.createdAt).toLocaleString(undefined, {
+                  dateStyle: "medium",
+                  timeStyle: "medium",
+                })}
+              </Td>
+              <Td>
+                {user.lastLogin
+                  ? new Date(user.lastLogin).toLocaleString(undefined, {
                       dateStyle: "medium",
                       timeStyle: "medium",
-                    })}
-                  </td>
+                    })
+                  : "n/a"}
+              </Td>
+              <Td>{user.sessions}</Td>
+              <Td>
+                {user.protected ? (
+                  <Tooltip label="User is protected">
+                    <IconButton icon={<CloseIcon />} aria-label="Delete user" variant="ghost" disabled />
+                  </Tooltip>
                 ) : (
-                  <td className="text-base-300">n/a</td>
-                )}
-                <td>{user.sessions}</td>
-                <td className="text-center">
-                  {user.protected ? (
-                    <div data-tip="User is protected" className="tooltip">
-                      <button className="btn btn-ghost btn-disabled btn-sm" disabled>
-                        <AiOutlineClose className="inline-block w-6 h-6 stroke-current" />
-                      </button>
-                    </div>
-                  ) : (
-                    <div data-tip="Delete user" className="tooltip">
-                      <Modal
-                        id={`delete-${user.username}-modal`}
-                        openIcon={<AiOutlineClose className="inline-block w-6 h-6 stroke-current" />}
-                        title={`Are you sure you want to delete user '${user.username}'?`}
-                        primaryText="Delete"
-                        secondaryText="Cancel"
-                        onConfirm={() => {
-                          deleteUserMutation.mutate(user.id);
+                  <>
+                    <Tooltip label="Delete user">
+                      <IconButton
+                        icon={<CloseIcon />}
+                        aria-label="Delete user"
+                        variant="ghost"
+                        onClick={() => {
+                          handleDeleteClick(user.id);
                         }}
-                        destructive
-                        ghost
-                      >
-                        <p>This action cannot be reversed.</p>
-                      </Modal>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                      />
+                    </Tooltip>
+                    <Modal id={`delete-${activeID}-modal`} isOpen={isOpen} onClose={onClose} isCentered>
+                      <ModalOverlay />
+                      <ModalContent>
+                        <ModalHeader>Delete User</ModalHeader>
 
-        <form id="addUser" className="mt-8 input-group w-full" onSubmit={handleSubmit}>
-          <input
-            id="username"
-            type="text"
-            name="username"
-            placeholder="Username"
-            pattern="^(\w+)$"
-            title="Username cannot contain whitespace"
-            required
-            className="input input-bordered"
-          />
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-            className="input input-bordered"
-          />
-          <button id="submit" type="submit" className="btn btn-outline btn-primary">
-            Add user
-          </button>
-        </form>
-      </div>
-    </div>
+                        <ModalBody>
+                          <Text>
+                            Are you sure you want to delete user &apos;
+                            {users.find((user) => user.id === activeID)?.username}
+                            &apos;?
+                          </Text>
+                          <Text>This action cannot be reversed.</Text>
+                        </ModalBody>
+
+                        <ModalFooter>
+                          <Button variant="outline" marginRight="1rem" onClick={onClose}>
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="outline"
+                            colorScheme="red"
+                            onClick={() => {
+                              deleteUserMutation.mutate(activeID);
+                              onClose();
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </ModalFooter>
+                      </ModalContent>
+                    </Modal>
+                  </>
+                )}
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+
+      <Card marginTop="2rem">
+        <CardBody>
+          <Heading as="h2" size="md" marginBottom="1rem">
+            Add User
+          </Heading>
+
+          <form id="addUser" onSubmit={handleSubmit}>
+            <VStack spacing="1rem">
+              <FormControl isInvalid={usernameError !== ""} isRequired>
+                <FormLabel htmlFor="username">Username</FormLabel>
+                <Input
+                  id="username"
+                  name="username"
+                  type="text"
+                  placeholder="Username"
+                  title="Username cannot contain whitespace"
+                />
+                <FormErrorMessage>{usernameError}</FormErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={confirmError !== ""} isRequired>
+                <FormLabel htmlFor="password">Password</FormLabel>
+                <InputGroup>
+                  <Input id="password" name="password" type={show ? "text" : "password"} placeholder="Password" />
+                  <InputRightElement width="4.5rem">
+                    <Button height="1.75rem" size="sm" onClick={handleShowClick}>
+                      {show ? "hide" : "show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </FormControl>
+
+              <FormControl isInvalid={confirmError !== ""} isRequired>
+                <FormLabel htmlFor="confirm">Confirm password</FormLabel>
+                <InputGroup>
+                  <Input id="confirm" name="confirm" type={showConfirm ? "text" : "password"} placeholder="Password" />
+                  <InputRightElement width="4.5rem">
+                    <Button height="1.75rem" size="sm" onClick={handleShowConfirmClick}>
+                      {showConfirm ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <FormErrorMessage>{confirmError}</FormErrorMessage>
+              </FormControl>
+
+              <Button id="submit" type="submit" variant="outline" colorScheme="blue">
+                Add user
+              </Button>
+            </VStack>
+          </form>
+        </CardBody>
+      </Card>
+    </Container>
   );
 };

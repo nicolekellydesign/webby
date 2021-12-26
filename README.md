@@ -4,7 +4,7 @@
 
 This is the Content Management System (CMS) for graphic designer and photographer Nicole Kelly. It aims to have a simple and easy to use management interface powering an intuitive and stylistic public-facing site.
 
-Webby is built using TypeScript and React with [TailwindCSS](https://tailwindcss.com/) and [DaisyUI](https://daisyui.com/). It is powered by [Webby API](https://github.com/nicolekellydesign/webby-api), a backend API and database manager written in Go.
+Webby is built using TypeScript and React with [Chakra UI](https://chakra-ui.com/). It is powered by [Webby API](https://github.com/nicolekellydesign/webby-api), a backend API and database manager written in Go.
 
 ## Building and Installation
 

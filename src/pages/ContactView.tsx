@@ -1,9 +1,20 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import React from "react";
 
-import { Form } from "@Components/Form";
-import { TextArea } from "@Components/TextArea";
-import { TextInput } from "@Components/TextInput";
+import {
+  Button,
+  ButtonGroup,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Stack,
+  Textarea,
+  VStack,
+} from "@chakra-ui/react";
+
+import { Card, CardBody } from "@Components/Card";
 import { alertService } from "@Services/alert.service";
 
 interface FormElements extends HTMLFormControlsCollection {
@@ -66,34 +77,48 @@ export const ContactView: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto">
-      <div className="max-w-max mx-auto my-8">
-        <div className="card lg:card-side bordered">
-          <Form
-            id="form"
-            header="Contact Form"
-            onSubmit={onSubmit}
-            hasReset
-            resetText="Clear form"
-            submitText="Send message"
-            className="card-body"
-          >
-            <div className="form-control lg:flex-row">
-              <TextInput id="firstname" name="firstname" label="First Name" placeholder="John" required />
-              <TextInput id="lastname" name="lastname" label="Last Name" placeholder="Doe" required />
-            </div>
+    <Container>
+      <Heading as="h1" textAlign="center">
+        Contact Form
+      </Heading>
 
-            <TextInput id="email" name="email" label="Email Address" placeholder="you@example.com" required />
-            <TextArea
-              id="message"
-              name="message"
-              label="Message"
-              placeholder="Write your message for me here"
-              required
-            />
-          </Form>
-        </div>
-      </div>
-    </div>
+      <Card>
+        <CardBody>
+          <form onSubmit={onSubmit}>
+            <VStack spacing="1rem">
+              <Stack direction={{ base: "column", lg: "row" }} spacing="1rem" width="full">
+                <FormControl isRequired>
+                  <FormLabel htmlFor="firstname">First Name</FormLabel>
+                  <Input id="firstname" name="firstname" type="text" placeholder="John" />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormLabel htmlFor="lastname">Last Name</FormLabel>
+                  <Input id="lastname" name="lastname" type="text" placeholder="Doe" />
+                </FormControl>
+              </Stack>
+
+              <FormControl isRequired>
+                <FormLabel htmlFor="email">Email Address</FormLabel>
+                <Input id="email" name="email" type="email" placeholder="you@example.com" />
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel htmlFor="message">Message</FormLabel>
+                <Textarea id="message" name="message" resize="none" height="24rem" />
+              </FormControl>
+            </VStack>
+
+            <ButtonGroup variant="outline" spacing="1rem" marginTop="1rem" width={{ base: "full", lg: "auto" }}>
+              <Button type="reset" width={{ base: "full", lg: "auto" }}>
+                Reset
+              </Button>
+              <Button type="submit" colorScheme="blue" width={{ base: "full", lg: "auto" }}>
+                Send
+              </Button>
+            </ButtonGroup>
+          </form>
+        </CardBody>
+      </Card>
+    </Container>
   );
 };

@@ -2,14 +2,18 @@ import axios, { AxiosError } from "axios";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
+import { Container, Flex, Image, VStack } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/layout";
+
+import { Card, CardBody } from "@Components/Card";
+import { Dropzone } from "@Components/Dropzone";
+import { Form } from "@Components/Form";
 import { LoadingCard } from "@Components/LoadingCard";
 import { MarkdownInput } from "@Components/MarkdownInput";
 import BlankAvatar from "@Icons/blank-avatar.svg";
 import { alertService } from "@Services/alert.service";
 import { About, APIError } from "../../declarations";
 import { AboutQuery } from "../../Queries";
-import { Form } from "@Components/Form";
-import { Dropzone } from "@Components/Dropzone";
 
 interface StatementElements extends HTMLFormControlsCollection {
   statement: HTMLInputElement;
@@ -84,29 +88,31 @@ export const AdminAboutView: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto">
-      <h1 className="font-bold text-4xl text-center">About Page Settings</h1>
-      <div className="max-w-max mx-auto my-8">
-        <div className="card lg:card-side bordered">
-          <figure className="relative">
+    <Container>
+      <Heading as="h1" textAlign="center">
+        About Page Settings
+      </Heading>
+
+      <VStack marginTop={8} spacing={4}>
+        <Card>
+          <Flex>
             {about.portrait && (
-              <img
-                src={`/images/${about.portrait}`}
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = BlankAvatar;
-                  e.currentTarget.classList.add("bg-white");
-                  e.currentTarget.classList.add("p-4");
-                }}
+              <Image
                 alt="portrait"
-                className="rounded-xl h-72"
+                src={`/images/${about.portrait}`}
+                fallbackSrc={BlankAvatar}
+                borderLeftRadius={12}
+                boxSize={256}
               />
             )}
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title">Update Portrait</h2>
+          </Flex>
 
-            <div className="card-actions">
+          <CardBody>
+            <Heading as="h2" size="md" marginBottom={4}>
+              Update Portrait
+            </Heading>
+
+            <Flex wrap="wrap" align="start" marginTop={6}>
               <Dropzone
                 onSubmit={(files) => {
                   updatePortrait(files[0].name);
@@ -116,31 +122,29 @@ export const AdminAboutView: React.FC = () => {
                 multiple={false}
                 disabled={mutation.isLoading}
               />
-            </div>
-          </div>
-        </div>
+            </Flex>
+          </CardBody>
+        </Card>
 
-        <div id="update-about-form" className="card lg:card-side bordered mt-4">
-          <Form
-            disabled={mutation.isLoading}
-            onSubmit={updateStatement}
-            submitText="Update statement"
-            className="card-body"
-          >
-            <MarkdownInput
-              inputId="statement"
-              inputName="statement"
-              title="Designer Statement"
-              startingText={about.statement}
-            />
-          </Form>
-        </div>
+        <Card>
+          <CardBody>
+            <Heading as="h2" size="md" marginBottom={4}>
+              Designer Statement
+            </Heading>
 
-        <div className="card lg:card-side bordered mt-4">
-          <div className="card-body">
-            <h2 className="card-title">Update Résumé</h2>
+            <Form disabled={mutation.isLoading} onSubmit={updateStatement} submitText="Update statement">
+              <MarkdownInput inputId="statement" inputName="statement" startingText={about.statement} />
+            </Form>
+          </CardBody>
+        </Card>
 
-            <div className="card-actions">
+        <Card>
+          <CardBody>
+            <Heading as="h2" size="md" marginBottom={4}>
+              Update Résumé
+            </Heading>
+
+            <Flex wrap="wrap" align="start" marginTop={6}>
               <Dropzone
                 onSubmit={(files) => {
                   updateResume(files[0].name);
@@ -150,10 +154,10 @@ export const AdminAboutView: React.FC = () => {
                 maxSize={8 * 1024 * 1024}
                 disabled={mutation.isLoading}
               />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Flex>
+          </CardBody>
+        </Card>
+      </VStack>
+    </Container>
   );
 };

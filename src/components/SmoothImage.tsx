@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { AiOutlineFileImage, AiOutlineLoading } from "react-icons/ai";
+import { AiOutlineFileImage } from "react-icons/ai";
+
+import { Box, Flex, Icon, Image, Spinner } from "@chakra-ui/react";
 
 interface ISmoothImageProps extends Object {
   src: string;
@@ -21,29 +23,29 @@ export const SmoothImage: React.FC<ISmoothImageProps> = ({ src, alt, children })
 
   if (!loaded) {
     return (
-      <div className="flex items-center justify-center w-full h-full">
-        <img src={src} alt={alt} onLoad={onLoad} onError={onError} style={{ display: "none" }} />
-        <div className="p-32">
-          <AiOutlineLoading className="animate-spin stroke-current w-16 h-16" />
-        </div>
-      </div>
+      <Flex alignItems="center" justifyContent="center" width="full" height="full">
+        <Image alt={alt} src={src} loading="lazy" onLoad={onLoad} onError={onError} style={{ display: "none" }} />
+        <Box padding="8rem">
+          <Spinner size="lg" />
+        </Box>
+      </Flex>
     );
   }
 
   if (errored) {
     return (
-      <div className="flex items-center justify-center w-full h-full">
-        <div className="p-32">
-          <AiOutlineFileImage className="stroke-current w-16 h-16" />
-        </div>
-      </div>
+      <Flex alignItems="center" justifyContent="center" width="full" height="full">
+        <Box padding="8rem">
+          <Icon as={AiOutlineFileImage} width="4rem" height="4rem" />
+        </Box>
+      </Flex>
     );
   }
 
   return (
-    <div className="relative w-full h-full">
-      <img src={src} alt={alt} onLoad={onLoad} onError={onError} className="w-full h-auto" />
+    <Box position="relative" width="full" height="full">
+      <Image alt={alt} src={src} loading="lazy" onLoad={onLoad} onError={onError} width="full" height="full" />
       {children}
-    </div>
+    </Box>
   );
 };

@@ -1,50 +1,60 @@
 import React, { useEffect, useState } from "react";
 
+import { FormControl, FormLabel, FormHelperText, Textarea, Box } from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { Text, Heading, Link } from "@chakra-ui/layout";
+import ChakraUIRenderer from "chakra-ui-markdown-renderer";
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 interface IMarkdownInputProps extends Object {
   inputId?: string;
   inputName?: string;
-  title?: string;
   label?: string;
   startingText?: string;
 }
 
-export const MarkdownInput: React.FC<IMarkdownInputProps> = ({ inputId, inputName, title, label, startingText }) => {
+export const MarkdownInput: React.FC<IMarkdownInputProps> = ({ inputId, inputName, label, startingText }) => {
   const [currentText, setCurrentText] = useState("");
 
-  const titleElement = title && <div className="card-title mb-0">{title}</div>;
-  const labelElement = label && <div className="label-text">{label}</div>;
+  const labelElement = label && <FormLabel htmlFor={inputId}>{label}</FormLabel>;
+
+  const markdownTheme = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    p: (props: any) => {
+      const { children } = props;
+      return (
+        <Text fontSize="medium" lineHeight="22px" marginBottom="1.5rem">
+          {children}
+        </Text>
+      );
+    },
+  };
 
   useEffect(() => {
     setCurrentText(startingText || "");
   }, [setCurrentText, startingText]);
 
   return (
-    <div className="form-control">
-      <label htmlFor={inputId} className="label">
-        {titleElement}
-        {labelElement}
-      </label>
-      <label htmlFor={inputId} className="label">
-        <div className="label-text-alt">
+    <FormControl isRequired>
+      {labelElement}
+      <FormHelperText>
+        <Text>
           You can use{" "}
-          <a
+          <Link
             href="https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
-            className="link"
+            isExternal
           >
-            Github Flavored Markdown
-          </a>{" "}
+            Github Flavored Markdown <ExternalLinkIcon marginX="0.125rem" />
+          </Link>{" "}
           here.
-        </div>
-      </label>
-      <textarea
+        </Text>
+      </FormHelperText>
+      <Textarea
         id={inputId}
         name={inputName}
         defaultValue={startingText}
-        className="textarea textarea-bordered break-words resize-none mt-2 h-96"
-        required
         onChange={(e) => {
           setCurrentText(e.target.value);
         }}
@@ -54,20 +64,40 @@ export const MarkdownInput: React.FC<IMarkdownInputProps> = ({ inputId, inputNam
             preview.scrollTop = e.currentTarget.scrollTop;
           }
         }}
+        height="24rem"
+        resize="none"
       />
+
       {currentText && (
-        <div className="bg-base-200 bg-opacity-20 rounded-lg mt-4">
-          <div className="card-title text-neutral px-4 pt-2">Preview</div>
-          <div id="preview" className="overflow-y-hidden">
-            <ReactMarkdown
-              className="bg-opacity-10 prose textarea text-gray-600 max-w-fit max-h-96"
-              remarkPlugins={[remarkGfm]}
-            >
+        <Box backgroundColor="gray.900" borderRadius={8} marginTop={4}>
+          <Heading
+            as="h2"
+            fontSize={20}
+            fontWeight={600}
+            lineHeight={1.75}
+            opacity={0.4}
+            paddingX={4}
+            paddingTop={2}
+            marginBottom={3}
+          >
+            Preview
+          </Heading>
+          <Box
+            id="preview"
+            opacity={0.4}
+            overflowY="hidden"
+            maxWidth="fit-content"
+            maxHeight="24rem"
+            textColor="lightgray"
+            paddingLeft="1rem"
+            paddingRight="2rem"
+          >
+            <ReactMarkdown components={ChakraUIRenderer(markdownTheme)} remarkPlugins={[remarkGfm]} skipHtml>
               {currentText}
             </ReactMarkdown>
-          </div>
-        </div>
+          </Box>
+        </Box>
       )}
-    </div>
+    </FormControl>
   );
 };

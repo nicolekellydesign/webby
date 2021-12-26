@@ -2,6 +2,8 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "react-query";
 
+import { Box, Container, Flex, Heading, Link, Text } from "@chakra-ui/react";
+
 import { LoadingCard } from "@Components/LoadingCard";
 import { SmoothImage } from "@Components/SmoothImage";
 import { alertService } from "@Services/alert.service";
@@ -23,33 +25,45 @@ export const Home: React.FC = () => {
   const projects = projectsQuery.data as Project[];
 
   return (
-    <>
-      <div className="mx-auto my-0">
-        <div className="min-h-60">
-          <p className="font-bold text-xl text-center py-8">
-            “If you can design one thing, you can design everything.” &mdash; Massimo Vignelli
-          </p>
-        </div>
+    <Container>
+      <Box minHeight="60px" textAlign="center">
+        <Text textStyle="bold" fontSize="xl" paddingY="2rem">
+          “If you can design one thing, you can design everything.” &mdash; Massimo Vignelli
+        </Text>
+      </Box>
 
-        <div className="flex flex-wrap">
-          {projects.map((project, idx) => (
-            <div key={idx} className="w-full xl:w-1/2 p-4">
-              <SmoothImage src={`/images/${project.thumbnail}`} alt={project.title}>
-                <NavLink
-                  to={`/project/${project.name}`}
-                  className="opacity-0 hover:opacity-70 hover:bg-black block absolute overflow-hidden w-full h-full transition"
-                  style={{ transform: "translateY(-100%)" }}
-                >
-                  <div className="box-border max-w-xs h-full p-5">
-                    <h2 className="text-white mb-0 font-bold text-2xl">{project.title}</h2>
-                    <p className="text-white text-xl">{project.caption}</p>
-                  </div>
-                </NavLink>
-              </SmoothImage>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
+      <Flex wrap="wrap">
+        {projects.map((project, idx) => (
+          <Box key={idx} padding="1rem" width={{ base: "full", xl: "50%" }}>
+            <SmoothImage alt={project.title} src={`/images/${project.thumbnail}`}>
+              <Link
+                as={NavLink}
+                to={`/project/${project.name}`}
+                opacity={0}
+                position="absolute"
+                overflow="hidden"
+                transitionProperty="background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter"
+                transitionTimingFunction="cubic-bezier(0.4, 0, 0.2, 1)"
+                transitionDuration="150ms"
+                transform="auto"
+                translateY="-100%"
+                width="full"
+                height="full"
+                _hover={{ backgroundColor: "black", opacity: 0.7 }}
+              >
+                <Box textColor="white" boxSizing="border-box" padding="1.25rem" maxWidth="20rem" height="full">
+                  <Heading as="h2" marginBottom={0} fontStyle="bold" fontSize="2xl">
+                    {project.title}
+                  </Heading>
+                  <Text fontSize="xl" marginTop="1rem">
+                    {project.caption}
+                  </Text>
+                </Box>
+              </Link>
+            </SmoothImage>
+          </Box>
+        ))}
+      </Flex>
+    </Container>
   );
 };
