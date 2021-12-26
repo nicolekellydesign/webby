@@ -53,7 +53,7 @@ export const AlertContainer: React.FC<IAlertContainerProps> = ({ id }) => {
   }
 
   return (
-    <Stack spacing="1rem" marginX="auto" paddingY="1rem" width={{ base: "100%", lg: "48rem" }}>
+    <Stack spacing="1rem" marginX="auto" paddingY="1rem" width={{ base: "full", lg: "48rem" }}>
       {alerts.map((alert: AlertProps, idx) => (
         <Alert key={idx} status={alert.type} borderRadius="0.5rem" minHeight="4rem">
           <AlertIcon />

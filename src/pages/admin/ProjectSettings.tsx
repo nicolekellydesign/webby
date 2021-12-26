@@ -208,7 +208,7 @@ export const ProjectSettings: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="72rem">
+    <Container>
       <Heading as="h1" textAlign="center">
         About Page Settings
       </Heading>

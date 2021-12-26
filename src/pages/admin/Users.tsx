@@ -170,7 +170,7 @@ export const AdminUsers: React.FC = () => {
   });
 
   return (
-    <Container maxWidth="72rem">
+    <Container>
       <Heading as="h1" textAlign="center">
         Admin Users
       </Heading>

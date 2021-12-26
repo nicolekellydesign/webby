@@ -45,11 +45,12 @@ export const LoginModal: React.FC<ILoginModalProps> = ({ login }) => {
 
     login({ username: username.value, password: password.value, remember: remember.checked });
     form.reset();
+    onClose();
   };
 
   return (
     <>
-      <Link onClick={onOpen} width="100%" ref={finalRef}>
+      <Link onClick={onOpen} width="full" ref={finalRef}>
         Log In
       </Link>
       <Modal isOpen={isOpen} onClose={onClose} isCentered initialFocusRef={initialRef} finalFocusRef={finalRef}>
@@ -75,12 +76,12 @@ export const LoginModal: React.FC<ILoginModalProps> = ({ login }) => {
                     placeholder="Username"
                     pattern="^(\w+)$"
                     isRequired
-                    width="100%"
+                    width="full"
                     ref={initialRef}
                   />
                 </FormControl>
                 <FormControl isRequired>
-                  <Input id="password" name="password" type="password" placeholder="Password" isRequired width="100%" />
+                  <Input id="password" name="password" type="password" placeholder="Password" isRequired width="full" />
                 </FormControl>
                 <FormControl>
                   <Checkbox id="remember" name="remember">
@@ -88,7 +89,7 @@ export const LoginModal: React.FC<ILoginModalProps> = ({ login }) => {
                   </Checkbox>
                 </FormControl>
 
-                <Button id="submit" type="submit" variant="outline" margin={0} width="100%">
+                <Button id="submit" type="submit" variant="outline" margin={0} width="full">
                   Log In
                 </Button>
               </Stack>

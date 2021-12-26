@@ -109,7 +109,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav>
-      <Flex alignItems="center" width="100%" height="150px" padding="1.25rem">
+      <Flex alignItems="center" width="full" height="150px" padding="1.25rem">
         <Box flex="1 1 0%">
           <Image alt="Nicole Kelly Design" src={logo} width="115px" height="115px" />
         </Box>
@@ -176,7 +176,7 @@ export const Navbar: React.FC = () => {
       </Flex>
 
       <Collapse in={isOpen} animate>
-        <List padding="4px" width="100%">
+        <List padding="4px" width="full">
           {NavbarData.map((item, index) => (
             <ListItem key={index} fontWeight="light" textDecoration="none" textAlign="center" paddingY="0.75rem">
               <Link as={ReactLink} to={item.path} className="navbar-link">
@@ -210,7 +210,7 @@ export const Navbar: React.FC = () => {
               <MenuDivider />
               <ListItem fontWeight="light" textDecoration="none" textAlign="center" paddingY="0.75rem">
                 {session.valid ? (
-                  <Link to="/admin" onClick={() => logoutMutation.mutate()} width="100%">
+                  <Link to="/admin" onClick={() => logoutMutation.mutate()} width="full">
                     Logout
                   </Link>
                 ) : (

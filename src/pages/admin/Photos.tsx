@@ -73,7 +73,7 @@ export const AdminPhotos: React.FC = () => {
   const photos = (photosQuery.data as Photo[]).flatMap((photo) => photo.filename);
 
   return (
-    <Container maxWidth="72rem">
+    <Container>
       <Heading as="h1" textAlign="center">
         Photography Gallery Settings
       </Heading>

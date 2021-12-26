@@ -20,6 +20,13 @@ const theme = extendTheme({
     heading: "Helvetica",
     body: "Helvetica",
   },
+  components: {
+    Container: {
+      baseStyle: {
+        maxWidth: "none",
+      },
+    },
+  },
 });
 
 export default theme;

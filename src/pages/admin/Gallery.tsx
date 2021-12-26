@@ -188,7 +188,7 @@ export const AdminGalleryView: React.FC = () => {
         <Button leftIcon={<AddIcon />} onClick={onToggle} variant="outline">
           Add new project
         </Button>
-        <Collapse in={isOpen} style={{ width: "100%" }} animate>
+        <Collapse in={isOpen} style={{ width: "full" }} animate>
           <Form disabled={mutation.isLoading} onSubmit={onSubmit} submitText="Add project" className="text-left">
             <FormControl isRequired>
               <FormLabel htmlFor="name">Project name</FormLabel>

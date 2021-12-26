@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { useQuery } from "react-query";
 
 import { Box, Button, Collapse, Container, Flex, Heading, Text, useDisclosure } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import ChakraUIRenderer from "chakra-ui-markdown-renderer";
 
 import remarkGfm from "remark-gfm";
@@ -45,7 +45,7 @@ export const ProjectView: React.FC = () => {
     p: (props: any) => {
       const { children } = props;
       return (
-        <Text fontSize="medium" lineHeight="22px" marginBottom="1.5rem">
+        <Text fontSize="xl" marginBottom="1.5rem">
           {children}
         </Text>
       );
@@ -55,7 +55,7 @@ export const ProjectView: React.FC = () => {
   return (
     <Container>
       <Box>
-        <Button leftIcon={<AddIcon />} onClick={onToggle}>
+        <Button leftIcon={isOpen ? <MinusIcon /> : <AddIcon />} onClick={onToggle} size="lg" variant="ghost">
           Project Information
         </Button>
         <Collapse in={isOpen} animate>
@@ -76,8 +76,8 @@ export const ProjectView: React.FC = () => {
       <Box marginTop="2rem">
         <Flex wrap="wrap">
           {project.embedURL && project.embedURL?.length > 0 && (
-            <Box boxSizing="border-box" paddingX="0.5rem" width="100%">
-              <Box position="relative" padding={0} width="100%">
+            <Box boxSizing="border-box" paddingX="0.5rem" width="full">
+              <Box position="relative" padding={0} width="full">
                 <iframe
                   src={project.embedURL}
                   title="0"
@@ -87,8 +87,8 @@ export const ProjectView: React.FC = () => {
                     borderStyle: "none",
                     top: 0,
                     left: 0,
-                    width: "100%",
-                    height: "100%",
+                    width: "full",
+                    height: "full",
                   }}
                 />
               </Box>

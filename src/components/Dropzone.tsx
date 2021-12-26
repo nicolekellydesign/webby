@@ -43,7 +43,7 @@ const Preview: React.FC<IPreviewProps> = ({ file: { name }, percentage = 0, prev
   };
 
   return (
-    <ListItem display="flex" flexDirection="row" position="relative" paddingY="1rem" width="100%">
+    <ListItem display="flex" flexDirection="row" position="relative" paddingY="1rem" width="full">
       {state === "finished" && preview ? (
         <Image
           width="6rem"

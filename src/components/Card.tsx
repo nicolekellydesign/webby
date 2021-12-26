@@ -14,7 +14,7 @@ export const CardBody: React.FC = ({ children }) => {
   );
 };
 
-export const Card: React.FC<ICardProps> = ({ children, marginTop }) => {
+export const Card: React.FC<ICardProps> = ({ children, marginTop = "2rem" }) => {
   return (
     <Flex
       borderRadius={16}

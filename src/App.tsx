@@ -34,8 +34,8 @@ export const App: React.FC = () => {
       <ChakraProvider theme={theme}>
         <Container
           position="relative"
-          maxWidth="100%"
-          minHeight="100%"
+          maxWidth="full"
+          minHeight="full"
           marginBottom="-6rem"
           paddingBottom="6rem"
           paddingInline="auto"

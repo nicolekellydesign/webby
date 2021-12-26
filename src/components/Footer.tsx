@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
       autoFlow="row"
       fontSize="smaller"
       marginTop="2rem"
-      width="100%"
+      width="full"
     >
       <Box>
         <Text>&copy; 2020 &ndash; {new Date().getFullYear()} Nicole Kelly Design</Text>
