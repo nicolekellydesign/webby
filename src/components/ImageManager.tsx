@@ -35,7 +35,6 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
 
   const overlay = (image: string, selected: boolean) => (
     <Box
-      borderRadius="1rem"
       position="relative"
       flex="1 1 0%"
       display="flex"
@@ -43,6 +42,7 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
       justifyContent="center"
       verticalAlign="middle"
       overflow="hidden"
+      rounded="lg"
       transitionProperty="background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter"
       transitionTimingFunction="cubic-bezier(0.4, 0, 0.2, 1)"
       transitionDuration="150ms"
@@ -67,14 +67,14 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
           marginX="auto"
           width="max-content"
         >
-          <CheckIcon width="3rem" height="3rem" />
+          <CheckIcon width={12} height={12} />
         </Box>
       </Tooltip>
     </Box>
   );
 
   return (
-    <Card marginTop="2rem">
+    <Card marginTop={8}>
       <CardBody>
         <Heading as="h2" size="md">
           {title}
@@ -82,11 +82,11 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
 
         <List
           display="flex"
-          borderRadius="1rem"
-          maxWidth="72rem"
-          maxHeight="20rem"
-          gap="1rem"
-          padding="1rem"
+          rounded="lg"
+          maxWidth="6xl"
+          maxHeight="7xl"
+          gap={4}
+          padding={4}
           className="image-scroller"
         >
           {images?.map((image, idx) => (
@@ -94,16 +94,16 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
               key={idx}
               boxSizing="content-box"
               display="flex"
+              rounded="lg"
               flex="none"
-              borderRadius="1rem"
               backgroundImage={`url("/images/${image}")`}
               backgroundSize="cover"
               backgroundPosition="center"
               backgroundRepeat="no-repeat"
               cursor="pointer"
               justifyContent="center"
-              width="12rem"
-              height="12rem"
+              width={48}
+              height={48}
             >
               {overlay(
                 image,
@@ -114,7 +114,7 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
         </List>
 
         {selected.length > 0 && (
-          <Box marginTop="2rem">
+          <Box marginTop={8} marginLeft={4}>
             <Button onClick={onOpen} leftIcon={<CloseIcon />} colorScheme="red" variant="outline">
               Delete selected
             </Button>
@@ -127,7 +127,7 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
                   <Text>This action cannot be reversed.</Text>
                 </ModalBody>
                 <ModalFooter>
-                  <Button onClick={onClose} marginRight="1rem" variant="outline">
+                  <Button onClick={onClose} marginRight={4} variant="outline">
                     Close
                   </Button>
                   <Button
@@ -147,7 +147,7 @@ export const ImageManager: React.FC<IImageManagerProps> = ({ deleteImages, image
           </Box>
         )}
 
-        <Box marginTop="2rem">
+        <Box marginTop={8}>
           <Dropzone
             onSubmit={(files) => {
               uploadFunc(files.flatMap((file) => file.name));

@@ -101,7 +101,7 @@ export const AdminAboutView: React.FC = () => {
                 alt="portrait"
                 src={`/images/${about.portrait}`}
                 fallbackSrc={BlankAvatar}
-                borderLeftRadius={12}
+                roundedLeft="lg"
                 boxSize={256}
               />
             )}

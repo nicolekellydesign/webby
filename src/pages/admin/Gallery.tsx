@@ -126,11 +126,11 @@ export const AdminGalleryView: React.FC = () => {
 
             <List
               display="flex"
-              borderRadius="1rem"
               maxWidth="72rem"
               maxHeight="20rem"
               gap="1rem"
               padding="1rem"
+              rounded="lg"
               className="image-scroller"
             >
               {projects.map((project, idx) => (
@@ -139,20 +139,19 @@ export const AdminGalleryView: React.FC = () => {
                   boxSizing="content-box"
                   display="flex"
                   flex="none"
-                  borderRadius="1rem"
                   backgroundImage={`url("/images/${project.thumbnail}")`}
                   backgroundSize="cover"
                   backgroundPosition="center"
                   backgroundRepeat="no-repeat"
                   cursor="pointer"
                   justifyContent="center"
+                  rounded="lg"
                   width="12rem"
                   height="12rem"
                 >
                   <Link
                     as={NavLink}
                     to={`/admin/gallery/${project.name}`}
-                    borderRadius="1rem"
                     position="relative"
                     flex="1 1 0%"
                     display="flex"
@@ -160,6 +159,7 @@ export const AdminGalleryView: React.FC = () => {
                     justifyContent="center"
                     verticalAlign="middle"
                     overflow="hidden"
+                    rounded="lg"
                     transitionProperty="background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter"
                     transitionTimingFunction="cubic-bezier(0.4, 0, 0.2, 1)"
                     transitionDuration="150ms"

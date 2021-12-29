@@ -43,21 +43,21 @@ const Preview: React.FC<IPreviewProps> = ({ file: { name }, percentage = 0, prev
   };
 
   return (
-    <ListItem display="flex" flexDirection="row" position="relative" paddingY="1rem" width="full">
+    <ListItem display="flex" flexDirection="row" position="relative" paddingY={4} width="full">
       {state === "finished" && preview ? (
         <Image
-          width="6rem"
-          height="6rem"
+          width={24}
+          height={24}
           alt={preview}
           src={`/images/${preview}`}
-          fallback={<Icon as={AiOutlineFile} w="6rem" h="6rem" />}
+          fallback={<Icon as={AiOutlineFile} width={24} height={24} />}
         />
       ) : (
-        <Icon as={AiOutlineFile} w="6rem" h="6rem" />
+        <Icon as={AiOutlineFile} width={24} height={24} />
       )}
 
       <Flex align="center">
-        <Flex direction="column" marginX="1rem" width="16rem">
+        <Flex direction="column" marginX={4} width={64}>
           <Text fontWeight="bold">{name}</Text>
           <Text fontWeight="bold">{percentage}</Text>
           <Progress hasStripe value={percentage} colorScheme={barColor[state]} />
@@ -204,17 +204,17 @@ export const Dropzone: React.FC<IDropzoneProps> = ({ onSubmit: onUpload, disable
       <Flex direction="column">
         <Button {...getRootProps({ className: dropzoneClasses, disabled: disabled })} variant="outline">
           <input {...getInputProps({ disabled: disabled })} />
-          <Text fontSize="1.5rem" lineHeight="2rem">
+          <Text fontSize="xl" lineHeight={8}>
             {isDragActive ? "Drop files here" : "Drag files here or click to select"}
           </Text>
         </Button>
 
         {previews.length > 0 && (
-          <Box marginTop="1rem">
+          <Box marginTop={4}>
             <Heading as="h4" fontSize="lg">
               File Uploads
             </Heading>
-            <UnorderedList display="flex" flexWrap="wrap" gap="1rem">
+            <UnorderedList display="flex" flexWrap="wrap" gap={4}>
               {previews.map((preview, idx) => (
                 <Preview key={idx} {...preview} />
               ))}
@@ -223,7 +223,7 @@ export const Dropzone: React.FC<IDropzoneProps> = ({ onSubmit: onUpload, disable
             <Button
               leftIcon={<Icon as={AiOutlineUpload} />}
               variant="outline"
-              marginTop="1rem"
+              marginTop={4}
               isLoading={!allFinished}
               onClick={() => {
                 onUpload(files);

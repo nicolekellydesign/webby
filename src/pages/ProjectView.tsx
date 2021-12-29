@@ -45,7 +45,7 @@ export const ProjectView: React.FC = () => {
     p: (props: any) => {
       const { children } = props;
       return (
-        <Text fontSize="xl" marginBottom="1.5rem">
+        <Text fontSize="xl" marginBottom={6}>
           {children}
         </Text>
       );
@@ -59,12 +59,12 @@ export const ProjectView: React.FC = () => {
           Project Information
         </Button>
         <Collapse in={isOpen} animate>
-          <Box fontSize="2xl" paddingTop="2rem">
+          <Box fontSize="2xl" paddingTop={8}>
             <Heading as="h1" fontWeight={700}>
               {project.title}
             </Heading>
 
-            <Box paddingTop="1.5rem">
+            <Box paddingTop={6}>
               <ReactMarkdown components={ChakraUIRenderer(markdownTheme)} remarkPlugins={[remarkGfm]}>
                 {project.projectInfo}
               </ReactMarkdown>
@@ -73,10 +73,10 @@ export const ProjectView: React.FC = () => {
         </Collapse>
       </Box>
 
-      <Box marginTop="2rem">
+      <Box marginTop={8}>
         <Flex wrap="wrap">
           {project.videoKey && project.videoKey?.length > 0 && (
-            <Box boxSizing="border-box" paddingX="0.5rem" width="full">
+            <Box boxSizing="border-box" paddingX={2} width="full">
               <Box position="relative" padding={0} width="full">
                 <iframe
                   src={`https://youtube.com/embed/${project.videoKey}`}
@@ -95,7 +95,7 @@ export const ProjectView: React.FC = () => {
             </Box>
           )}
           {project.images?.map((image, idx) => (
-            <Box key={idx} marginBottom="1.25rem">
+            <Box key={idx} marginBottom={5}>
               <SmoothImage alt={image} src={`/images/${image}`} />
             </Box>
           ))}

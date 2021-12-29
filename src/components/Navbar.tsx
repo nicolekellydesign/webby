@@ -109,7 +109,7 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav>
-      <Flex alignItems="center" width="full" height="150px" padding="1.25rem">
+      <Flex alignItems="center" width="full" height="150px" padding={5}>
         <Box flex="1 1 0%">
           <Image alt="Nicole Kelly Design" src={logo} width="115px" height="115px" />
         </Box>
@@ -125,7 +125,7 @@ export const Navbar: React.FC = () => {
                 padding={0}
                 position="relative"
               >
-                <Link as={ReactLink} to={item.path} paddingX="1.25rem" paddingY="0.75rem" className="navbar-link">
+                <Link as={ReactLink} to={item.path} paddingX={5} paddingY={3} className="navbar-link">
                   {item.title}
                 </Link>
               </ListItem>
@@ -176,9 +176,9 @@ export const Navbar: React.FC = () => {
       </Flex>
 
       <Collapse in={isOpen} animate>
-        <List padding="4px" width="full">
+        <List padding={1} width="full">
           {NavbarData.map((item, index) => (
-            <ListItem key={index} fontWeight="light" textDecoration="none" textAlign="center" paddingY="0.75rem">
+            <ListItem key={index} fontWeight="light" textDecoration="none" textAlign="center" paddingY={3}>
               <Link as={ReactLink} to={item.path} className="navbar-link">
                 {item.title}
               </Link>
@@ -197,7 +197,7 @@ export const Navbar: React.FC = () => {
                         fontWeight="light"
                         textDecoration="none"
                         textAlign="center"
-                        paddingY="0.75rem"
+                        paddingY={3}
                       >
                         <Link as={ReactLink} to={item.path} className="navbar-link">
                           {item.title}
@@ -208,7 +208,7 @@ export const Navbar: React.FC = () => {
               </MenuGroup>
 
               <MenuDivider />
-              <ListItem fontWeight="light" textDecoration="none" textAlign="center" paddingY="0.75rem">
+              <ListItem fontWeight="light" textDecoration="none" textAlign="center" paddingY={3}>
                 {session.valid ? (
                   <Link to="/admin" onClick={() => logoutMutation.mutate()} width="full">
                     Logout

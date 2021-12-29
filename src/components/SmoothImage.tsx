@@ -25,7 +25,7 @@ export const SmoothImage: React.FC<ISmoothImageProps> = ({ src, alt, children })
     return (
       <Flex alignItems="center" justifyContent="center" width="full" height="full">
         <Image alt={alt} src={src} loading="lazy" onLoad={onLoad} onError={onError} style={{ display: "none" }} />
-        <Box padding="8rem">
+        <Box padding={32}>
           <Spinner size="lg" />
         </Box>
       </Flex>
@@ -35,8 +35,8 @@ export const SmoothImage: React.FC<ISmoothImageProps> = ({ src, alt, children })
   if (errored) {
     return (
       <Flex alignItems="center" justifyContent="center" width="full" height="full">
-        <Box padding="8rem">
-          <Icon as={AiOutlineFileImage} width="4rem" height="4rem" />
+        <Box padding={32}>
+          <Icon as={AiOutlineFileImage} width={16} height={16} />
         </Box>
       </Flex>
     );

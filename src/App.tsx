@@ -7,6 +7,7 @@ import { ChakraProvider, Container, Divider } from "@chakra-ui/react";
 import { defaultId } from "@Services/alert.service";
 
 import { AlertContainer } from "@Components/AlertContainer";
+import { Footer } from "@Components/Footer";
 import { Navbar } from "@Components/Navbar";
 
 import { AboutView } from "@Pages/AboutView";
@@ -36,13 +37,13 @@ export const App: React.FC = () => {
           position="relative"
           maxWidth="full"
           minHeight="full"
-          marginBottom="-6rem"
-          paddingBottom="6rem"
+          marginBottom={-24}
+          paddingBottom={24}
           paddingInline="auto"
         >
           <BrowserRouter>
             <Navbar />
-            <Divider borderColor="white" marginX="1.25rem" width="auto" />
+            <Divider borderColor="white" marginX={5} width="auto" />
             <AlertContainer id={defaultId} />
             <Switch>
               <Route path="/about" exact component={AboutView} />
@@ -55,6 +56,7 @@ export const App: React.FC = () => {
             </Switch>
           </BrowserRouter>
         </Container>
+        <Footer />
       </ChakraProvider>
     </QueryClientProvider>
   );

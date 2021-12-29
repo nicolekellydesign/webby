@@ -213,7 +213,7 @@ export const ProjectSettings: React.FC = () => {
         About Page Settings
       </Heading>
 
-      <VStack marginTop="2rem" spacing="1rem">
+      <VStack marginTop={8} spacing={4}>
         <Card>
           <Flex>
             {thumbMutation.isLoading ? (
@@ -224,11 +224,11 @@ export const ProjectSettings: React.FC = () => {
           </Flex>
 
           <CardBody>
-            <Heading as="h2" size="md" marginBottom="1rem">
+            <Heading as="h2" size="md" marginBottom={4}>
               Update Thumbnail
             </Heading>
 
-            <Flex wrap="wrap" align="start" marginTop="2rem">
+            <Flex wrap="wrap" align="start" marginTop={8}>
               <Dropzone
                 onSubmit={(files) => {
                   thumbMutation.mutate(files[0].name);
@@ -298,7 +298,7 @@ export const ProjectSettings: React.FC = () => {
           />
         )}
 
-        <Box marginTop="2rem">
+        <Box marginTop={8}>
           <Button onClick={onOpen} leftIcon={<DeleteIcon />} variant="outline" colorScheme="red">
             Delete project
           </Button>
@@ -313,7 +313,7 @@ export const ProjectSettings: React.FC = () => {
               </ModalBody>
 
               <ModalFooter>
-                <Button variant="outline" marginRight="1rem" onClick={onClose}>
+                <Button variant="outline" marginRight={4} onClick={onClose}>
                   Cancel
                 </Button>
                 <Button

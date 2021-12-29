@@ -65,9 +65,9 @@ export const LoginModal: React.FC<ILoginModalProps> = ({ login }) => {
               onKeyDown={(e) => {
                 e.stopPropagation();
               }}
-              style={{ padding: "1.5rem" }}
+              style={{ padding: 6 }}
             >
-              <Stack spacing="0.75rem">
+              <Stack spacing={3}>
                 <FormControl isRequired>
                   <Input
                     id="username"

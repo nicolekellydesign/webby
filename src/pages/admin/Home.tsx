@@ -4,7 +4,7 @@ import React from "react";
 export const AdminHome: React.FC = () => {
   return (
     <Container textAlign="center">
-      <Heading as="h1" marginBottom="2rem">
+      <Heading as="h1" marginBottom={8}>
         Welcome!
       </Heading>
 

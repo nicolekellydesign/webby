@@ -85,8 +85,8 @@ export const ContactView: React.FC = () => {
       <Card>
         <CardBody>
           <form onSubmit={onSubmit}>
-            <VStack spacing="1rem">
-              <Stack direction={{ base: "column", lg: "row" }} spacing="1rem" width="full">
+            <VStack spacing={4}>
+              <Stack direction={{ base: "column", lg: "row" }} spacing={4} width="full">
                 <FormControl isRequired>
                   <FormLabel htmlFor="firstname">First Name</FormLabel>
                   <Input id="firstname" name="firstname" type="text" placeholder="John" />
@@ -104,11 +104,11 @@ export const ContactView: React.FC = () => {
 
               <FormControl isRequired>
                 <FormLabel htmlFor="message">Message</FormLabel>
-                <Textarea id="message" name="message" resize="none" height="24rem" />
+                <Textarea id="message" name="message" resize="none" height={96} />
               </FormControl>
             </VStack>
 
-            <ButtonGroup variant="outline" spacing="1rem" marginTop="1rem" width={{ base: "full", lg: "auto" }}>
+            <ButtonGroup variant="outline" spacing={4} marginTop={4} width={{ base: "full", lg: "auto" }}>
               <Button type="reset" width={{ base: "full", lg: "auto" }}>
                 Reset
               </Button>

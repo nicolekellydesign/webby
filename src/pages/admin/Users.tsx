@@ -175,7 +175,7 @@ export const AdminUsers: React.FC = () => {
         Admin Users
       </Heading>
 
-      <Table marginTop="2rem">
+      <Table marginTop={8}>
         <TableCaption>Registered administrators</TableCaption>
         <Thead>
           <Tr>
@@ -240,7 +240,7 @@ export const AdminUsers: React.FC = () => {
                         </ModalBody>
 
                         <ModalFooter>
-                          <Button variant="outline" marginRight="1rem" onClick={onClose}>
+                          <Button variant="outline" marginRight={4} onClick={onClose}>
                             Cancel
                           </Button>
                           <Button
@@ -264,14 +264,14 @@ export const AdminUsers: React.FC = () => {
         </Tbody>
       </Table>
 
-      <Card marginTop="2rem">
+      <Card marginTop={8}>
         <CardBody>
-          <Heading as="h2" size="md" marginBottom="1rem">
+          <Heading as="h2" size="md" marginBottom={4}>
             Add User
           </Heading>
 
           <form id="addUser" onSubmit={handleSubmit}>
-            <VStack spacing="1rem">
+            <VStack spacing={4}>
               <FormControl isInvalid={usernameError !== ""} isRequired>
                 <FormLabel htmlFor="username">Username</FormLabel>
                 <Input
@@ -288,8 +288,8 @@ export const AdminUsers: React.FC = () => {
                 <FormLabel htmlFor="password">Password</FormLabel>
                 <InputGroup>
                   <Input id="password" name="password" type={show ? "text" : "password"} placeholder="Password" />
-                  <InputRightElement width="4.5rem">
-                    <Button height="1.75rem" size="sm" onClick={handleShowClick}>
+                  <InputRightElement width={18}>
+                    <Button height={7} size="sm" onClick={handleShowClick}>
                       {show ? "hide" : "show"}
                     </Button>
                   </InputRightElement>
@@ -300,8 +300,8 @@ export const AdminUsers: React.FC = () => {
                 <FormLabel htmlFor="confirm">Confirm password</FormLabel>
                 <InputGroup>
                   <Input id="confirm" name="confirm" type={showConfirm ? "text" : "password"} placeholder="Password" />
-                  <InputRightElement width="4.5rem">
-                    <Button height="1.75rem" size="sm" onClick={handleShowConfirmClick}>
+                  <InputRightElement width={18}>
+                    <Button height={7} size="sm" onClick={handleShowConfirmClick}>
                       {showConfirm ? "Hide" : "Show"}
                     </Button>
                   </InputRightElement>

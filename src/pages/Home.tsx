@@ -27,14 +27,14 @@ export const Home: React.FC = () => {
   return (
     <Container>
       <Box minHeight="60px" textAlign="center">
-        <Text textStyle="bold" fontSize="xl" paddingY="2rem">
+        <Text textStyle="bold" fontSize="xl" paddingY={8}>
           “If you can design one thing, you can design everything.” &mdash; Massimo Vignelli
         </Text>
       </Box>
 
       <Flex wrap="wrap">
         {projects.map((project, idx) => (
-          <Box key={idx} padding="1rem" width={{ base: "full", xl: "50%" }}>
+          <Box key={idx} padding={4} width={{ base: "full", xl: "50%" }}>
             <SmoothImage alt={project.title} src={`/images/${project.thumbnail}`}>
               <Link
                 as={NavLink}
@@ -51,11 +51,11 @@ export const Home: React.FC = () => {
                 height="full"
                 _hover={{ backgroundColor: "black", opacity: 0.7 }}
               >
-                <Box textColor="white" boxSizing="border-box" padding="1.25rem" maxWidth="20rem" height="full">
+                <Box textColor="white" boxSizing="border-box" padding={5} maxWidth={80} height="full">
                   <Heading as="h2" marginBottom={0} fontStyle="bold" fontSize="2xl">
                     {project.title}
                   </Heading>
-                  <Text fontSize="xl" marginTop="1rem">
+                  <Text fontSize="xl" marginTop={4}>
                     {project.caption}
                   </Text>
                 </Box>

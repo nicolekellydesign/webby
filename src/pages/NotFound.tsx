@@ -17,11 +17,11 @@ export const NotFound: React.FC = () => {
       alignItems="center"
       justifyContent="center"
       fontSize="2xl"
-      marginTop="1rem"
+      marginTop={4}
       marginX="auto"
       width="fit-content"
     >
-      <ArrowBackIcon width="3rem" height="2rem" />
+      <ArrowBackIcon width={12} height={8} />
       <Text>{isAdminRoute ? "Go to admin home" : "Go to home"}</Text>
     </Link>
   );
@@ -32,7 +32,7 @@ export const NotFound: React.FC = () => {
         <Heading as="h2" fontSize="5xl">
           Page Not Found
         </Heading>
-        <Text fontSize="2xl" paddingTop="1.5rem">
+        <Text fontSize="2xl" paddingTop={6}>
           Sorry, that page doesn&apos;t exist!
         </Text>
         {link}

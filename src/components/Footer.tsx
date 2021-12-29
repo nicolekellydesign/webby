@@ -5,12 +5,12 @@ export const Footer: React.FC = () => {
   return (
     <Grid
       role="contentinfo"
-      padding="1rem"
+      paddingY={4}
       placeItems="center"
       textAlign="center"
       autoFlow="row"
       fontSize="smaller"
-      marginTop="2rem"
+      marginTop={8}
       width="full"
     >
       <Box>

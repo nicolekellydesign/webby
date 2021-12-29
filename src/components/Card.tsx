@@ -14,13 +14,13 @@ export const CardBody: React.FC = ({ children }) => {
   );
 };
 
-export const Card: React.FC<ICardProps> = ({ children, marginTop = "2rem" }) => {
+export const Card: React.FC<ICardProps> = ({ children, marginTop = 8 }) => {
   return (
     <Flex
-      borderRadius={16}
       borderWidth={1}
       borderColor="white.700"
       direction={{ base: "column", lg: "row" }}
+      rounded="lg"
       spacing={4}
       marginTop={marginTop}
       marginX="auto"

@@ -24,7 +24,7 @@ export const PhotographyView: React.FC = () => {
   const photos = (photosQuery.data as Photo[]).flatMap((photo) => photo.filename);
 
   return (
-    <Grid gap="0.25rem" templateColumns={{ base: "repeat(1, minmax(0, 1fr))", md: "repeat(3, minmax(0, 1fr))" }}>
+    <Grid gap={1} templateColumns={{ base: "repeat(1, minmax(0, 1fr))", md: "repeat(3, minmax(0, 1fr))" }}>
       {photos && photos.map((photo, idx) => <SmoothImage key={idx} src={`/images/${photo}`} alt={photo} />)}
     </Grid>
   );

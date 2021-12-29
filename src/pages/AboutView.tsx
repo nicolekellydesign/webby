@@ -33,7 +33,7 @@ export const AboutView: React.FC = () => {
     p: (props: any) => {
       const { children } = props;
       return (
-        <Text fontSize="medium" lineHeight="22px" marginBottom="1.5rem">
+        <Text fontSize="medium" lineHeight="22px" marginBottom={6}>
           {children}
         </Text>
       );
@@ -45,7 +45,7 @@ export const AboutView: React.FC = () => {
       <Stack
         direction={{ base: "column", lg: "row" }}
         spacing={{ base: "2rem", lg: "6rem" }}
-        marginTop="2rem"
+        marginTop={8}
         marginX="auto"
         width="full"
       >
@@ -58,24 +58,24 @@ export const AboutView: React.FC = () => {
                 alt="portrait"
                 src={BlankAvatar}
                 backgroundColor="white"
-                padding="1rem"
-                borderRadius="1rem"
-                height={{ lg: "48rem" }}
+                padding={4}
+                rounded="lg"
+                height={{ lg: "3xl" }}
               />
             }
-            borderRadius="1rem"
+            rounded="lg"
             width="auto"
-            height={{ lg: "48rem" }}
+            height={{ lg: "3xl" }}
           />
         </Box>
 
-        <Flex flex="1 1 auto" direction="column" maxWidth="56rem">
+        <Flex flex="1 1 auto" direction="column" maxWidth="4xl">
           <Heading as="h2" size="md">
             Designer Statement
           </Heading>
 
           {about.statement && (
-            <Box marginTop="2rem">
+            <Box marginTop={8}>
               <ReactMarkdown components={ChakraUIRenderer(markdownTheme)} remarkPlugins={[remarkGfm]} skipHtml>
                 {about.statement}
               </ReactMarkdown>
@@ -83,7 +83,7 @@ export const AboutView: React.FC = () => {
           )}
 
           {about.resume && (
-            <Box paddingTop="1rem">
+            <Box paddingTop={4}>
               <Button
                 variant="outline"
                 colorScheme="blue"

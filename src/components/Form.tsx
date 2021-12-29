@@ -20,7 +20,7 @@ export const Form: React.FC<IFormProps> = ({
   ...rest
 }) => {
   const controls = hasReset ? (
-    <ButtonGroup variant="outline" spacing="1rem" width={{ base: "full", lg: "auto" }}>
+    <ButtonGroup variant="outline" spacing={4} width={{ base: "full", lg: "auto" }}>
       <Button type="reset" disabled={disabled}>
         {resetText}
       </Button>
@@ -29,7 +29,7 @@ export const Form: React.FC<IFormProps> = ({
       </Button>
     </ButtonGroup>
   ) : (
-    <ButtonGroup variant="outline" spacing="1rem" width={{ base: "full", lg: "auto" }}>
+    <ButtonGroup variant="outline" spacing={4} width={{ base: "full", lg: "auto" }}>
       <Button id="submit" type="submit" disabled={disabled} colorScheme="blue" width={{ base: "full", lg: "auto" }}>
         {submitText}
       </Button>
@@ -44,7 +44,7 @@ export const Form: React.FC<IFormProps> = ({
         </Heading>
       )}
 
-      <VStack spacing="1rem" marginY="1rem">
+      <VStack spacing={4} marginY={4}>
         {children}
       </VStack>
 

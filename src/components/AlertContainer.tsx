@@ -53,12 +53,12 @@ export const AlertContainer: React.FC<IAlertContainerProps> = ({ id }) => {
   }
 
   return (
-    <Stack spacing="1rem" marginX="auto" paddingY="1rem" width={{ base: "full", lg: "48rem" }}>
+    <Stack spacing={4} marginX="auto" paddingY={4} width={{ base: "full", lg: "3xl" }}>
       {alerts.map((alert: AlertProps, idx) => (
-        <Alert key={idx} status={alert.type} borderRadius="0.5rem" minHeight="4rem">
+        <Alert key={idx} status={alert.type} rounded="md" minHeight={16}>
           <AlertIcon />
           <AlertDescription>{alert.message}</AlertDescription>
-          <CloseButton position="absolute" right="1rem" top="1rem" onClick={() => removeAlert(alert)} />
+          <CloseButton position="absolute" right={4} top={4} onClick={() => removeAlert(alert)} />
         </Alert>
       ))}
     </Stack>

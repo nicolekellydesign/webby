@@ -33,7 +33,7 @@ const Admin: React.FC<RouterDetailProps> = () => {
   const session = sessionQuery.data as Session;
 
   return (
-    <Box paddingTop="2rem">
+    <Box paddingTop={8}>
       <PrivateRoute path="/admin/gallery/:name" authed={session.valid} component={ProjectSettings} />
       <PrivateRoute exact path="/admin/gallery" authed={session.valid} component={AdminGalleryView} />
       <PrivateRoute exact path="/admin/photos" authed={session.valid} component={AdminPhotos} />

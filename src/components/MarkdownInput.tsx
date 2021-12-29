@@ -69,7 +69,7 @@ export const MarkdownInput: React.FC<IMarkdownInputProps> = ({ inputId, inputNam
       />
 
       {currentText && (
-        <Box backgroundColor="gray.900" borderRadius={8} marginTop={4}>
+        <Box backgroundColor="gray.900" rounded="lg" marginTop={4}>
           <Heading
             as="h2"
             fontSize={20}
